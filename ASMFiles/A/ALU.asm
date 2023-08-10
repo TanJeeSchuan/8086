@@ -2,14 +2,11 @@
 .stack 100
 .data
 
-num1    DW  0051d           ;51.5278d 
-        DW  8984d
+num1    DW  0051d           ;51.5278d     whole number    ;decimal number 要allocate 两个 WORD 来store
+        DW  5278d           ;             mantissa  
 
 num2    DW  0045d           ;45.8984d
-        DW  5278d           
-
-Rnum    DW  ?
-        DW  ?
+        DW  8984d           
 
 newline EQU 10
 decimal EQU 46d
@@ -23,9 +20,9 @@ mov ax,4c00h
 
 ; start
 
-call print_n
+call print_n            ;print newline
 
-lea si,num1
+lea si,num1             ;load address of num1 into si
 call print_dec
 
 call print_n
@@ -41,13 +38,11 @@ call print_n
 lea si,num1
 lea di,num2
 
-; call dec_add
-call dec_sub
-
+; call dec_add          ;add function
+call dec_sub            ;sub function
 
 lea si,num1
 call print_dec
-
 
 ;end
 
@@ -124,18 +119,18 @@ dec_sub   :                                         ;performs decimal addition f
 ;                             mov     bx,[di + 2]
 
 print_dec :                                         ;print decimal from si
-                            mov     ax, 0000h
-                            mov     ax, [si]
-                            call    print_num_leading_zero
+                            mov     ax, 0000h                   ;clean ax register
+                            mov     ax, [si]                    ;load whole number
+                            call    print_num_leading_zero      ;print whole number
 
-                            mov     dl, decimal
+                            mov     dl, decimal                 ;print decimal character
                             call    print_char
 
-                            mov     ax, [si + 2]
-                            call    print_num_leading_zero
+                            mov     ax, [si + 2]                ;load mantissa
+                            call    print_num_leading_zero      ;print mantissa
             ret
 
-print_num :                                         ;print from ax 
+print_num :                                         ;print from ax              这个没有用到
                             push    ax             ;preserves original register values
                             push    bx
                             push    cx
@@ -183,38 +178,35 @@ print_num_leading_zero :                            ;print from ax with 4 places
                             mov     bx,000Ah        
                             mov     cx,0000h
             Divloop_leading_zero:
-                            mov     dx,0000h
-                            div     bx
-                            push    dx
-                            inc     cx
-                            test    ax,ax
-                            jnz     Divloop_leading_zero
+                            mov     dx,0000h        ;clean dx
+                            div     bx              ;divide ax by 10
+                            push    dx              ;push remainder to stack
+                            inc     cx              ;increment cx to record number of times loop
+                            test    ax,ax           ;test the number of ax
+                            jnz     Divloop_leading_zero        ;if ax is not zero jump to start of loop
             
             startCheck_leading_zero:
-                            cmp cx,0004h                        ;if cx ]is below 
-                            jl push_zero_leading_zero
+                            cmp cx,0004h                        ;if cx is below 
+                            jl push_zero_leading_zero           ;if cx is below 4 jump to function that puts 0 in stack and increments cx
 
             mov ah,02h                          ;setup for print
-            IntPrint_leading_zero:       
+            IntPrint_leading_zero:              ;print data in stack, number of data is recorded in cx
                             pop     dx
                             add     dx,"0"
                             int     21h
-                            loop    IntPrint
+                            loop    IntPrint    
 
-            pop dx                              ;restore original ax value
+            pop dx                              ;restore original register value
             pop cx
             pop bx
             pop ax
             ret
 
             push_zero_leading_zero:
-                            mov ax,0h
-                            push ax
-                            inc cx
-
-                            ; mov dl,"T"
-                            ; call print_char
-                            jmp startCheck_leading_zero
+                            mov ax,0h                       ;prepare for push
+                            push ax                         ;push 0 to stack
+                            inc cx                          ;cx++
+                            jmp startCheck_leading_zero     ;jump to leading zero checker
 
 
 
