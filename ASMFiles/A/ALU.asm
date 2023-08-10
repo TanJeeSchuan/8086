@@ -61,8 +61,6 @@ mov ah,4ch
 int 21h
 
 dec_add   :                                         ;performs decimal addition from si and di, modifies value in si
-
-
                         ;load mantissa
                         mov ax, [si + 2]                  ;一个word 2 byte，+2 来拿第二个word
                         mov bx, [di + 2]
@@ -121,8 +119,9 @@ dec_sub   :                                         ;performs decimal addition f
 
                         ret
 
-dec_mul   :                                         ;performs decimal multiplication
-                        mov ax,
+; dec_mul   :                                         ;performs decimal multiplication
+;                             mov     ax,[si + 2]                          ;load  mantissa
+;                             mov     bx,[di + 2]
 
 print_dec :                                         ;print decimal from si
                             mov     ax, 0000h
