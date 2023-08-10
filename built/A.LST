@@ -1,0 +1,210 @@
+Microsoft (R) Macro Assembler Version 5.00                  8/6/23 33:55:18
+                                                             Page     1-1
+
+
+       1				.model small 
+       2 0064				.stack 100 
+       3 0000				.data 
+       4				 
+       5 0000  20 20 20 20 20 20 20	log1        DB "                       
+					   LOGIN SCREEN                        
+					        $" 
+       6       20 20 20 20 20 20 20	
+       7       20 20 20 20 20 20 20	
+       8       20 20 20 20 20 4C 4F	
+       9       47 49 4E 20 53 43 52	
+      10       45 45 4E 20 20 20 20	
+      11       20 20 20 20 20 20 20	
+      12       20 20 20 20 20 20 20	
+      13       20 20 20 20 20 20 20	
+      14       20 20 20 20 20 20 20	
+      15       24			
+      16 0047  55 73 65 72 6E 61 6D	log2        DB "Username: $" 
+      17       65 3A 20 24		
+      18 0052  50 61 73 73 77 6F 72	log3        DB "Password: $" 
+      19       64 3A 20 24		
+      20				 
+      21 005D  1E			stringBuff  DB 30                      
+					     ;Max number of chars 
+      22 005E  00			            DB 0                       
+					     ;Length of input 
+      23 005F  001E[			            DB 30 DUP(0)               
+					    ;Allocate space 
+      24	   00			
+      25			 ]	
+      26				
+      27				 
+      28				 
+      29 007D  1264			points_num  DW 1264h 
+      30 007F  24			            DB "$" 
+      31				 
+      32 = 000A				newline EQU 10 
+      33				 
+      34 0080  0002[			discount    DW 2 DUP (0)               
+					    ;discount format 
+      35	   0000			
+      36			 ]	
+      37				
+      38				 
+      39 0000				.code 
+      40 0000				main proc 
+      41				 
+      42 0000  B8 ---- R		mov ax,@data 
+      43 0003  8E D8			mov ds,ax 
+      44 0005  B8 4C00			mov ax,4c00h 
+      45				 
+      46				; start 
+      47				 
+      48 0008  8D 16 0000 R		lea dx,log1                            
+Microsoft (R) Macro Assembler Version 5.00                  8/6/23 33:55:18
+                                                             Page     1-2
+
+
+					 ;print log1 
+      49 000C  E8 0040 R		call print_str 
+      50				 
+      51 000F  BA 000A			mov dx,newline                         
+					 ;print 2 newlines 
+      52 0012  E8 006B R		call print_char 
+      53 0015  E8 006B R		call print_char 
+      54				 
+      55 0018  8D 16 0047 R		lea dx,log2                            
+					 ;print log2 
+      56 001C  E8 0040 R		call print_str 
+      57				 
+      58 001F  8B 16 005D R		mov dx, stringBuff                     
+					 ;input string 
+a.asm(40): warning A4031: Operand types must match
+      59 0023  B4 0A			mov ah,0Ah 
+      60 0025  CD 21			int 21h 
+      61				 
+      62 0027  BA 000A			mov dx,newline                         
+					 ;print 2 newlines 
+      63 002A  E8 006B R		call print_char 
+      64				 
+      65 002D  8B 16 005E R		mov dx, stringBuff + 1 
+a.asm(47): warning A4031: Operand types must match
+      66 0031  E8 0047 R		call print_num 
+      67				 
+      68 0034  8B 16 005F R		mov dx, stringBuff + 2 
+a.asm(50): warning A4031: Operand types must match
+      69 0038  B4 09			mov ah, 09h ; Function 09h Print charac
+					ter string 
+      70 003A  CD 21			int 21h ; ds:dx points to string 
+      71				;end 
+      72				 
+      73				 
+      74 003C  B4 4C			mov ah,4ch 
+      75 003E  CD 21			int 21h 
+      76				 
+      77 0040				print_str:  ;print value from address i
+					n dx 
+      78 0040  50			            push ax 
+      79 0041  B4 09			            mov ah,09h       
+      80 0043  CD 21			            int 21h 
+      81 0045  58			            pop ax 
+      82 0046  C3			            ret 
+      83				 
+      84 0047				print_num:  ;print from ax  
+      85 0047  50			                            push    ax 
+					            ;preserves original ax valu
+					e 
+      86 0048  53			                            push    bx 
+      87 0049  51			                            push    cx 
+      88 004A  52			                            push    dx 
+      89 004B  BB 000A			                            mov     bx,
+					000Ah         
+Microsoft (R) Macro Assembler Version 5.00                  8/6/23 33:55:18
+                                                             Page     1-3
+
+
+      90 004E  B9 0000			                            mov     cx,
+					0000h 
+      91 0051				            Divloop: 
+      92 0051  BA 0000			                            mov     dx,
+					0000h 
+      93 0054  F7 F3			                            div     bx 
+      94 0056  52			                            push    dx 
+      95 0057  41			                            inc     cx 
+      96 0058  85 C0			                            test    ax,
+					ax 
+      97 005A  75 F5			                            jnz     Div
+					loop 
+      98 005C  B4 02			            mov ah,02h                 
+					         ;setup for print 
+      99 005E  5A			            IntPrint:       pop     dx 
+     100 005F  83 C2 30			                            add     dx,
+					48d 
+     101 0062  CD 21			                            int     21h
+					 
+     102 0064  E2 F8			                            loop    Int
+					Print 
+     103				 
+     104 0066  5A			            pop dx                     
+					         ;restore original ax value 
+     105 0067  59			            pop cx 
+     106 0068  5B			            pop bx 
+     107 0069  58			            pop ax 
+     108 006A  C3			            ret 
+     109				 
+     110 006B				print_char: ;print from dl 
+     111 006B  50			            push ax                    
+					          
+     112 006C  B4 02			            mov ah,02h 
+     113 006E  CD 21			            int 21h 
+     114 0070  58			            pop ax 
+     115 0071  C3			            ret 
+     116				 
+     117 0072				main endp 
+     118 0072				end main 
+Microsoft (R) Macro Assembler Version 5.00                  8/6/23 33:55:18
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	0084	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	0072	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+DISCOUNT . . . . . . . . . . . .  	L WORD	0080	_DATA	Length = 0002
+DIVLOOP  . . . . . . . . . . . .  	L NEAR	0051	_TEXT
+
+INTPRINT . . . . . . . . . . . .  	L NEAR	005E	_TEXT
+
+LOG1 . . . . . . . . . . . . . .  	L BYTE	0000	_DATA
+LOG2 . . . . . . . . . . . . . .  	L BYTE	0047	_DATA
+LOG3 . . . . . . . . . . . . . .  	L BYTE	0052	_DATA
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 0072
+
+NEWLINE  . . . . . . . . . . . .  	NUMBER	000A	
+
+POINTS_NUM . . . . . . . . . . .  	L WORD	007D	_DATA
+PRINT_CHAR . . . . . . . . . . .  	L NEAR	006B	_TEXT
+PRINT_NUM  . . . . . . . . . . .  	L NEAR	0047	_TEXT
+PRINT_STR  . . . . . . . . . . .  	L NEAR	0040	_TEXT
+
+STRINGBUFF . . . . . . . . . . .  	L BYTE	005D	_DATA
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  a		
+
+
+    100 Source  Lines
+    100 Total   Lines
+     27 Symbols
+
+  50544 + 466000 Bytes symbol space free
+
+      3 Warning Errors
+      0 Severe  Errors
