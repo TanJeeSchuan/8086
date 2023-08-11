@@ -3,10 +3,10 @@
 .data
 
 num1    DW  0051d           ;51.5278d     whole number    ;decimal number 要allocate 两个 WORD 来store
-        DW  5278d           ;             mantissa  
+        DW  1500d           ;             mantissa  
 
-num2    DW  0045d           ;45.8984d
-        DW  8984d           
+num2    DW  0000d           ;45.8984d
+        DW  0500d           
 
 newline EQU 10
 decimal EQU 46d
@@ -39,7 +39,8 @@ lea si,num1
 lea di,num2
 
 ; call dec_add          ;add function
-call dec_sub            ;sub function
+; call dec_sub            ;sub function
+; call dec_mul
 
 lea si,num1
 call print_dec
@@ -114,9 +115,56 @@ dec_sub   :                                         ;performs decimal addition f
 
                         ret
 
-; dec_mul   :                                         ;performs decimal multiplication
-;                             mov     ax,[si + 2]                          ;load  mantissa
-;                             mov     bx,[di + 2]
+dec_mul   :                                         ;performs decimal multiplication
+                            mov     ax,[si + 2]                          ;load mantissa
+                            mov     bx,[di + 2]
+                            mul     bx
+                             
+                            push    dx
+                            push    ax
+
+                            mov     ax,[si]
+                            mul     bx
+
+                            pop     cx
+                            add     dx,cx
+
+                            push    ax
+                            push    dx
+
+                            mov     ax,[si + 2]
+                            mov     bx,[di]
+                            mul     bx
+
+                            pop     cx
+                            add     dx,cx
+
+                            pop     cx
+                            adc     ax,cx
+
+                            push    dx
+                            push    ax
+
+                            mov     ax,[si]
+                            mul     bx
+
+                            pop     cx
+                            add     dx,cx
+
+                            push    dx
+                            push    ax
+
+                            pop     ax
+                            pop     bx
+                            pop     cx
+                            pop     dx
+
+                            mov     [di],ax
+                            mov     [di+2],bx
+                            mov     [di+4],cx
+                            mov     [di+6],dx
+                            
+                            ret
 
 print_dec :                                         ;print decimal from si
                             mov     ax, 0000h                   ;clean ax register
