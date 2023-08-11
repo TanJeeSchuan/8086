@@ -117,53 +117,10 @@ dec_sub   :                                         ;performs decimal addition f
 
 dec_mul   :                                         ;performs decimal multiplication
                             mov     ax,[si + 2]                          ;load mantissa
-                            mov     bx,[di + 2]
-                            mul     bx
-                             
-                            push    dx
-                            push    ax
-
-                            mov     ax,[si]
-                            mul     bx
-
-                            pop     cx
-                            add     dx,cx
-
-                            push    ax
-                            push    dx
-
-                            mov     ax,[si + 2]
-                            mov     bx,[di]
-                            mul     bx
-
-                            pop     cx
-                            add     dx,cx
-
-                            pop     cx
-                            adc     ax,cx
-
-                            push    dx
-                            push    ax
-
-                            mov     ax,[si]
-                            mul     bx
-
-                            pop     cx
-                            add     dx,cx
-
-                            push    dx
-                            push    ax
-
-                            pop     ax
-                            pop     bx
-                            pop     cx
-                            pop     dx
-
-                            mov     [di],ax
-                            mov     [di+2],bx
-                            mov     [di+4],cx
-                            mov     [di+6],dx
+                            mov     bx,[di + 2]                             
                             
+                        
+
                             ret
 
 print_dec :                                         ;print decimal from si
