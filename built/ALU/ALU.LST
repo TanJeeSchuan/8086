@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 5.00                  8/11/23 11:34:05
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 12:20:12
                                                              Page     1-1
 
 
@@ -6,436 +6,637 @@
        2 0064				.stack 100 
        3 0000				.data 
        4				 
-       5 0000  0033			num1    DW  0051d           ;51.5278d  
+       5 0000  0019			num1    DW  0025d           ;51.5278d  
 					   whole number    ;decimal number 要a
 					llocate 两个 WORD 来store 
        6 0002  05DC			        DW  1500d           ;          
 					   mantissa   
        7				 
-       8 0004  0000			num2    DW  0000d           ;45.8984d 
+       8 0004  0002			num2    DW  0002d           ;45.8984d 
        9 0006  01F4			        DW  0500d            
       10				 
-      11 = 000A				newline EQU 10 
-      12 = 002E				decimal EQU 46d 
-      13				 
-      14 0000				.code 
-      15 0000				main proc 
-      16				 
-      17 0000  B8 ---- R		mov ax,@data 
-      18 0003  8E D8			mov ds,ax 
-      19 0005  B8 4C00			mov ax,4c00h 
-      20				 
-      21				; start 
-      22				 
-      23 0008  E8 0107 R		call print_n            ;print newline 
-      24				 
-      25 000B  8D 36 0000 R		lea si,num1             ;load address o
-					f num1 into si 
-      26 000F  E8 00C8 R		call print_dec 
+      11 0008  000A[			buffer  DW  10 DUP(0)       ;10 Bytes o
+					f value 0 
+      12	   0000			
+      13			 ]	
+      14				
+      15				 
+      16 = 000A				newline EQU 10 
+      17 = 002E				decimal EQU 46d 
+      18				 
+      19 0000				.code 
+      20 0000				main proc 
+      21				 
+      22 0000  B8 ---- R		mov ax,@data 
+      23 0003  8E D8			mov ds,ax 
+      24 0005  B8 4C00			mov ax,4c00h 
+      25				 
+      26				; start 
       27				 
-      28 0012  E8 0107 R		call print_n 
-      29 0015  E8 0107 R		call print_n 
-      30				 
-      31 0018  8D 36 0004 R		lea si,num2 
-      32 001C  E8 00C8 R		call print_dec 
-      33				 
-      34 001F  E8 0107 R		call print_n 
-      35 0022  E8 0107 R		call print_n 
-      36				 
-      37				;load addresses 
-      38 0025  8D 36 0000 R		lea si,num1 
-      39 0029  8D 3E 0004 R		lea di,num2 
-      40				 
-      41 002D  E8 0044 R		call dec_add          ;add function 
-      42				; call dec_sub            ;sub function
-					 
-      43				; call dec_mul 
-      44				 
+      28 0008  E8 012C R		call print_n            ;print newline 
+      29				 
+      30 000B  8D 36 0000 R		lea si,num1             ;load address o
+					f num1 into si 
+      31 000F  E8 00ED R		call print_dec 
+      32				 
+      33 0012  E8 012C R		call print_n 
+      34 0015  E8 012C R		call print_n 
+      35				 
+      36 0018  8D 36 0004 R		lea si,num2 
+      37 001C  E8 00ED R		call print_dec 
+      38				 
+      39 001F  E8 012C R		call print_n 
+      40 0022  E8 012C R		call print_n 
+      41				 
+      42				;load addresses 
+      43 0025  8D 36 0000 R		lea si,num1 
+      44 0029  8D 3E 0004 R		lea di,num2 
       45				 
-      46 0030  8D 36 0000 R		lea si,num1 
-      47 0034  E8 00C8 R		call print_dec 
-      48				 
-      49				;end 
-Microsoft (R) Macro Assembler Version 5.00                  8/11/23 11:34:05
+      46				; call dec_add              ;add functi
+					on 
+      47				; call dec_sub              ;sub functi
+					on 
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 12:20:12
                                                              Page     1-2
 
 
-      50				 
-      51 0037  B4 4C			mov ah,4ch 
-      52 0039  CD 21			int 21h 
-      53				 
-      54 003B				endProgram: 
-      55 003B  B2 54			mov dl,"T" 
-      56 003D  E8 0100 R		call print_char 
-      57 0040  B4 4C			mov ah,4ch 
-      58 0042  CD 21			int 21h 
+      48 002D  E8 0047 R		call dec_mul 
+      49				 
+      50 0030  8D 36 0000 R		lea si,num1 
+      51 0034  E8 00ED R		call print_dec 
+      52				 
+      53 0037  E8 012C R		call print_n 
+      54				 
+      55				; mov  ax,[buffer+8] 
+      56				; call print_num 
+      57				 
+      58				;end 
       59				 
-      60 0044				dec_add   :                            
-					             ;performs decimal addition
-					 from si and di, modifies value in si 
-      61				                        ;load mantissa 
-      62 0044  8B 44 02			                        mov ax, [si + 2
-					]                  ;一个word 2 byte�
-					�+2 来拿第二个word 
-      63 0047  8B 5D 02			                        mov bx, [di + 2
-					] 
-      64				 
-      65 004A  03 C3			                        add ax,bx      
-					                     ;add mantissa 
-      66				 
-      67 004C  3D 2710			                        cmp ax,2710h   
-					                     ;check if mantissa
-					 exceeds 10000 
-      68 004F  73 03			                        jae over_10000 
-					                     ;if mantissa >= 10
-					000 
-      69				 
-      70 0051  EB 05 90			                        jmp no_overflow
-					                     ;if not exceed 100
-					00 jump over over_10000: function 
-      71				 
-      72 0054				                        over_10000: 
-      73 0054  2D 2710			                        sub ax,2710h   
-					                     ;subtract 10000 fr
-					om mantissa 
-      74 0057  F9			                        STC            
-					                     ;set carry flag fo
-					r whole number addition 
-      75				 
-      76 0058				                        no_overflow: 
-      77 0058  B9 0000			                        mov cx,0000h   
-					                     ; 
-      78 005B  89 4C 02			                        mov [si + 2],cx
-					                     ;set [si + 2] to z
-					ero 
-      79				 
-      80 005E  89 44 02			                        mov [si + 2],ax
-					                   ;load calculated man
-					tissa 
+      60 003A  B4 4C			mov ah,4ch 
+      61 003C  CD 21			int 21h 
+      62				 
+      63 003E				endProgram: 
+      64 003E  B2 54			mov dl,"T" 
+      65 0040  E8 0125 R		call print_char 
+      66 0043  B4 4C			mov ah,4ch 
+      67 0045  CD 21			int 21h 
+      68				 
+      69 0047				ADD32           PROC                   
+					                     ;performs addition
+					 on dx:ax and bx:cx 
+      70				 
+      71 0047				ADD32           ENDP 
+      72				 
+      73 0047				DEC_MUL         PROC                   
+					                     ;performs multipli
+					cation from si and di, output in si 
+      74 0047  33 C0			                        xor     ax,ax 
+      75 0049  33 DB			                        xor     bx,bx 
+      76 004B  33 C9			                        xor     cx,cx 
+      77 004D  33 D2			                        xor     dx,dx 
+      78				 
+      79 004F  8B 44 02			                        mov     ax,[si+
+					2] 
+      80 0052  8B 5D 02			                        mov     bx,[di+
+					2] 
       81				 
-      82				                        ;load whole num
-Microsoft (R) Macro Assembler Version 5.00                  8/11/23 11:34:05
+      82 0055  F7 E3			                        mul     bx     
+					                     ;dx will be carry,
+					 ax is (w(0,1,2) + previous_carry + ax*
+					bx mod FFFFh) 
+      83 0057  50			                        push    ax     
+					                     ;w0 
+      84 0058  8B CA			                        mov     cx,dx  
+					                     ;store carry at cx
+					 
+      85				 
+      86 005A  33 D2			                        xor     dx,dx 
+      87 005C  8B 04			                        mov     ax,[si]
+					 
+      88				 
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 12:20:12
                                                              Page     1-3
 
 
-					ber 
-      83 0061  8B 04			                        mov ax, [si] 
-      84 0063  8B 1D			                        mov bx, [di] 
-      85				 
-      86 0065  13 C3			                        adc ax,bx      
-					                     ;add with carry 
-      87 0067  89 04			                        mov [si],ax    
-					                   ;load into si 
-      88				 
-      89 0069  C3			                        ret 
-      90				 
-      91 006A				dec_sub   :                            
-					             ;performs decimal addition
-					 from si and di, modifies value in si 
-      92 006A  8B 44 02			                        mov ax,[si + 2]
-					                                 ;load 
-					mantissa values in address 
-      93 006D  8B 5D 02			                        mov bx,[di + 2]
+      89 005E  F7 E3			                        mul     bx 
+      90 0060  03 C1			                        add     ax,cx  
+					                     ;ax + carry 
+      91 0062  50			                        push    ax     
+					                     ;w1 
+      92 0063  8B CA			                        mov     cx,dx  
+					                     ;store carry at cx
 					 
-      94				 
-      95 0070  2B C3			                        sub ax,bx      
-					                                 ;subtr
-					act mantissa 
-      96				 
-      97 0072  72 03			                        jc sub_overflow
-					                                 ;if ca
-					rry flag set (有进位) (eng???) jump 
-					to sub_overflow
-      98				 
-      99 0074  EB 0B 90			                        jmp sub_no_over
-					flow 
-     100 0077				                        sub_overflow: 
-     101 0077  F7 D8			                                neg ax 
-					                                 ;negat
-					e ax, reverse two's complement 
-     102 0079  B9 2710			                                mov cx,
-					10000d                           ;prepa
-					re for substraction 
-     103 007C  2B C8			                                sub cx,
-					ax                               ;10000
-					 subtract ax, to find the value of the 
-					ax in the limit
-     104 007E  8B C1			                                mov ax,
-					cx 
-     105 0080  F9			                                STC    
-					                                 ;set c
-					arry flag for whole number subtraction 
-     106				 
-     107 0081				                        sub_no_overflow
-					: 
-     108 0081  89 44 02			                        mov [si+2],ax  
-					                                 ;load 
-					mantisssa result in ax to si mantissa p
-					art 
-Microsoft (R) Macro Assembler Version 5.00                  8/11/23 11:34:05
+      93				 
+      94 0065  33 D2			                        xor     dx,dx 
+      95 0067  8B 44 02			                        mov     ax,[si+
+					2] 
+      96 006A  8B 1D			                        mov     bx,[di]
+					 
+      97				 
+      98 006C  F7 E3			                        mul     bx 
+      99 006E  03 C1			                        add     ax,cx  
+					                     ;add carry 
+     100 0070  5A			                        pop     dx     
+					                     ;get w1 
+     101 0071  03 C2			                        add     ax,dx  
+					                     ;w1 + ax*bx + carr
+					y 
+     102 0073  50			                        push    ax     
+					                     ;w1 
+     103 0074  8B CA			                        mov     cx,dx  
+					                     ;carry as cx 
+     104				 
+     105 0076  33 C0			                        xor     ax,ax 
+     106 0078  33 D2			                        xor     dx,dx 
+     107 007A  8B 04			                        mov     ax,[si]
+					 
+     108 007C  8B 05			                        mov     ax,[di]
+					 
+     109				                         
+     110 007E  F7 E3			                        mul     bx 
+     111 0080  E8 0101 R		                        call    PRINT_N
+					UM 
+     112 0083  E8 012C R		                        call    print_n
+					 
+     113 0086  03 C1			                        add     ax,cx 
+     114 0088  50			                        push    ax     
+					                     ;w2 
+     115				 
+     116 0089  58			                        pop     ax     
+					                     ;get w2 
+     117 008A  E8 0164 R		                        call    PRINT_H
+					EX 
+     118 008D  E8 012C R		                        call    print_n
+					 
+     119 0090  89 04			                        mov     [si],ax
+					 
+     120				 
+     121 0092  58			                        pop     ax     
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 12:20:12
                                                              Page     1-4
 
 
-     109				 
-     110 0084  8B 04			                        mov ax,[si]    
-					                                 ;load 
-					whole numbers in memory to addresses 
-     111 0086  8B 1D			                        mov bx,[di] 
-     112				 
-     113 0088  1B C3			                        sbb ax,bx      
-					                                 ;subtr
-					act with carry 
-     114				 
-     115 008A  89 04			                        mov [si],ax    
-					                                 ;load 
-					whole number result in ax to si whole n
-					umber part 
-     116				 
-     117 008C  C3			                        ret 
-     118				 
-     119 008D				dec_mul   :                            
-					             ;performs decimal multipli
-					cation 
-     120 008D  8B 44 02			                            mov     ax,
-					[si + 2]                          ;load
-					 mantissa 
-     121 0090  8B 5D 02			                            mov     bx,
-					[di + 2] 
-     122 0093  F7 E3			                            mul     bx 
-     123				                              
-     124 0095  52			                            push    dx 
-     125 0096  50			                            push    ax 
-     126				 
-     127 0097  8B 04			                            mov     ax,
-					[si] 
-     128 0099  F7 E3			                            mul     bx 
-     129				 
-     130 009B  59			                            pop     cx 
-     131 009C  03 D1			                            add     dx,
-					cx 
-     132				 
-     133 009E  50			                            push    ax 
-     134 009F  52			                            push    dx 
-     135				 
-     136 00A0  8B 44 02			                            mov     ax,
-					[si + 2] 
-     137 00A3  8B 1D			                            mov     bx,
-					[di] 
-     138 00A5  F7 E3			                            mul     bx 
+					                     ;get w1 
+     122 0093  E8 0164 R		                        call    PRINT_H
+					EX 
+     123 0096  E8 012C R		                        call    print_n
+					 
+     124 0099  89 44 02			                        mov     [si+2],
+					ax 
+     125				 
+     126 009C  58			                        pop     ax     
+					                     ;throw away smalle
+					st digit partS 
+     127 009D  E8 0164 R		                        call    PRINT_H
+					EX 
+     128 00A0  E8 012C R		                        call    print_n
+					 
+     129				                         
+     130 00A3  C3			                        ret 
+     131				 
+     132				                         
+     133 00A4				DEC_MUL         ENDP 
+     134				 
+     135 00A4				DEC_ADD         PROC                   
+					                     ;performs decimal 
+					addition from si and di, modifies value
+					 in si 
+     136				                        ;load mantissa 
+     137 00A4  8B 44 02			                        mov ax, [si + 2
+					]                    ;一个word 2 byte
+					，+2 来拿第二个word 
+     138 00A7  8B 5D 02			                        mov bx, [di + 2
+					] 
      139				 
-     140 00A7  59			                            pop     cx 
-     141 00A8  03 D1			                            add     dx,
-					cx 
-     142				 
-     143 00AA  59			                            pop     cx 
-     144 00AB  13 C1			                            adc     ax,
-					cx 
-Microsoft (R) Macro Assembler Version 5.00                  8/11/23 11:34:05
+     140 00AA  03 C3			                        add ax,bx      
+					                     ;add mantissa 
+     141				 
+     142 00AC  3D 2710			                        cmp ax,2710h   
+					                     ;check if mantissa
+					 exceeds 10000 
+     143 00AF  73 03			                        jae over_10000 
+					                     ;if mantissa >= 10
+					000 
+     144				 
+     145 00B1  EB 05 90			                        jmp no_overflow
+					                     ;if not exceed 100
+					00 jump over over_10000: function 
+     146				 
+     147 00B4				                        over_10000: 
+     148 00B4  2D 2710			                        sub ax,2710h   
+					                     ;subtract 10000 fr
+					om mantissa 
+     149 00B7  F9			                        STC            
+					                     ;set carry flag fo
+					r whole number addition 
+     150				 
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 12:20:12
                                                              Page     1-5
 
 
-     145				 
-     146 00AD  52			                            push    dx 
-     147 00AE  50			                            push    ax 
-     148				 
-     149 00AF  8B 04			                            mov     ax,
-					[si] 
-     150 00B1  F7 E3			                            mul     bx 
-     151				 
-     152 00B3  59			                            pop     cx 
-     153 00B4  03 D1			                            add     dx,
-					cx 
+     151 00B8				                        no_overflow: 
+     152 00B8  B9 0000			                        mov cx,0000h   
+					                     ; 
+     153 00BB  89 4C 02			                        mov [si + 2],cx
+					                     ;set [si + 2] to z
+					ero 
      154				 
-     155 00B6  52			                            push    dx 
-     156 00B7  50			                            push    ax 
-     157				 
-     158 00B8  58			                            pop     ax 
-     159 00B9  5B			                            pop     bx 
-     160 00BA  59			                            pop     cx 
-     161 00BB  5A			                            pop     dx 
-     162				 
-     163 00BC  89 05			                            mov     [di
-					],ax 
-     164 00BE  89 5D 02			                            mov     [di
-					+2],bx 
-     165 00C1  89 4D 04			                            mov     [di
-					+4],cx 
-     166 00C4  89 55 06			                            mov     [di
-					+6],dx 
-     167				                             
-     168 00C7  C3			                            ret 
-     169				 
-     170 00C8				print_dec :                            
-					             ;print decimal from si 
-     171 00C8  B8 0000			                            mov     ax,
-					 0000h                   ;clean ax regi
-					ster 
-     172 00CB  8B 04			                            mov     ax,
-					 [si]                    ;load whole nu
-					mber 
-     173 00CD  E8 010F R		                            call    pri
-					nt_num_leading_zero      ;print whole n
-					umber 
-     174				 
-     175 00D0  B2 2E			                            mov     dl,
-					 decimal                 ;print decimal
-					 character 
-     176 00D2  E8 0100 R		                            call    pri
-					nt_char 
-     177				 
-     178 00D5  8B 44 02			                            mov     ax,
-					 [si + 2]                ;load mantissa
+     155 00BE  89 44 02			                        mov [si + 2],ax
+					                     ;load calculated m
+					antissa 
+     156				 
+     157				                        ;load whole num
+					ber 
+     158 00C1  8B 04			                        mov ax, [si] 
+     159 00C3  8B 1D			                        mov bx, [di] 
+     160				 
+     161 00C5  13 C3			                        adc ax,bx      
+					                     ;add with carry 
+     162 00C7  89 04			                        mov [si],ax    
+					                     ;load into si 
+     163				 
+     164 00C9  C3			                        ret 
+     165 00CA				DEC_ADD         ENDP 
+     166				 
+     167 00CA				DEC_SUB         PROC                   
+					                     ;performs decimal 
+					addition from si and di, modifies value
+					 in si 
+     168 00CA  8B 44 02			                        mov ax,[si + 2]
+					                     ;load mantissa val
+					ues in address 
+     169 00CD  8B 5D 02			                        mov bx,[di + 2]
 					 
-     179 00D8  E8 010F R		                            call    pri
-					nt_num_leading_zero      ;print mantiss
-Microsoft (R) Macro Assembler Version 5.00                  8/11/23 11:34:05
+     170				 
+     171 00D0  2B C3			                        sub ax,bx      
+					                     ;subtract mantissa
+					 
+     172				 
+     173 00D2  72 03			                        jc sub_overflow
+					                     ;if carry flag set
+					 (有进位) (eng???) jump to sub_overf
+					low 
+     174				 
+     175 00D4  EB 0B 90			                        jmp sub_no_over
+					flow 
+     176 00D7				            sub_overflow: 
+     177 00D7  F7 D8			                                neg ax 
+					                     ;negate ax, revers
+					e two's complement 
+     178 00D9  B9 2710			                                mov cx,
+					10000d               ;prepare for subst
+					raction 
+     179 00DC  2B C8			                                sub cx,
+					ax                   ;10000 subtract ax
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 12:20:12
                                                              Page     1-6
 
 
-					a 
-     180 00DB  C3			            ret 
-     181				 
-     182 00DC				print_num :                            
-					             ;print from ax            
-					  这个没有用到 
-     183 00DC  50			                            push    ax 
-					            ;preserves original registe
-					r values 
-     184 00DD  53			                            push    bx 
-     185 00DE  51			                            push    cx 
-     186 00DF  52			                            push    dx 
-     187 00E0  BB 000A			                            mov     bx,
-					000Ah         
-     188 00E3  B9 0000			                            mov     cx,
-					0000h 
-     189 00E6				            Divloop: 
-     190 00E6  BA 0000			                            mov     dx,
-					0000h 
-     191 00E9  F7 F3			                            div     bx 
-     192 00EB  52			                            push    dx 
-     193 00EC  41			                            inc     cx 
-     194 00ED  85 C0			                            test    ax,
-					ax 
-     195 00EF  75 F5			                            jnz     Div
-					loop 
-     196 00F1  B4 02			            mov ah,02h                 
-					         ;setup for print 
-     197 00F3  5A			            IntPrint:       pop     dx 
-     198 00F4  83 C2 30			                            add     dx,
-					48d 
-     199 00F7  CD 21			                            int     21h
+					, to find the value of the ax in the li
+					mit of 10000 
+     180 00DE  8B C1			                                mov ax,
+					cx 
+     181 00E0  F9			                                STC    
+					                     ;set carry flag fo
+					r whole number subtraction 
+     182				 
+     183 00E1				            sub_no_overflow: 
+     184 00E1  89 44 02			                        mov [si+2],ax  
+					                     ;load mantisssa re
+					sult in ax to si mantissa part 
+     185				 
+     186 00E4  8B 04			                        mov ax,[si]    
+					                     ;load whole number
+					s in memory to addresses 
+     187 00E6  8B 1D			                        mov bx,[di] 
+     188				 
+     189 00E8  1B C3			                        sbb ax,bx      
+					                     ;subtract with car
+					ry 
+     190				 
+     191 00EA  89 04			                        mov [si],ax    
+					                     ;load whole number
+					 result in ax to si whole number part 
+     192				 
+     193 00EC  C3			                        ret 
+     194 00ED				DEC_SUB         ENDP 
+     195				 
+     196 00ED				PRINT_DEC       PROC                   
+					                     ;print decimal fro
+					m si 
+     197 00ED  B8 0000			                        mov     ax, 000
+					0h                   ;clean ax register
 					 
-     200 00F9  E2 F8			                            loop    Int
-					Print 
-     201				 
-     202 00FB  5A			            pop dx                     
-					         ;restore original ax value 
-     203 00FC  59			            pop cx 
-     204 00FD  5B			            pop bx 
-     205 00FE  58			            pop ax 
-     206 00FF  C3			            ret 
-     207				 
-     208 0100				print_char:                            
-					             ;print from dl 
-     209 0100  50			            push ax                    
-					          
-     210 0101  B4 02			            mov ah,02h 
-     211 0103  CD 21			            int 21h 
-     212 0105  58			            pop ax 
-     213 0106  C3			            ret 
-     214				 
-     215 0107				print_n   :                            
-					             ;print newline 
-Microsoft (R) Macro Assembler Version 5.00                  8/11/23 11:34:05
+     198 00F0  8B 04			                        mov     ax, [si
+					]                    ;load whole number
+					 
+     199 00F2  E8 0134 R		                        call    print_n
+					um_leading_zero      ;print whole numbe
+					r 
+     200				 
+     201 00F5  B2 2E			                        mov     dl, dec
+					imal                 ;print decimal cha
+					racter 
+     202 00F7  E8 0125 R		                        call    print_c
+					har 
+     203				 
+     204 00FA  8B 44 02			                        mov     ax, [si
+					 + 2]                ;load mantissa 
+     205 00FD  E8 0134 R		                        call    print_n
+					um_leading_zero      ;print mantissa 
+     206				 
+     207 0100  C3			                        ret 
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 12:20:12
                                                              Page     1-7
 
 
-     216 0107  52			            push dx 
-     217 0108  B2 0A			            mov dl, newline 
-     218 010A  E8 0100 R		            call print_char 
-     219 010D  5A			            pop dx 
-     220 010E  C3			            ret 
-     221				 
-     222 010F				print_num_leading_zero :               
-					             ;print from ax with 4 plac
-					es leading zeros. (eg. if ax=0021d, fun
-					ction will prin
-     223 010F  50			                            push    ax 
-					             ;preserves original regist
-					er values 
-     224 0110  53			                            push    bx 
-     225 0111  51			                            push    cx 
-     226 0112  52			                            push    dx 
-     227 0113  BB 000A			                            mov     bx,
-					000Ah         
-     228 0116  B9 0000			                            mov     cx,
-					0000h 
-     229 0119				            Divloop_leading_zero: 
-     230 0119  BA 0000			                            mov     dx,
-					0000h        ;clean dx 
-     231 011C  F7 F3			                            div     bx 
-					             ;divide ax by 10 
-     232 011E  52			                            push    dx 
-					             ;push remainder to stack 
-     233 011F  41			                            inc     cx 
-					             ;increment cx to record nu
-					mber of times loop 
-     234 0120  85 C0			                            test    ax,
-					ax           ;test the number of ax 
-     235 0122  75 F5			                            jnz     Div
-					loop_leading_zero        ;if ax is not 
-					zero jump to start of loop 
-     236				             
-     237 0124				            startCheck_leading_zero: 
-     238 0124  83 F9 04			                            cmp cx,0004
-					h                        ;if cx is belo
-					w  
-     239 0127  7C 0F			                            jl push_zer
-					o_leading_zero           ;if cx is belo
-					w 4 jump to function that puts 0 in sta
-					ck and incremen
-     240				 
-     241 0129  B4 02			            mov ah,02h                 
-					         ;setup for print 
-     242 012B				            IntPrint_leading_zero:     
-					         ;print data in stack, number o
-					f data is recorded in cx 
-     243 012B  5A			                            pop     dx 
-     244 012C  83 C2 30			                            add     dx,
-					"0" 
-     245 012F  CD 21			                            int     21h
-Microsoft (R) Macro Assembler Version 5.00                  8/11/23 11:34:05
+     208 0101				PRINT_DEC       ENDP 
+     209				 
+     210 0101				PRINT_NUM       PROC                   
+					                     ;print from ax    
+					          这个没有用到 
+     211 0101  50			                        push    ax     
+					                     ;preserves origina
+					l register values 
+     212 0102  53			                        push    bx 
+     213 0103  51			                        push    cx 
+     214 0104  52			                        push    dx 
+     215 0105  BB 000A			                        mov     bx,000A
+					h         
+     216 0108  B9 0000			                        mov     cx,0000
+					h 
+     217 010B				            Divloop: 
+     218 010B  BA 0000			                        mov     dx,0000
+					h 
+     219 010E  F7 F3			                        div     bx 
+     220 0110  52			                        push    dx 
+     221 0111  41			                        inc     cx 
+     222 0112  85 C0			                        test    ax,ax 
+     223 0114  75 F5			                        jnz     Divloop
+					 
+     224				 
+     225 0116  B4 02			                        mov ah,02h     
+					                     ;setup for print 
+     226				 
+     227 0118				            IntPrint:    
+     228 0118  5A			                        pop     dx 
+     229 0119  83 C2 30			                        add     dx,48d 
+     230 011C  CD 21			                        int     21h 
+     231 011E  E2 F8			                        loop    IntPrin
+					t 
+     232				 
+     233 0120  5A			                        pop dx         
+					                     ;restore original 
+					ax value 
+     234 0121  59			                        pop cx 
+     235 0122  5B			                        pop bx 
+     236 0123  58			                        pop ax 
+     237 0124  C3			                        ret 
+     238 0125				PRINT_NUM       ENDP 
+     239				 
+     240 0125				PRINT_CHAR      PROC                   
+					                     ;print from dl 
+     241 0125  50			                        push ax        
+					                      
+     242 0126  B4 02			                        mov ah,02h 
+     243 0128  CD 21			                        int 21h 
+     244 012A  58			                        pop ax 
+     245 012B  C3			                        ret 
+     246 012C				PRINT_CHAR      ENDP 
+     247				 
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 12:20:12
                                                              Page     1-8
 
 
+     248 012C				PRINT_N         PROC                   
+					                     ;print newline 
+     249 012C  52			                        push dx 
+     250 012D  B2 0A			                        mov dl, newline
 					 
-     246 0131  E2 C0			                            loop    Int
+     251 012F  E8 0125 R		                        call print_char
+					 
+     252 0132  5A			                        pop dx 
+     253 0133  C3			                        ret 
+     254 0134				PRINT_N         ENDP 
+     255				 
+     256 0134				PRINT_NUM_LEADING_ZERO PROC            
+					                     ;print from ax wit
+					h 4 places leading zeros. (eg. if ax=00
+					21d, function w
+     257 0134  50			                            push    ax 
+					                     ;preserves origina
+					l register values 
+     258 0135  53			                            push    bx 
+     259 0136  51			                            push    cx 
+     260 0137  52			                            push    dx 
+     261 0138  BB 000A			                            mov     bx,
+					000Ah         
+     262 013B  B9 0000			                            mov     cx,
+					0000h 
+     263 013E				            Divloop_leading_zero: 
+     264 013E  BA 0000			                            mov     dx,
+					0000h                ;clean dx 
+     265 0141  F7 F3			                            div     bx 
+					                     ;divide ax by 10 
+     266 0143  52			                            push    dx 
+					                     ;push remainder to
+					 stack 
+     267 0144  41			                            inc     cx 
+					                     ;increment cx to r
+					ecord number of times loop 
+     268 0145  85 C0			                            test    ax,
+					ax                   ;test the number o
+					f ax 
+     269 0147  75 F5			                            jnz     Div
+					loop_leading_zero    ;if ax is not zero
+					 jump to start of loop 
+     270				             
+     271 0149				            startCheck_leading_zero: 
+     272 0149  83 F9 04			                            cmp cx,0004
+					h                    ;if cx is below  
+     273 014C  7C 0F			                            jl push_zer
+					o_leading_zero       ;if cx is below 4 
+					jump to function that puts 0 in stack a
+					nd increments c
+     274				 
+     275 014E  B4 02			            mov ah,02h                 
+					                     ;setup for print 
+     276 0150				            IntPrint_leading_zero:     
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 12:20:12
+                                                             Page     1-9
+
+
+					                     ;print data in sta
+					ck, number of data is recorded in cx 
+     277 0150  5A			                            pop     dx 
+     278 0151  83 C2 30			                            add     dx,
+					"0" 
+     279 0154  CD 21			                            int     21h
+					 
+     280 0156  E2 C0			                            loop    Int
 					Print     
-     247				 
-     248 0133  5A			            pop dx                     
-					         ;restore original register val
-					ue 
-     249 0134  59			            pop cx 
-     250 0135  5B			            pop bx 
-     251 0136  58			            pop ax 
-     252 0137  C3			            ret 
-     253				 
-     254 0138				            push_zero_leading_zero: 
-     255 0138  B8 0000			                            mov ax,0h  
+     281				 
+     282 0158  5A			            pop dx                     
+					                     ;restore original 
+					register value 
+     283 0159  59			            pop cx 
+     284 015A  5B			            pop bx 
+     285 015B  58			            pop ax 
+     286 015C  C3			            ret 
+     287				 
+     288 015D				            push_zero_leading_zero: 
+     289 015D  B8 0000			                            mov ax,0h  
 					                     ;prepare for push 
-     256 013B  50			                            push ax    
+     290 0160  50			                            push ax    
 					                     ;push 0 to stack 
-     257 013C  41			                            inc cx     
+     291 0161  41			                            inc cx     
 					                     ;cx++ 
-     258 013D  EB E5			                            jmp startCh
+     292 0162  EB E5			                            jmp startCh
 					eck_leading_zero     ;jump to leading z
 					ero checker 
-     259				 
-     260				 
-     261				 
-     262 013F				main endp 
-     263 013F				end main 
-Microsoft (R) Macro Assembler Version 5.00                  8/11/23 11:34:05
+     293 0164				PRINT_NUM_LEADING_ZERO ENDP 
+     294				 
+     295 0164				PRINT_HEX       PROC 
+     296 0164  50			                            push    ax 
+					                         ;preserves ori
+					ginal register values 
+     297 0165  53			                            push    bx 
+     298 0166  51			                            push    cx 
+     299 0167  52			                            push    dx 
+     300 0168  BB 0010			                            mov     bx,
+					0010h         
+     301 016B  B9 0000			                            mov     cx,
+					0000h 
+     302 016E				                DivloopHex: 
+     303 016E  BA 0000			                            mov     dx,
+					0000h 
+     304 0171  F7 F3			                            div     bx 
+     305 0173  52			                            push    dx 
+     306 0174  41			                            inc     cx 
+     307 0175  85 C0			                            test    ax,
+					ax 
+     308 0177  75 F5			                            jnz     Div
+					loopHex 
+     309				 
+     310 0179  B4 02			                            mov ah,02h 
+					                         ;setup for pri
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 12:20:12
+                                                             Page     1-10
+
+
+					nt 
+     311				 
+     312 017B				                IntPrintHex:    
+     313 017B  5A			                            pop     dx 
+     314 017C  83 FA 0A			                            cmp     dx,
+					10d 
+     315 017F  73 0C			                            jae     hex
+					Add 
+     316				                     
+     317 0181  83 C2 30			                            add     dx,
+					48d 
+     318				 
+     319 0184				                    endAdd:         
+     320 0184  CD 21			                            int     21h
+					 
+     321 0186  E2 F3			                            loop    Int
+					PrintHex 
+     322				 
+     323 0188  5A			                            pop dx     
+					                         ;restore origi
+					nal ax value 
+     324 0189  59			                            pop cx 
+     325 018A  5B			                            pop bx 
+     326 018B  58			                            pop ax 
+     327 018C  C3			                            ret 
+     328				 
+     329 018D				                hexAdd: 
+     330 018D  83 C2 37			                            add     dx,
+					55d 
+     331 0190  EB F2			                            jmp     end
+					Add 
+     332				 
+     333 0192				PRINT_HEX       ENDP 
+     334				 
+     335 0192				PRINT_BIN       PROC                   
+					                     ;print binary from
+					 ax 
+     336 0192  50			                            push    ax 
+					            ;preserves original registe
+					r values 
+     337 0193  53			                            push    bx 
+     338 0194  51			                            push    cx 
+     339 0195  52			                            push    dx 
+     340 0196  BB 0002			                            mov     bx,
+					0002h         
+     341 0199  B9 0000			                            mov     cx,
+					0000h 
+     342 019C				            DivloopB: 
+     343 019C  BA 0000			                            mov     dx,
+					0000h 
+     344 019F  F7 F3			                            div     bx 
+     345 01A1  52			                            push    dx 
+     346 01A2  41			                            inc     cx 
+     347 01A3  85 C0			                            test    ax,
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 12:20:12
+                                                             Page     1-11
+
+
+					ax 
+     348 01A5  75 F5			                            jnz     Div
+					loopB 
+     349 01A7  B4 02			            mov ah,02h                 
+					         ;setup for print 
+     350				 
+     351 01A9  BB 0000			            mov bx,0000h 
+     352				 
+     353 01AC  BB 0010			            mov bx,16d                 
+					         ;max number of digits 
+     354 01AF  2B D9			            sub bx,cx                  
+					         ;number of leading zeros = max
+					 digits - number of chars to print 
+     355				 
+     356 01B1  B2 30			            mov dl,"0"                 
+					         ;prepare for print 
+     357				 
+     358 01B3  51			            push cx                    
+					         ;store cx for later use 
+     359 01B4  8B CB			            mov  cx,bx 
+     360				 
+     361 01B6  85 C9			            test cx,cx                 
+					         ;if cx != 0, print 0 for cx nu
+					mber of times 
+     362 01B8  75 03			            jnz Trailing0B 
+     363				 
+     364 01BA  EB 05 90			            jmp Trailing0BEnd 
+     365				 
+     366 01BD  CD 21			            Trailing0B:     int 21h 
+     367 01BF  E2 FC			                            loop Traili
+					ng0B 
+     368				 
+     369				 
+     370 01C1				            Trailing0BEnd: 
+     371 01C1  59			            pop  cx 
+     372				 
+     373 01C2  5A			            IntPrintB:      pop     dx 
+     374 01C3  83 C2 30			                            add     dx,
+					48d 
+     375 01C6  CD 21			                            int     21h
+					 
+     376 01C8  E2 F8			                            loop    Int
+					PrintB 
+     377				 
+     378 01CA  5A			            pop dx                     
+					         ;restore original ax value 
+     379 01CB  59			            pop cx 
+     380 01CC  5B			            pop bx 
+     381 01CD  58			            pop ax 
+     382 01CE  C3			            ret 
+     383 01CF				PRINT_BIN       ENDP 
+     384				 
+     385 01CF				main endp 
+     386 01CF				end main 
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 12:20:12
                                                              Symbols-1
 
 
@@ -444,61 +645,77 @@ Segments and Groups:
                 N a m e         	Length	 Align	Combine Class
 
 DGROUP . . . . . . . . . . . . .  	GROUP
-  _DATA  . . . . . . . . . . . .  	0008	WORD	PUBLIC	'DATA'
+  _DATA  . . . . . . . . . . . .  	001C	WORD	PUBLIC	'DATA'
   STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
-_TEXT  . . . . . . . . . . . . .  	013F	WORD	PUBLIC	'CODE'
+_TEXT  . . . . . . . . . . . . .  	01CF	WORD	PUBLIC	'CODE'
 
 Symbols:            
 
                 N a m e         	Type	 Value	 Attr
 
+ADD32  . . . . . . . . . . . . .  	N PROC	0047	_TEXT	Length = 0000
+
+BUFFER . . . . . . . . . . . . .  	L WORD	0008	_DATA	Length = 000A
+
 DECIMAL  . . . . . . . . . . . .  	NUMBER	002E	
-DEC_ADD  . . . . . . . . . . . .  	L NEAR	0044	_TEXT
-DEC_MUL  . . . . . . . . . . . .  	L NEAR	008D	_TEXT
-DEC_SUB  . . . . . . . . . . . .  	L NEAR	006A	_TEXT
-DIVLOOP  . . . . . . . . . . . .  	L NEAR	00E6	_TEXT
-DIVLOOP_LEADING_ZERO . . . . . .  	L NEAR	0119	_TEXT
+DEC_ADD  . . . . . . . . . . . .  	N PROC	00A4	_TEXT	Length = 0026
+DEC_MUL  . . . . . . . . . . . .  	N PROC	0047	_TEXT	Length = 005D
+DEC_SUB  . . . . . . . . . . . .  	N PROC	00CA	_TEXT	Length = 0023
+DIVLOOP  . . . . . . . . . . . .  	L NEAR	010B	_TEXT
+DIVLOOPB . . . . . . . . . . . .  	L NEAR	019C	_TEXT
+DIVLOOPHEX . . . . . . . . . . .  	L NEAR	016E	_TEXT
+DIVLOOP_LEADING_ZERO . . . . . .  	L NEAR	013E	_TEXT
 
-ENDPROGRAM . . . . . . . . . . .  	L NEAR	003B	_TEXT
+ENDADD . . . . . . . . . . . . .  	L NEAR	0184	_TEXT
+ENDPROGRAM . . . . . . . . . . .  	L NEAR	003E	_TEXT
 
-INTPRINT . . . . . . . . . . . .  	L NEAR	00F3	_TEXT
-INTPRINT_LEADING_ZERO  . . . . .  	L NEAR	012B	_TEXT
+HEXADD . . . . . . . . . . . . .  	L NEAR	018D	_TEXT
 
-MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 013F
+INTPRINT . . . . . . . . . . . .  	L NEAR	0118	_TEXT
+INTPRINTB  . . . . . . . . . . .  	L NEAR	01C2	_TEXT
+INTPRINTHEX  . . . . . . . . . .  	L NEAR	017B	_TEXT
+INTPRINT_LEADING_ZERO  . . . . .  	L NEAR	0150	_TEXT
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 01CF
 
 NEWLINE  . . . . . . . . . . . .  	NUMBER	000A	
-NO_OVERFLOW  . . . . . . . . . .  	L NEAR	0058	_TEXT
+NO_OVERFLOW  . . . . . . . . . .  	L NEAR	00B8	_TEXT
 NUM1 . . . . . . . . . . . . . .  	L WORD	0000	_DATA
 NUM2 . . . . . . . . . . . . . .  	L WORD	0004	_DATA
 
-OVER_10000 . . . . . . . . . . .  	L NEAR	0054	_TEXT
+OVER_10000 . . . . . . . . . . .  	L NEAR	00B4	_TEXT
 
-PRINT_CHAR . . . . . . . . . . .  	L NEAR	0100	_TEXT
-PRINT_DEC  . . . . . . . . . . .  	L NEAR	00C8	_TEXT
-PRINT_N  . . . . . . . . . . . .  	L NEAR	0107	_TEXT
-PRINT_NUM  . . . . . . . . . . .  	L NEAR	00DC	_TEXT
-PRINT_NUM_LEADING_ZERO . . . . .  	L NEAR	010F	_TEXT
-PUSH_ZERO_LEADING_ZERO . . . . .  	L NEAR	0138	_TEXT
+PRINT_BIN  . . . . . . . . . . .  	N PROC	0192	_TEXT	Length = 003D
+PRINT_CHAR . . . . . . . . . . .  	N PROC	0125	_TEXT	Length = 0007
+PRINT_DEC  . . . . . . . . . . .  	N PROC	00ED	_TEXT	Length = 0014
+PRINT_HEX  . . . . . . . . . . .  	N PROC	0164	_TEXT	Length = 002E
+PRINT_N  . . . . . . . . . . . .  	N PROC	012C	_TEXT	Length = 0008
+PRINT_NUM  . . . . . . . . . . .  	N PROC	0101	_TEXT	Length = 0024
+PRINT_NUM_LEADING_ZERO . . . . .  	N PROC	0134	_TEXT	Length = 0030
+PUSH_ZERO_LEADING_ZERO . . . . .  	L NEAR	015D	_TEXT
 
-STARTCHECK_LEADING_ZERO  . . . .  	L NEAR	0124	_TEXT
-SUB_NO_OVERFLOW  . . . . . . . .  	L NEAR	0081	_TEXT
-SUB_OVERFLOW . . . . . . . . . .  	L NEAR	0077	_TEXT
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 12:20:12
+                                                             Symbols-2
+
+
+STARTCHECK_LEADING_ZERO  . . . .  	L NEAR	0149	_TEXT
+SUB_NO_OVERFLOW  . . . . . . . .  	L NEAR	00E1	_TEXT
+SUB_OVERFLOW . . . . . . . . . .  	L NEAR	00D7	_TEXT
+
+TRAILING0B . . . . . . . . . . .  	L NEAR	01BD	_TEXT
+TRAILING0BEND  . . . . . . . . .  	L NEAR	01C1	_TEXT
 
 @CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
 @CODESIZE  . . . . . . . . . . .  	TEXT  0		
 @DATASIZE  . . . . . . . . . . .  	TEXT  0		
 @FILENAME  . . . . . . . . . . .  	TEXT  ALU		
 
-Microsoft (R) Macro Assembler Version 5.00                  8/11/23 11:34:05
-                                                             Symbols-2
 
+    383 Source  Lines
+    383 Total   Lines
+     50 Symbols
 
-
-    263 Source  Lines
-    263 Total   Lines
-     38 Symbols
-
-  50404 + 449756 Bytes symbol space free
+  50402 + 449758 Bytes symbol space free
 
       0 Warning Errors
       0 Severe  Errors

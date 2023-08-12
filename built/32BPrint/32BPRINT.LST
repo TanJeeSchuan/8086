@@ -1,177 +1,262 @@
-Microsoft (R) Macro Assembler Version 5.00                  8/11/23 14:40:57
+Microsoft (R) Macro Assembler Version 5.00                  8/11/23 19:21:20
                                                              Page     1-1
 
 
        1				.model small 
        2 0064				.stack 100 
        3 0000				.data 
-       4 0000				.code 
-       5 0000				main proc 
-       6				 
-       7 0000  B8 ---- R		mov ax,@data 
-       8 0003  8E D8			mov ds,ax 
-       9 0005  B8 4C00			mov ax,4c00h 
+       4				 
+       5 0000  4E61BC00			num1                DD 12345678d 
+       6 0004  ????????????????		buffer              DQ ? 
+       7				 
+       8 0000				.code 
+       9 0000				main proc 
       10				 
-      11				; start 
-      12				 
-      13 0008  BA 0001			mov dx,0001h 
-      14 000B  B8 8000			mov ax,1000000000000000b 
-      15				 
-      16 000E				DDLess4Check: 
-      17 000E  E8 0067 R		                            call    SHR
-					_REG 
-      18 0011  E8 0043 R		                            call    pri
-					nt_bin 
-      19 0014  E8 0078 R		                            call    new
-					line 
-      20				 
-      21 0017  85 C0			                            test ax,ax 
-      22 0019  75 F3			                            jnz DDLess4
-					Check 
-      23				 
-      24				;end 
-      25				 
-      26 001B  B4 4C			mov ah,4ch 
-      27 001D  CD 21			int 21h 
-      28				 
-      29 001F				main endp 
-      30				 
-      31 001F				PRINT_NUM   PROC                       
-					                 ;print from ax        
-					      这个没有用到 
-      32 001F  50			                            push    ax 
+      11 0000  B8 ---- R		mov ax,@data 
+      12 0003  8E D8			mov ds,ax 
+      13 0005  B8 4C00			mov ax,4c00h 
+      14				 
+      15				; start 
+      16				 
+      17 0008  8D 36 0000 R		lea si,num1 
+      18				 
+      19				mov eax,[si] 
+ASMFiles\A\32BPrint.asm(19): error A2009: Symbol not defined: EAX
+      20 000C  8B 5C 02			mov bx,[si + 2] 
+      21				 
+      22 000F  E8 0024 R		call print_num 
+      23 0012  E8 00A9 R		call newline 
+      24				 
+      25 0015  8B C3			mov ax,bx 
+      26 0017  E8 0024 R		call print_num 
+      27				 
+      28				;end 
+      29				 
+      30 001A  B4 4C			mov ah,4ch 
+      31 001C  CD 21			int 21h 
+      32				 
+      33 001E				main endp 
+ASMFiles\A\32BPrint.asm(33): error A2006: Phase error between passes
+      34				 
+      35				PRINT_NUM       PROC                   
+					                     ;print from ax    
+					          这个没有用到 
+ASMFiles\A\32BPrint.asm(35): error A2006: Phase error between passes
+      36 0024  50			                            push    ax 
 					            ;preserves original registe
 					r values 
-      33 0020  53			                            push    bx 
-      34 0021  51			                            push    cx 
-      35 0022  52			                            push    dx 
-      36 0023  BB 000A			                            mov     bx,
+      37 0025  53			                            push    bx 
+      38 0026  51			                            push    cx 
+      39 0027  52			                            push    dx 
+      40 0028  BB 000A			                            mov     bx,
 					000Ah         
-      37 0026  B9 0000			                            mov     cx,
+      41 002B  B9 0000			                            mov     cx,
 					0000h 
-      38 0029				            Divloop: 
-      39 0029  BA 0000			                            mov     dx,
+      42 002E				            Divloop: 
+      43 002E  BA 0000			                            mov     dx,
 					0000h 
-      40 002C  F7 F3			                            div     bx 
-      41 002E  52			                            push    dx 
-      42 002F  41			                            inc     cx 
-      43 0030  85 C0			                            test    ax,
-Microsoft (R) Macro Assembler Version 5.00                  8/11/23 14:40:57
+      44 0031  F7 F3			                            div     bx 
+Microsoft (R) Macro Assembler Version 5.00                  8/11/23 19:21:20
                                                              Page     1-2
 
 
+      45 0033  52			                            push    dx 
+      46 0034  41			                            inc     cx 
+      47 0035  85 C0			                            test    ax,
 					ax 
-      44 0032  75 F5			                            jnz     Div
+      48 0037  75 F5			                            jnz     Div
 					loop 
-      45 0034  B4 02			            mov ah,02h                 
+      49 0039  B4 02			            mov ah,02h                 
 					         ;setup for print 
-      46 0036  5A			            IntPrint:       pop     dx 
-      47 0037  83 C2 30			                            add     dx,
+      50 003B  5A			            IntPrint:       pop     dx 
+      51 003C  83 C2 30			                            add     dx,
 					48d 
-      48 003A  CD 21			                            int     21h
+      52 003F  CD 21			                            int     21h
 					 
-      49 003C  E2 F8			                            loop    Int
+      53 0041  E2 F8			                            loop    Int
 					Print 
-      50				 
-      51 003E  5A			            pop dx                     
+      54				 
+      55 0043  5A			            pop dx                     
 					         ;restore original ax value 
-      52 003F  59			            pop cx 
-      53 0040  5B			            pop bx 
-      54 0041  58			            pop ax 
-      55 0042  C3			            ret 
-      56 0043				PRINT_NUM   endp 
-      57				 
-      58 0043				PRINT_BIN   PROC 
-      59 0043  50			                            push    ax 
+      56 0044  59			            pop cx 
+      57 0045  5B			            pop bx 
+      58 0046  58			            pop ax 
+      59 0047  C3			            ret 
+      60 0048				PRINT_NUM       ENDP 
+      61				 
+      62 0048				PRINT_BIN       PROC                   
+					                     ;print binary from
+					 ax 
+      63 0048  50			                            push    ax 
 					            ;preserves original registe
 					r values 
-      60 0044  53			                            push    bx 
-      61 0045  51			                            push    cx 
-      62 0046  52			                            push    dx 
-      63 0047  BB 0002			                            mov     bx,
+      64 0049  53			                            push    bx 
+      65 004A  51			                            push    cx 
+      66 004B  52			                            push    dx 
+      67 004C  BB 0002			                            mov     bx,
 					0002h         
-      64 004A  B9 0000			                            mov     cx,
+      68 004F  B9 0000			                            mov     cx,
 					0000h 
-      65 004D				            DivloopB: 
-      66 004D  BA 0000			                            mov     dx,
+      69 0052				            DivloopB: 
+      70 0052  BA 0000			                            mov     dx,
 					0000h 
-      67 0050  F7 F3			                            div     bx 
-      68 0052  52			                            push    dx 
-      69 0053  41			                            inc     cx 
-      70 0054  85 C0			                            test    ax,
+      71 0055  F7 F3			                            div     bx 
+      72 0057  52			                            push    dx 
+      73 0058  41			                            inc     cx 
+      74 0059  85 C0			                            test    ax,
 					ax 
-      71 0056  75 F5			                            jnz     Div
+      75 005B  75 F5			                            jnz     Div
 					loopB 
-      72 0058  B4 02			            mov ah,02h                 
+      76 005D  B4 02			            mov ah,02h                 
 					         ;setup for print 
-      73 005A  5A			            IntPrintB:       pop     dx
-					 
-      74 005B  83 C2 30			                            add     dx,
-					48d 
-      75 005E  CD 21			                            int     21h
-					 
-      76 0060  E2 F8			                            loop    Int
-					PrintB 
       77				 
-      78 0062  5A			            pop dx                     
-Microsoft (R) Macro Assembler Version 5.00                  8/11/23 14:40:57
+      78 005F  BB 0000			            mov bx,0000h 
+      79				 
+      80 0062  BB 0010			            mov bx,16d                 
+					         ;max number of digits 
+Microsoft (R) Macro Assembler Version 5.00                  8/11/23 19:21:20
                                                              Page     1-3
 
 
-					         ;restore original ax value 
-      79 0063  59			            pop cx 
-      80 0064  5B			            pop bx 
-      81 0065  58			            pop ax 
-      82 0066  C3			            ret 
-      83 0067				PRINT_BIN   endp 
+      81 0065  2B D9			            sub bx,cx                  
+					         ;number of leading zeros = max
+					 digits - number of chars to print 
+      82				 
+      83 0067  B2 30			            mov dl,"0"                 
+					         ;prepare for print 
       84				 
-      85 0067				SHR_REG     PROC                       
-					                 ;shift dx:ax to the ri
-					ght 
-      86 0067  D1 EA			                            shr dx,1   
+      85 0069  51			            push cx                    
+					         ;store cx for later use 
+      86 006A  8B CB			            mov  cx,bx 
+      87				 
+      88 006C  85 C9			            test cx,cx                 
+					         ;if cx != 0, print 0 for cx nu
+					mber of times 
+      89 006E  75 03			            jnz Trailing0B 
+      90				 
+      91 0070  EB 05 90			            jmp Trailing0BEnd 
+      92				 
+      93 0073  CD 21			            Trailing0B:     int 21h 
+      94 0075  E2 FC			                            loop Traili
+					ng0B 
+      95				 
+      96				 
+      97 0077				            Trailing0BEnd: 
+      98 0077  59			            pop  cx 
+      99				 
+     100 0078  5A			            IntPrintB:      pop     dx 
+     101 0079  83 C2 30			                            add     dx,
+					48d 
+     102 007C  CD 21			                            int     21h
+					 
+     103 007E  E2 F8			                            loop    Int
+					PrintB 
+     104				 
+     105 0080  5A			            pop dx                     
+					         ;restore original ax value 
+     106 0081  59			            pop cx 
+     107 0082  5B			            pop bx 
+     108 0083  58			            pop ax 
+     109 0084  C3			            ret 
+     110 0085				PRINT_BIN       ENDP 
+     111				 
+     112 0085				GET_LOWER_DL    PROC                   
+					                     ;put last 4 bits o
+					f DL to BL, first 4 bits of DL to BH 
+     113 0085  51			                            push    cx 
+     114 0086  52			                            push    dx 
+     115				 
+     116 0087  B1 04			                            mov     cl,
+					4d 
+     117 0089  D2 E2			                            shl     dl,
+					cl                   ;shifts left 4 the
+					n right 4 to get value of lower 4 bits 
+     118 008B  D2 EA			                            shr     dl,
+Microsoft (R) Macro Assembler Version 5.00                  8/11/23 19:21:20
+                                                             Page     1-4
+
+
+					cl 
+     119 008D  8A DA			                            mov     bl,
+					dl 
+     120				 
+     121 008F  5A			                            pop     dx 
+					                      
+     122 0090  52			                            push    dx 
+     123 0091  D2 EA			                            shr     dl,
+					cl                   ;shifts right 4 to
+					 get value of higher 4 bits 
+     124 0093  8A FA			                            mov     bh,
+					dl 
+     125				 
+     126 0095  5A			                            pop     dx 
+     127 0096  59			                            pop     cx 
+     128				 
+     129 0097  C3			                            ret 
+     130 0098				GET_LOWER_DL    ENDP 
+     131				 
+     132 0098				SHR_REG         PROC                   
+					                     ;shift dx:ax to th
+					e right 
+     133 0098  D1 EA			                            shr dx,1   
 					                 ;shift right will set 
 					carry flag will shifted bit is 1 
-      87 0069  D1 D8			                            rcr ax,1   
+     134 009A  D1 D8			                            rcr ax,1   
 					                 ;(Rotate through Carry
 					 Right) 
-      88 006B  C3			                            ret 
-      89 006C				SHR_REG     ENDP 
-      90				 
-      91 006C				SHL_REG     PROC                       
-					                 ;shift dx:ax to the le
-					ft 
-      92 006C  D1 E2			                            shl dx,1   
+     135 009C  C3			                            ret 
+     136 009D				SHR_REG         ENDP 
+     137				 
+     138 009D				SHL_REG         PROC                   
+					                     ;shift dx:ax to th
+					e left 
+     139 009D  D1 E0			                            shl ax,1   
 					                 ;shift left will set c
 					arry flag will shifted bit is 1 
-      93 006E  D1 D0			                            rcl ax,1   
+     140 009F  D1 D2			                            rcl dx,1   
 					                 ;(Rotate through Carry
 					 left) 
-      94 0070  C3			                            ret 
-      95 0071				SHL_REG     ENDP 
-      96				 
-      97 0071				PRINT_CHAR  PROC                       
-					                 ;print cjaracter of va
-					lue in dl 
-      98 0071  50			                            push    ax 
-      99 0072  B4 02			                            mov     ah,
+     141 00A1  C3			                            ret 
+     142 00A2				SHL_REG         ENDP 
+     143				 
+     144 00A2				PRINT_CHAR      PROC                   
+					                     ;print cjaracter o
+					f value in dl 
+     145 00A2  50			                            push    ax 
+     146 00A3  B4 02			                            mov     ah,
 					02h 
-     100 0074  CD 21			                            int     21h
+     147 00A5  CD 21			                            int     21h
 					 
-     101 0076  58			                            pop     ax 
-     102 0077  C3			                            ret 
-     103 0078				PRINT_CHAR  ENDP 
-     104				 
-     105 0078				NEWLINE     PROC 
-     106 0078  52			                            push    dx 
-     107 0079  B2 0A			                            mov     dl,
+     148 00A7  58			                            pop     ax 
+     149 00A8  C3			                            ret 
+     150 00A9				PRINT_CHAR      ENDP 
+Microsoft (R) Macro Assembler Version 5.00                  8/11/23 19:21:20
+                                                             Page     1-5
+
+
+     151				 
+     152 00A9				NEWLINE         PROC 
+     153 00A9  52			                            push    dx 
+     154 00AA  B2 0A			                            mov     dl,
 					0Ah 
-     108 007B  E8 0071 R		                            call PRINT_
+     155 00AC  E8 00A2 R		                            call PRINT_
 					CHAR 
-     109 007E  5A			                            pop     dx 
-     110 007F  C3			                            ret 
-     111 0080				NEWLINE     ENDP 
-     112 0080				end main 
-Microsoft (R) Macro Assembler Version 5.00                  8/11/23 14:40:57
+     156 00AF  5A			                            pop     dx 
+     157 00B0  C3			                            ret 
+     158 00B1				NEWLINE         ENDP 
+     159				 
+     160 00B1				SPACE           PROC 
+     161 00B1  52			                            push dx 
+     162 00B2  B2 20			                            mov     dl,
+					" " 
+     163 00B4  E8 00A2 R		                            call PRINT_
+					CHAR 
+     164 00B7  5A			                            pop     dx 
+     165 00B8  C3			                            ret 
+     166 00B9				SPACE           ENDP 
+     167				 
+     168 00B9				end main 
+Microsoft (R) Macro Assembler Version 5.00                  8/11/23 19:21:20
                                                              Symbols-1
 
 
@@ -180,43 +265,55 @@ Segments and Groups:
                 N a m e         	Length	 Align	Combine Class
 
 DGROUP . . . . . . . . . . . . .  	GROUP
-  _DATA  . . . . . . . . . . . .  	0000	WORD	PUBLIC	'DATA'
+  _DATA  . . . . . . . . . . . .  	000C	WORD	PUBLIC	'DATA'
   STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
-_TEXT  . . . . . . . . . . . . .  	0080	WORD	PUBLIC	'CODE'
+_TEXT  . . . . . . . . . . . . .  	00B9	WORD	PUBLIC	'CODE'
 
 Symbols:            
 
                 N a m e         	Type	 Value	 Attr
 
-DDLESS4CHECK . . . . . . . . . .  	L NEAR	000E	_TEXT
-DIVLOOP  . . . . . . . . . . . .  	L NEAR	0029	_TEXT
-DIVLOOPB . . . . . . . . . . . .  	L NEAR	004D	_TEXT
+BUFFER . . . . . . . . . . . . .  	L QWORD	0004	_DATA
 
-INTPRINT . . . . . . . . . . . .  	L NEAR	0036	_TEXT
-INTPRINTB  . . . . . . . . . . .  	L NEAR	005A	_TEXT
+DIVLOOP  . . . . . . . . . . . .  	L NEAR	002E	_TEXT
+DIVLOOPB . . . . . . . . . . . .  	L NEAR	0052	_TEXT
 
-MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 001F
+GET_LOWER_DL . . . . . . . . . .  	N PROC	0085	_TEXT	Length = 0013
 
-NEWLINE  . . . . . . . . . . . .  	N PROC	0078	_TEXT	Length = 0008
+INTPRINT . . . . . . . . . . . .  	L NEAR	003B	_TEXT
+INTPRINTB  . . . . . . . . . . .  	L NEAR	0078	_TEXT
 
-PRINT_BIN  . . . . . . . . . . .  	N PROC	0043	_TEXT	Length = 0024
-PRINT_CHAR . . . . . . . . . . .  	N PROC	0071	_TEXT	Length = 0007
-PRINT_NUM  . . . . . . . . . . .  	N PROC	001F	_TEXT	Length = 0024
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 001E
 
-SHL_REG  . . . . . . . . . . . .  	N PROC	006C	_TEXT	Length = 0005
-SHR_REG  . . . . . . . . . . . .  	N PROC	0067	_TEXT	Length = 0005
+NEWLINE  . . . . . . . . . . . .  	N PROC	00A9	_TEXT	Length = 0008
+NUM1 . . . . . . . . . . . . . .  	L DWORD	0000	_DATA
+
+PRINT_BIN  . . . . . . . . . . .  	N PROC	0048	_TEXT	Length = 003D
+PRINT_CHAR . . . . . . . . . . .  	N PROC	00A2	_TEXT	Length = 0007
+PRINT_NUM  . . . . . . . . . . .  	N PROC	0024	_TEXT	Length = 0024
+
+SHL_REG  . . . . . . . . . . . .  	N PROC	009D	_TEXT	Length = 0005
+SHR_REG  . . . . . . . . . . . .  	N PROC	0098	_TEXT	Length = 0005
+SPACE  . . . . . . . . . . . . .  	N PROC	00B1	_TEXT	Length = 0008
+
+TRAILING0B . . . . . . . . . . .  	L NEAR	0073	_TEXT
+TRAILING0BEND  . . . . . . . . .  	L NEAR	0077	_TEXT
 
 @CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
 @CODESIZE  . . . . . . . . . . .  	TEXT  0		
 @DATASIZE  . . . . . . . . . . .  	TEXT  0		
 @FILENAME  . . . . . . . . . . .  	TEXT  32BPrint		
 
+Microsoft (R) Macro Assembler Version 5.00                  8/11/23 19:21:20
+                                                             Symbols-2
 
-    112 Source  Lines
-    112 Total   Lines
-     26 Symbols
 
-  50484 + 466060 Bytes symbol space free
+
+    168 Source  Lines
+    168 Total   Lines
+     31 Symbols
+
+  50330 + 449830 Bytes symbol space free
 
       0 Warning Errors
-      0 Severe  Errors
+      3 Severe  Errors
