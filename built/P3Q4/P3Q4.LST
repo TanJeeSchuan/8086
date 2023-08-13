@@ -1,0 +1,173 @@
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 20:03:36
+                                                             Page     1-1
+
+
+       1				.model small 
+       2 0064				.stack 100 
+       3 0000				.data 
+       4				 
+       5 0000  02 04 06 08 0A 0C	byteList DB 2, 4, 6, 8, 10, 12 
+       6				 
+       7 0000				.code 
+       8 0000				main proc 
+       9				 
+      10 0000  B8 ---- R		mov ax,@data 
+      11 0003  8E D8			mov ds,ax 
+      12 0005  8E C0			mov es,ax 
+      13 0007  B8 4C00			mov ax,4c00h 
+      14				 
+      15				; start 
+      16				 
+      17 000A  B8 0000			mov     ax,0h 
+      18 000D  BA 0000			mov     dx,0000h                       
+					         ;use DX as accumulator 
+      19 0010  B9 0005			mov     cx,5h                          
+					         ;number of elements is array 
+      20 0013  BB 0000			mov     bx,0000h                       
+					         ;bx as tracker 
+      21				 
+      22 0016  8D 36 0000 R		lea     si,byteList 
+      23				 
+      24 001A				loopStart:   
+      25 001A  8A 04			                    mov     al,[si]    
+					         ;move si value to al 
+      26 001C  02 D0			                    add     dl,al      
+					         ;add to dl 
+      27				 
+      28 001E  83 C6 01			                    add     si,1       
+					         ;to next element 
+      29 0021  43			                    inc     bx         
+					         ;bx++ 
+      30				 
+      31 0022  3B D9			                    cmp     bx,cx      
+					         ;if loopnumber < elementNumber
+					, jmp 
+      32 0024  72 F4			                    jb      loopStart 
+      33				 
+      34 0026  8B C2			mov     ax,dx 
+      35				 
+      36 0028  E8 002F R		call    PRINT_NUM 
+      37				;end 
+      38				 
+      39 002B  B4 4C			mov ah,4ch 
+      40 002D  CD 21			int 21h 
+      41				 
+      42 002F				main endp 
+      43				 
+      44 002F				PRINT_NUM           PROC               
+					         ;print ax 
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 20:03:36
+                                                             Page     1-2
+
+
+      45 002F  50			                            push    ax 
+      46 0030  53			                            push    bx 
+      47 0031  51			                            push    cx 
+      48 0032  52			                            push    dx 
+      49				 
+      50 0033  BB 000A			                            mov     bx,
+					0Ah      ;initalise divisor 
+      51 0036  B9 0000			                            mov     cx,
+					0h 
+      52				                             
+      53 0039				                            divLoop:   
+					  
+      54 0039  33 D2			                                       
+					 xor     dx,dx       ;clear remainder 
+      55 003B  F7 F3			                                       
+					 div     bx 
+      56 003D  52			                                       
+					 push    dx          ;save remainder 
+      57 003E  41			                                       
+					 inc     cx          ;count looped numb
+					er 
+      58 003F  85 C0			                                       
+					 test    ax,ax       ;if ax != 0, conti
+					nue 
+      59 0041  75 F6			                                       
+					 jnz     divLoop 
+      60				 
+      61 0043  B4 02			                            mov     ah,
+					02h 
+      62				 
+      63 0045				                            printLoop: 
+					  
+      64 0045  5A			                                       
+					 pop     dx          ;get remainder 
+      65 0046  80 C2 30			                                       
+					 add     dl,"0" 
+      66 0049  CD 21			                                       
+					 int     21h         ;print 
+      67 004B  E2 F8			                                       
+					 loop    printLoop   ;loop until cx is 
+					zero (the number of times divLoop) 
+      68				 
+      69 004D  58			                            pop    ax 
+      70 004E  5B			                            pop    bx 
+      71 004F  59			                            pop    cx 
+      72 0050  5A			                            pop    dx 
+      73				 
+      74 0051  C3			                            ret 
+      75				 
+      76 0052				PRINT_NUM           ENDP 
+      77				 
+      78 0052				NEWLINE         PROC 
+      79 0052  50			                        push    ax 
+      80 0053  52			                        push    dx 
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 20:03:36
+                                                             Page     1-3
+
+
+      81 0054  B2 0A			                        mov     dl,10d 
+      82 0056  B4 02			                        mov     ah,02h 
+      83 0058  CD 21			                        int     21h 
+      84 005A  5A			                        pop     dx 
+      85 005B  58			                        pop     ax 
+      86 005C  C3			                        ret 
+      87 005D				NEWLINE         ENDP 
+      88				 
+      89 005D				end main 
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 20:03:36
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	0006	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	005D	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+BYTELIST . . . . . . . . . . . .  	L BYTE	0000	_DATA
+
+DIVLOOP  . . . . . . . . . . . .  	L NEAR	0039	_TEXT
+
+LOOPSTART  . . . . . . . . . . .  	L NEAR	001A	_TEXT
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 002F
+
+NEWLINE  . . . . . . . . . . . .  	N PROC	0052	_TEXT	Length = 000B
+
+PRINTLOOP  . . . . . . . . . . .  	L NEAR	0045	_TEXT
+PRINT_NUM  . . . . . . . . . . .  	N PROC	002F	_TEXT	Length = 0023
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  P3Q4		
+
+
+     89 Source  Lines
+     89 Total   Lines
+     21 Symbols
+
+  50470 + 466074 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

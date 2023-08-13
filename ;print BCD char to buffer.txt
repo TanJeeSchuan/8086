@@ -1,0 +1,150 @@
+;print BCD char to buffer
+
+xor cx,cx
+mov bx,000Ah
+
+main_print_num_div_loop: 
+xor dx,dx                   ;set dx to zero
+div bx
+push dx
+inc cx
+test ax,ax
+jnz main_print_num_div_loop
+
+mov ah, 02h
+
+main_print_num_print_lp: 
+pop dx
+add dx,"0"
+
+mov ax,cx
+mov bx,19d
+sub bx,ax
+
+mov [buffer + bx],dx
+loop main_print_num_print_lp
+
+lea dx,buffer
+mov ah,09h
+int 21h
+
+; DDLess4Check:
+;                             call    SHL_REG             ;shift dx:ax                        ;BCD is stored in dx
+
+;                             call    GET_LOWER_DL        ;move lower half of dl into bl
+
+;                             ; xor     dl,dl
+
+;                             cmp     bl,4                ;if bl larger than 4 (x > 4) add 3 (0011)
+;                             ja      blDDAdd
+;                             jmp     ddBLCheckDone
+
+;                     blDDAdd:  
+;                             add     bl,3d               ;add 3 to bl
+
+;                             mov     cl,4                ;how many bits to shift
+;                             shr     dl,cl               ;shift dl to the right by 4 bits, to removem the lower 4 bits
+;                             shl     dl,cl               ;shift dl back, lower 4 bits value are zero
+
+;                             or      dl,bl               ;appends new lower 4 bit value to dl
+
+;                     ddBLCheckDone:
+;                             cmp     bh,4
+;                             ja      ddBHAdd
+;                             jmp     ddDone
+
+;                     ddBHAdd:
+;                             add     bh,3d
+                            
+;                             mov     cl,4d
+;                             shl     bh,cl
+
+;                             or      dl,bh
+
+
+;                     ddDone:
+;                             push    ax
+;                             mov     ax,dx
+;                             call    print_bin
+;                             pop     ax
+
+;                             call    space
+
+                            
+;                             call    print_bin
+
+;                             call    newline
+
+;                             ; push    ax                  ;print dx
+;                             ; mov     ax,dx
+;                             ; call print_bin
+;                             ; push    dx
+
+;                             ; mov dl," "                  ;print space          
+;                             ; call print_char
+
+;                             ; ; pop     dx
+;                             ; ; push    dx
+
+;                             ; ; call GET_LOWER_DL
+;                             ; ; mov     ax,bx
+;                             ; ; call PRINT_NUM
+
+;                             ; ; pop     dx
+;                             ; ; push    dx
+
+;                             ; ; mov dl," "                  ;print space          
+;                             ; ; call print_char
+
+;                             ; pop     dx
+;                             ; pop     ax
+;                             ; call print_bin
+
+;                             ; call    newline
+
+;                             test ax,ax
+;                             jnz DDLess4Check
+
+ push    dx
+                            push    ax
+
+                            mov     ax,[si]
+                            mul     bx
+
+                            pop     cx
+                            add     dx,cx
+
+                            push    ax
+                            push    dx
+
+                            mov     ax,[si + 2]
+                            mov     bx,[di]
+                            mul     bx
+
+                            pop     cx
+                            add     dx,cx
+
+                            pop     cx
+                            adc     ax,cx
+
+                            push    dx
+                            push    ax
+
+                            mov     ax,[si]
+                            mul     bx
+
+                            pop     cx
+                            add     dx,cx
+
+                            push    dx
+                            push    ax
+
+                            pop     ax
+                            pop     bx
+                            pop     cx
+                            pop     dx
+
+                            mov     [di],ax
+                            mov     [di+2],bx
+                            mov     [di+4],cx
+                            mov     [di+6],dx
