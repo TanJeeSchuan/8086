@@ -1,15 +1,20 @@
-.model small
-.stack 100
-.data
+.MODEL SMALL
+.STACK 100
+.DATA
 
-num1                DB  4                               ;decimal location from end of number
-                    DD  10041231d                       ;1004.1231
+num1                DD  0FFFFFFFFh                               ;double type varoab;e
+
+strNum1             DB  "525.25"
+
+strNum2             DB  "475.75"
+
+output              DB  50 DUP("$")
 
 buffer              DB 20 DUP(?)
                     DB "$"
 
-.code
-main proc
+.CODE
+MAIN            PROC
 
 mov ax,@data
 mov ds,ax
@@ -19,80 +24,21 @@ mov ax,4c00h
 
 
 
-
 ;end
 
 mov ah,4ch
 int 21h
 
-print_dec:                                          ;print number in di
-                        mov  cx,[di]                ;load location of decimal point in number
-                        
+MAIN            ENDP
 
-
-print_lnum:                                          ;print large number in si in decimal format
-                        push ax
-                        push bx
-                        push cx
-                        push dx
-
-                        xor cx,cx
-                        mov bx,000Ah
-                        
-    print_lnum_div_loop: 
-                        xor dx,dx                   ;set dx to zero
-                        div bx
-                        push dx
-                        inc cx
-                        test ax,ax
-                        jnz print_num_div_loop
-
-                        mov ah, 02h
-
-    print_lnum_print_lp: 
-                        pop dx
-                        add dx,"0"
-                        int 21h
-                        loop print_num_print_lp
-
-                        pop ax
-                        pop bx
-                        pop cx
-                        pop dx
-
+PRINT_DOUBLE    PROC
+                        mov dx,[si]
+                        mov ax,[si + 2]
                         ret
+PRINT_DOUBLE    ENDP
 
-print_num:                                          ;print number in ax in decimal format
-                        push ax
-                        push bx
-                        push cx
-                        push dx
+STRNUM_ADD      PROC
+                        mov dx
+STRNUM_ADD      ENDP
 
-                        xor cx,cx
-                        mov bx,000Ah
-                        
-    print_num_div_loop: 
-                        xor dx,dx                   ;set dx to zero
-                        div bx
-                        push dx
-                        inc cx
-                        test ax,ax
-                        jnz print_num_div_loop
-
-                        mov ah, 02h
-
-    print_num_print_lp: 
-                        pop dx
-                        add dx,"0"
-                        int 21h
-                        loop print_num_print_lp
-
-                        pop ax
-                        pop bx
-                        pop cx
-                        pop dx
-
-                        ret
-
-main endp
-end main
+END MAIN
