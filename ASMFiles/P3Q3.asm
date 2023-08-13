@@ -83,7 +83,7 @@ int 21h
 
 main endp
 
-PRINT_DATA      PROC
+PRINT_DATA      PROC                            ;print comparision of data1 and data2
                         lea     dx,data1Name
                         call    PRINT_STR
 
@@ -107,7 +107,7 @@ LOWER_CASE      PROC                            ;reverse SI to DI, length in cx
                         lCaseLoop:
                                 mov     dl  ,   [si]
 
-                                add     dl  ,   32d
+                                add     dl  ,   32d     ;turn to lower case
 
                                 mov     [di],   dl
 
