@@ -1,0 +1,99 @@
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 20:06:54
+                                                             Page     1-1
+
+
+       1				.model small 
+       2 0064				.stack 100 
+       3 0000				.data 
+       4				 
+       5 0000  54			var1 DB "T" 
+       6 0001  41			var2 DB "A" 
+       7				 
+       8 0000				.code 
+       9 0000				main proc 
+      10				 
+      11 0000  B8 ---- R		mov ax,@data 
+      12 0003  8E D8			mov ds,ax 
+      13 0005  B8 4C00			mov ax,4c00h 
+      14				 
+      15				; start 
+      16				 
+      17 0008  B2 28			mov dl,"(" 
+      18 000A  B4 02			mov ah,02h 
+      19 000C  CD 21			int 21h 
+      20 000E  8A 16 0000 R		mov dl,var1 
+      21 0012  CD 21			int 21h 
+      22 0014  B2 2C			mov dl,"," 
+      23 0016  CD 21			int 21h 
+      24 0018  8A 16 0001 R		mov dl,var2 
+      25 001C  CD 21			int 21h 
+      26 001E  B2 29			mov dl,")" 
+      27 0020  CD 21			int 21h 
+      28 0022  B2 3E			mov dl,">" 
+      29 0024  CD 21			int 21h 
+      30				 
+      31 0026  8A 1E 0000 R		mov bl,var1 
+      32 002A  8A 3E 0001 R		mov bh,var2 
+      33 002E  88 3E 0000 R		mov var1,bh 
+      34 0032  88 1E 0001 R		mov var2,bl 
+      35				 
+      36				 
+      37 0036  B2 28			mov dl,"(" 
+      38 0038  B4 02			mov ah,02h 
+      39 003A  CD 21			int 21h 
+      40 003C  8A 16 0000 R		mov dl,var1 
+      41 0040  CD 21			int 21h 
+      42 0042  B2 2C			mov dl,"," 
+      43 0044  CD 21			int 21h 
+      44 0046  8A 16 0001 R		mov dl,var2 
+      45 004A  CD 21			int 21h 
+      46 004C  B2 29			mov dl,")" 
+      47 004E  CD 21			int 21h 
+      48				 
+      49				;end 
+      50				 
+      51 0050  B4 4C			mov ah,4ch 
+      52 0052  CD 21			int 21h 
+      53				 
+      54 0054				main endp 
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 20:06:54
+                                                             Page     1-2
+
+
+      55 0054				end main 
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 20:06:54
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	0002	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	0054	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 0054
+
+VAR1 . . . . . . . . . . . . . .  	L BYTE	0000	_DATA
+VAR2 . . . . . . . . . . . . . .  	L BYTE	0001	_DATA
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  P2Q4		
+
+
+     55 Source  Lines
+     55 Total   Lines
+     17 Symbols
+
+  50538 + 466006 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

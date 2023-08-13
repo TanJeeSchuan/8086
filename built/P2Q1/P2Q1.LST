@@ -1,0 +1,93 @@
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 20:06:06
+                                                             Page     1-1
+
+
+       1				.model small 
+       2 0064				.stack 100 
+       3 0000				.data 
+       4 0000  0D 0A 54 68 69 73 20	a db 0dh,0ah, "This is my first DEBUG P
+					rogram" 
+       5       69 73 20 6D 79 20 66	
+       6       69 72 73 74 20 44 45	
+       7       42 55 47 20 50 72 6F	
+       8       67 72 61 6D		
+       9 0020  0D 0A 24			b db 0dh,0ah, "$" 
+      10				 
+      11 0023  06			val1 DB 6 
+      12 0024  03			val2 DB 3 
+      13 0025  04			val3 DB 4 
+      14 0026  ??			result DB ? 
+      15				 
+      16 0000				.code 
+      17 0000				main proc 
+      18				 
+      19 0000  B8 ---- R		mov ax,@data 
+      20 0003  8E D8			mov ds,ax 
+      21 0005  B8 4C00			mov ax,4c00h 
+      22				 
+      23				; start 
+      24				 
+      25 0008  A0 0024 R		mov al,val2 
+      26 000B  04 05			add al,5 
+      27 000D  8A 1E 0023 R		mov bl,val1 
+      28 0011  2A C3			sub al,bl 
+      29 0013  8A 1E 0025 R		mov bl,val3 
+      30 0017  02 C3			add al,bl 
+      31				 
+      32 0019  A2 0026 R		mov result,al 
+      33 001C  80 06 0026 R 30		add result,48d 
+      34				 
+      35 0021  8A 16 0026 R		mov dl,result 
+      36 0025  B4 02			mov ah,02h 
+      37 0027  CD 21			int 21h 
+      38				 
+      39				;end 
+      40				 
+      41 0029  B4 4C			mov ah,4ch 
+      42 002B  CD 21			int 21h 
+      43				 
+      44 002D				main endp 
+      45 002D				end main 
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 20:06:06
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	0027	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	002D	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+A  . . . . . . . . . . . . . . .  	L BYTE	0000	_DATA
+
+B  . . . . . . . . . . . . . . .  	L BYTE	0020	_DATA
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 002D
+
+RESULT . . . . . . . . . . . . .  	L BYTE	0026	_DATA
+
+VAL1 . . . . . . . . . . . . . .  	L BYTE	0023	_DATA
+VAL2 . . . . . . . . . . . . . .  	L BYTE	0024	_DATA
+VAL3 . . . . . . . . . . . . . .  	L BYTE	0025	_DATA
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  P2Q1		
+
+
+     41 Source  Lines
+     41 Total   Lines
+     21 Symbols
+
+  50538 + 466006 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors
