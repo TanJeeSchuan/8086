@@ -18,6 +18,7 @@ main proc
 
 mov ax,@data
 mov ds,ax
+mov es,ax
 mov ax,4c00h
 
 ; start
@@ -63,9 +64,26 @@ call print_char
 mov ah,4ch
 int 21h
 
-ADD32           PROC                                        ;performs addition on dx:ax and bx:cx
+NORM_DEC        PROC                                        ;normalise decimal representation in si
+                        mov     ax,[si + 2]                 ;get the mantissa of number
 
-ADD32           ENDP
+                        cmp ax,2710h                        ;check if mantissa exceeds 10000
+                        jae dec_mantissa_OF                 ;if over/equal 10000
+                        jmp no_mantissa_OF
+
+        dec_mantissa_OF:
+                        mov     bx,[si]                     ;
+                        inc     bx                          ;add 1 to whole number
+                        mov     [si],bx
+                        
+                        sub     ax,2710h
+                        mov     [si+2],ax
+
+        no_mantissa_OF:
+                        ret
+
+
+NORM_DEC        ENDP
 
 DEC_MUL         PROC                                        ;performs multiplication from si and di, output in si
                         xor     ax,ax
@@ -93,20 +111,27 @@ DEC_MUL         PROC                                        ;performs multiplica
                         mov     bx,[di]
 
                         mul     bx
+
                         add     ax,cx                       ;add carry
-                        pop     dx                          ;get w1
-                        add     ax,dx                       ;w1 + ax*bx + carry
+                        pop     cx                          ;get w1
+                        add     ax,cx                       ;w1 + ax*bx + carry
+
                         push    ax                          ;w1
                         mov     cx,dx                       ;carry as cx
 
                         xor     ax,ax
                         xor     dx,dx
                         mov     ax,[si]
-                        mov     ax,[di]
+                        mov     bx,[di]
                         
                         mul     bx
+
+                        push    ax
+                        mov     ax,cx
                         call    PRINT_NUM
                         call    print_n
+                        pop     ax
+
                         add     ax,cx
                         push    ax                          ;w2
 
@@ -123,6 +148,8 @@ DEC_MUL         PROC                                        ;performs multiplica
                         pop     ax                          ;throw away smallest digit partS
                         call    PRINT_HEX
                         call    print_n
+
+                        call    NORM_DEC
                         
                         ret
 

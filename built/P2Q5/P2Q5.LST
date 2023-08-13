@@ -1,0 +1,145 @@
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 15:59:41
+                                                             Page     1-1
+
+
+       1				.model small 
+       2 0064				.stack 100 
+       3 0000				.data 
+       4				 
+       5 0000  50 6C 65 61 73 65 20	str1 DB "Please enter a digit: $" 
+       6       65 6E 74 65 72 20 61	
+       7       20 64 69 67 69 74 3A	
+       8       20 24			
+       9 0017  20 74 69 6D 65 73 20	str2 DB " times $" 
+      10       24			
+      11 001F  20 72 65 74 75 72 6E	str3 DB " returns: $" 
+      12       73 3A 20 24		
+      13				 
+      14 0000				.code 
+      15 0000				main proc 
+      16				 
+      17 0000  B8 ---- R		mov ax,@data 
+      18 0003  8E D8			mov ds,ax 
+      19 0005  B8 4C00			mov ax,4c00h 
+      20				 
+      21				; start 
+      22				 
+      23 0008  8D 16 0000 R		lea dx,str1 
+      24 000C  B4 09			mov ah,09h 
+      25 000E  CD 21			int 21h 
+      26				 
+      27 0010  B4 01			mov ah,0001h    ;input 
+      28 0012  CD 21			int 21h 
+      29 0014  8A D8			mov bl,al 
+      30				 
+      31 0016  B4 02			mov ah,02h      ;print \n 
+      32 0018  B2 0A			mov dl, 10d 
+      33 001A  CD 21			int 21h 
+      34				 
+      35 001C  8A D3			mov dl,bl       ;print input 
+      36 001E  CD 21			int 21h 
+      37				 
+      38 0020  8D 16 0017 R		lea dx,str2     ;print times 
+      39 0024  B4 09			mov ah,09h   
+      40 0026  CD 21			int 21h 
+      41				 
+      42 0028  B4 02			mov ah,02h      ;print input 
+      43 002A  8A D3			mov dl,bl 
+      44 002C  CD 21			int 21h 
+      45				 
+      46 002E  B4 09			mov ah,09h      ;print returns: 
+      47 0030  8D 16 001F R		lea dx,str3 
+      48 0034  CD 21			int 21h 
+      49				 
+      50 0036  80 EB 30			sub bl,48d      ;multiply 
+      51 0039  8A C3			mov al,bl 
+      52 003B  F6 E3			mul bl 
+      53				 
+      54				; mov ah,02h      ;print result (single
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 15:59:41
+                                                             Page     1-2
+
+
+					 digit only) 
+      55				; mov dl,al 
+      56				; add dl,48d 
+      57				; int 21h 
+      58				 
+      59				;;METHOD 1 
+      60				; mov bl,0Ah 
+      61				; div bl          ;divide ax by bl, al 
+					will be quotient, ah is remainder 
+      62				 
+      63				; mov cl,ah       ;save AH because rema
+					inder is last 
+      64				 
+      65				; mov ah,02h      ;print quotient 
+      66				; mov dl,al 
+      67				; add dl,"0" 
+      68				; int 21h 
+      69				 
+      70				; mov dl,cl       ;print remainder 
+      71				; add dl,"0" 
+      72				; int 21h 
+      73				 
+      74 003D  B3 0A			mov bl,10d      ; 
+      75 003F  F6 F3			div bl          ;ax = 00xy 
+      76				 
+      77 0041  52			push dx         ;save remainder (y) Fir
+					st In Last Out, only x remains in ax 
+      78				 
+      79 0042  F6 F3			div bl          ; 
+      80 0044  52			push dx         ; 
+      81				 
+      82 0045  B4 02			mov ah,02h 
+      83				 
+      84 0047  5A			pop dx 
+      85 0048  CD 21			int 21h 
+      86				 
+      87 004A  5A			pop dx 
+      88 004B  CD 21			int 21h 
+      89				 
+      90				;end 
+      91				 
+      92 004D  B4 4C			mov ah,4ch 
+      93 004F  CD 21			int 21h 
+      94				 
+      95 0051				main endp 
+      96 0051				end main 
+Microsoft (R) Macro Assembler Version 5.00                  8/12/23 15:59:41
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	002A	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	0051	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 0051
+
+STR1 . . . . . . . . . . . . . .  	L BYTE	0000	_DATA
+STR2 . . . . . . . . . . . . . .  	L BYTE	0017	_DATA
+STR3 . . . . . . . . . . . . . .  	L BYTE	001F	_DATA
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  P2Q5		
+
+
+     91 Source  Lines
+     91 Total   Lines
+     18 Symbols
+
+  50546 + 465998 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

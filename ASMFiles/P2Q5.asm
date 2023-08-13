@@ -51,20 +51,36 @@ mul bl
 ; add dl,48d
 ; int 21h
 
-mov bl,0Ah
-div bl          ;divide ax by bl, al will be quotient, ah is remainder
+;;METHOD 1
+; mov bl,0Ah
+; div bl          ;divide ax by bl, al will be quotient, ah is remainder
 
-mov cl,ah       ;save AH because remainder is last
+; mov cl,ah       ;save AH because remainder is last
 
-mov ah,02h      ;print quotient
-mov dl,al
-add dl,"0"
+; mov ah,02h      ;print quotient
+; mov dl,al
+; add dl,"0"
+; int 21h
+
+; mov dl,cl       ;print remainder
+; add dl,"0"
+; int 21h
+
+mov bl,10d      ;
+div bl          ;ax = 00xy
+
+push dx         ;save remainder (y) First In Last Out, only x remains in ax
+
+div bl          ;
+push dx         ;
+
+mov ah,02h
+
+pop dx
 int 21h
 
-mov dl,cl       ;print remainder
-add dl,"0"
+pop dx
 int 21h
-
 
 ;end
 
