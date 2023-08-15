@@ -81,6 +81,8 @@ call    PRINT_DATA
 mov ah,4ch
 int 21h
 
+
+
 main endp
 
 PRINT_DATA      PROC                            ;print comparision of data1 and data2

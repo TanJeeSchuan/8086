@@ -1,0 +1,343 @@
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 23:41:52
+                                                             Page     1-1
+
+
+       1				.model small 
+       2 0100				.stack 100h 
+       3 0000				.data 
+       4				 
+       5 0000  4D 49 4C 4B 24		    data1 db 'MILK', '$' 
+       6 0005  2A 2A 2A 2A 24		    data2 db '****', '$' 
+       7				 
+       8 000A  64 61 74 61 31 3A 20	    var1 db 'data1: ', '$' 
+       9       24			
+      10 0012  64 61 74 61 32 3A 20	    var2 db 'data2: ', '$' 
+      11       24			
+      12				 
+      13 001A  49 6E 69 74 69 61 6C	    var3 db 'Initial content', '$' 
+      14       20 63 6F 6E 74 65 6E	
+      15       74 24			
+      16 002A  41 66 74 65 72 20 52	    var4 db 'After Replacement', '$' 
+      17       65 70 6C 61 63 65 6D	
+      18       65 6E 74 24		
+      19 003C  41 66 74 65 72 20 52	    var5 db 'After Reverse', '$' 
+      20       65 76 65 72 73 65 24	
+      21 004A  41 66 74 65 72 20 63	    var6 db 'After changed case', '$' 
+      22       68 61 6E 67 65 64 20	
+      23       63 61 73 65 24		
+      24				 
+      25 005D  04				LEN db 04h 
+      26				 
+      27				 
+      28				 
+      29 0000				.code 
+      30				 
+      31 0000				    MAIN PROC 
+      32				 
+      33				        ;set up data segment 
+      34 0000  B8 ---- R		        MOV AX, @DATA 
+      35 0003  8E D8			        MOV DS, AX 
+      36				 
+      37 0005  8E C0			        MOV ES,AX       
+      38 0007  8D 36 0000 R		        lea SI, data1 
+      39 000B  8D 3E 0005 R		        lea DI, data2 
+      40				 
+      41				 
+      42				        ;display initial content 
+      43 000F  8D 16 001A R		        lea dx, var3 
+      44 0013  B4 09			        mov ah, 09h 
+      45 0015  CD 21			        int 21H 
+      46				         
+      47 0017  E8 0114 R		        call NEWLINE 
+      48				 
+      49				        ;print "data1: MILK" 
+      50 001A  B4 09			        mov ah, 09h 
+      51 001C  8D 16 000A R		        lea dx, var1 
+      52 0020  CD 21			        int 21H 
+      53				 
+      54 0022  8D 16 0000 R		        lea dx, data1 
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 23:41:52
+                                                             Page     1-2
+
+
+      55 0026  CD 21			        int 21H 
+      56				 
+      57 0028  E8 0114 R		        call NEWLINE 
+      58				 
+      59				        ;print "data2: **" 
+      60 002B  B4 09			        mov ah, 09h 
+      61 002D  8D 16 0012 R		        lea dx, var2 
+      62 0031  CD 21			        int 21H 
+      63				 
+      64 0033  8D 16 0005 R		        lea dx, data2 
+      65 0037  CD 21			        int 21h 
+      66				 
+      67				 
+      68 0039  E8 0114 R		        call NEWLINE 
+      69 003C  E8 0114 R		        call NEWLINE 
+      70				 
+      71				        ;display after Replacement valu
+					e 
+      72 003F  8D 16 002A R		        lea dx, var4 
+      73 0043  B4 09			        mov ah, 09h 
+      74 0045  CD 21			        int 21H 
+      75				 
+      76 0047  E8 0114 R		        call NEWLINE 
+      77				         
+      78 004A  B4 09			        mov ah, 09h 
+      79 004C  8D 16 000A R		        lea dx, var1 
+      80 0050  CD 21			        int 21H 
+      81				 
+      82 0052  8D 16 0000 R		        lea dx, data1 
+      83 0056  CD 21			        int 21H 
+      84				 
+      85 0058  E8 0114 R		        call NEWLINE 
+      86				 
+      87 005B  B4 09			        mov ah, 09h 
+      88 005D  8D 16 0012 R		        lea dx, var2 
+      89 0061  CD 21			        int 21H 
+      90				         
+      91 0063  FC			        CLD         ;clear direction fl
+					ag 
+      92 0064  B5 00			        mov ch, 00h 
+      93 0066  8A 0E 005D R		        mov cl, [LEN] 
+      94 006A  F3/ A4			        rep movsb 
+      95				 
+      96 006C  B4 09			        mov ah, 09h 
+      97 006E  8D 16 0005 R		        lea dx, data2 
+      98 0072  CD 21			        int 21H 
+      99				 
+     100 0074  E8 0114 R		        call NEWLINE 
+     101 0077  E8 0114 R		        call NEWLINE 
+     102				 
+     103				        ;load address of the string  
+     104 007A  8D 16 003C R		        lea dx, var5 
+     105 007E  B4 09			        mov ah, 09h 
+     106 0080  CD 21			        int 21H 
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 23:41:52
+                                                             Page     1-3
+
+
+     107				 
+     108 0082  E8 0114 R		        call NEWLINE 
+     109				 
+     110 0085  8D 16 000A R		        lea dx, var1 
+     111 0089  B4 09			        mov ah, 09h 
+     112 008B  CD 21			        int 21H 
+     113				 
+     114 008D  8D 16 0000 R		        lea dx, data1 
+     115 0091  B4 09			        mov ah, 09h 
+     116 0093  CD 21			        int 21H 
+     117				 
+     118 0095  E8 0114 R		        call NEWLINE 
+     119				 
+     120 0098  8D 16 0012 R		        lea dx,var2 
+     121 009C  B4 09			        mov ah, 09h 
+     122 009E  CD 21			        int 21H 
+     123				 
+     124 00A0  E8 00F1 R		        call REVERSE 
+     125 00A3  8D 16 0005 R		        lea dx, data2 
+     126 00A7  B4 09			        mov ah, 09h 
+     127 00A9  CD 21			        int 21h 
+     128				 
+     129 00AB  E8 0114 R		        call NEWLINE 
+     130 00AE  E8 0114 R		        call NEWLINE 
+     131				 
+     132				        ;After changed case 
+     133 00B1  8D 16 004A R		        lea dx, var6 
+     134 00B5  B4 09			        mov ah, 09h 
+     135 00B7  CD 21			        int 21H 
+     136				 
+     137 00B9  E8 0114 R		        call NEWLINE 
+     138				 
+     139 00BC  8D 16 000A R		        lea dx, var1 
+     140 00C0  B4 09			        mov ah, 09h 
+     141 00C2  CD 21			        int 21H 
+     142				 
+     143 00C4  8D 16 0000 R		        lea dx, data1 
+     144 00C8  B4 09			        mov ah, 09h 
+     145 00CA  CD 21			        int 21H 
+     146				 
+     147 00CC  E8 0114 R		        call NEWLINE 
+     148				 
+     149 00CF  8D 16 0012 R		        lea dx, var2 
+     150 00D3  B4 09			        mov ah, 09h 
+     151 00D5  CD 21			        int 21h 
+     152				 
+     153 00D7  8D 36 0000 R		        lea si, data1 
+     154 00DB  8D 3E 0005 R		        lea di, data2 
+     155				 
+     156 00DF  E8 011F R		        call LOWERCASE 
+     157 00E2  8D 16 0005 R		        lea dx, data2 
+     158 00E6  B4 09			        mov ah, 09h 
+     159 00E8  CD 21			        int 21H 
+     160				 
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 23:41:52
+                                                             Page     1-4
+
+
+     161				 
+     162 00EA  E8 0114 R		        call NEWLINE 
+     163				 
+     164 00ED  B4 4C			        MOV AH, 4CH 
+     165 00EF  CD 21			        INT 21h 
+     166				 
+     167 00F1				    MAIN ENDP 
+     168				 
+     169 00F1				    REVERSE PROC 
+     170				        ;load the offset of the string 
+					 
+     171 00F1  BE 0000 R		        mov si, offset data1 
+     172				 
+     173				        ;count of characters of the str
+					ing 
+     174 00F4  B9 0000			        mov cx, 00h 
+     175				 
+     176 00F7				        LOOP1: 
+     177 00F7  33 C0			        xor ax,ax 
+     178				        ;compare if this is the last ch
+					aracter 
+     179 00F9  8A 04			        mov al, [si] 
+     180 00FB  3C 24			        cmp al, '$' 
+     181 00FD  74 05			        je  LABEL1 
+     182				 
+     183				        ;else put in the stack 
+     184 00FF  50			        push ax 
+     185				 
+     186 0100  46			        inc si 
+     187 0101  41			        inc cx 
+     188				 
+     189 0102  EB F3			        jmp LOOP1 
+     190				 
+     191 0104				        LABEL1: 
+     192				        ;again load the starting addres
+					s of the string  
+     193 0104  BE 0005 R		        mov si, offset data2 
+     194				 
+     195 0107				            LOOP2: 
+     196				            ;pop the top of stack 
+     197 0107  5A			            pop dx 
+     198				 
+     199				            ;make dh, 0 
+     200 0108  32 F6			            xor dh, dh 
+     201				 
+     202				            ;put the character of the r
+					eversed string  
+     203 010A  89 14			            mov [si], dx 
+     204				 
+     205				            ;increment si and decrement
+					 count  
+     206 010C  46			            inc si 
+     207				 
+     208 010D  E2 F8			            loop LOOP2 
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 23:41:52
+                                                             Page     1-5
+
+
+     209				 
+     210 010F				        EXIT: 
+     211				        ;add $ to the end of the string
+					  
+     212 010F  B0 24			        mov al,"$" 
+     213 0111  88 04			        mov [si],al 
+     214 0113  C3			        ret 
+     215				 
+     216 0114				    REVERSE ENDP 
+     217				 
+     218 0114				    NEWLINE PROC 
+     219				     
+     220 0114  B4 02			        mov ah, 02h 
+     221 0116  B2 0A			        mov dl, 0ah ;new line 
+     222 0118  CD 21			        int 21H 
+     223 011A  B2 0D			        mov dl, 0dh ;linefeed 
+     224 011C  CD 21			        int 21H 
+     225				 
+     226 011E  C3			        ret         ;return to the call
+					ing mode 
+     227				 
+     228 011F				    NEWLINE ENDP 
+     229				 
+     230 011F				    LOWERCASE PROC 
+     231 011F  33 DB			        xor bx,bx 
+     232 0121  8A 1E 005D R		        mov bl,[LEN] 
+     233 0125  B9 0000			        mov cx, 00h 
+     234 0128				        LCASE:  
+     235 0128  8A 14			            mov dl, [si] 
+     236 012A  80 C2 20			            add dl, 32d  ;convert to LO
+					WERCASE 
+     237				 
+     238 012D  88 15			            mov [di], dl 
+     239				 
+     240 012F  46			            inc si 
+     241 0130  47			            inc di 
+     242				 
+     243 0131  41			            inc cx 
+     244 0132  3B CB			            cmp cx, bx 
+     245 0134  72 F2			            jb LCASE     ;if first oper
+					and small than second operand  
+     246				 
+     247 0136  C3			            ret  
+     248				 
+     249 0137				    LOWERCASE ENDP 
+     250				 
+     251 0137				END MAIN 
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 23:41:52
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	005E	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0100	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	0137	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+DATA1  . . . . . . . . . . . . .  	L BYTE	0000	_DATA
+DATA2  . . . . . . . . . . . . .  	L BYTE	0005	_DATA
+
+EXIT . . . . . . . . . . . . . .  	L NEAR	010F	_TEXT
+
+LABEL1 . . . . . . . . . . . . .  	L NEAR	0104	_TEXT
+LCASE  . . . . . . . . . . . . .  	L NEAR	0128	_TEXT
+LEN  . . . . . . . . . . . . . .  	L BYTE	005D	_DATA
+LOOP1  . . . . . . . . . . . . .  	L NEAR	00F7	_TEXT
+LOOP2  . . . . . . . . . . . . .  	L NEAR	0107	_TEXT
+LOWERCASE  . . . . . . . . . . .  	N PROC	011F	_TEXT	Length = 0018
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 00F1
+
+NEWLINE  . . . . . . . . . . . .  	N PROC	0114	_TEXT	Length = 000B
+
+REVERSE  . . . . . . . . . . . .  	N PROC	00F1	_TEXT	Length = 0023
+
+VAR1 . . . . . . . . . . . . . .  	L BYTE	000A	_DATA
+VAR2 . . . . . . . . . . . . . .  	L BYTE	0012	_DATA
+VAR3 . . . . . . . . . . . . . .  	L BYTE	001A	_DATA
+VAR4 . . . . . . . . . . . . . .  	L BYTE	002A	_DATA
+VAR5 . . . . . . . . . . . . . .  	L BYTE	003C	_DATA
+VAR6 . . . . . . . . . . . . . .  	L BYTE	004A	_DATA
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  test		
+
+Microsoft (R) Macro Assembler Version 5.00                  8/13/23 23:41:52
+                                                             Symbols-2
+
+
+
+    242 Source  Lines
+    242 Total   Lines
+     32 Symbols
+
+  50470 + 449690 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors
