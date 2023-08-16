@@ -34,7 +34,7 @@ call        NEWLINE
 
 lea         si,strNum1
 lea         di,strNum2
-call        ADD_STRNUM
+call        SUB_STRNUM
 
 lea         dx,result
 call        PRINT_STR
@@ -49,18 +49,18 @@ MAIN            ENDP
 ADD_STRNUM      PROC                                        ;output result to result
                         xor         ax,ax
 
-                        ;remove decimals from si, di strings
-                        push        di                      ;normalise si string
-                        lea         di,normal1
-                        call        NORMALISE_STR
-                        mov         si,di
-                        pop         di
+                        ; ;remove decimals from si, di strings
+                        ; push        di                      ;normalise si string
+                        ; lea         di,normal1
+                        ; call        NORMALISE_STR
+                        ; mov         si,di
+                        ; pop         di
 
-                        push        si                      ;normalise di string
-                        mov         si,di
-                        lea         di,normal2
-                        call        NORMALISE_STR
-                        pop         si
+                        ; push        si                      ;normalise di string
+                        ; mov         si,di
+                        ; lea         di,normal2
+                        ; call        NORMALISE_STR
+                        ; pop         si
 
                         ;get the length of the longer string
                         call        STRLEN                  ;length of si
@@ -83,7 +83,7 @@ ADD_STRNUM      PROC                                        ;output result to re
                         
                         xor         bx,bx                   ;prepare bx for use as carry register
                         add_loop:
-                                    mov         al,[si]     ;get int value of string
+                                    mov         al,[si]     ;get int value of strin             ; *POINTER      lea offset &inte
                                     sub         al,48d
                                         
                                     mov         ah,[di]     ;get int value of string
@@ -123,6 +123,69 @@ ADD_STRNUM      PROC                                        ;output result to re
                                     loop        add_loop
                         ret
 ADD_STRNUM      ENDP
+
+SUB_STRNUM      PROC
+                        ;get the length of the longer string
+                        call        STRLEN                  ;length of si
+                        push        ax                   
+
+                        push        si          
+                        mov         si,di
+                        call        STRLEN                  ;length of di
+                        pop         si
+
+                        pop         bx
+                        call        LARGER_NUM              ;larger number in ax,bx will be in ax
+                        mov         cx,ax                   ;longest length of si and di will be in CX
+
+                        ;offset si,di
+                        add         si,cx                   ;move to last character
+                        dec         si
+                        add         di,cx
+                        dec         di
+
+                        xor         bx,bx
+
+                        sub_loop:
+                                    mov         al,[si]
+                                    sub         al,48d
+
+                                    mov         ah,[di]
+                                    sub         ah,48d
+
+                                    sub         al,bl
+                                    xor         bl,bl
+                                    sub         al,ah
+                                    js          sub_underflow   ;if underflow
+                                    jmp         sub_no_underflow
+
+                                    sub_underflow:
+                                                neg         al
+                                                mov         ah,10d
+                                                sub         ah,al
+                                                mov         al,ah
+                                                mov         bl,1         
+                        sub_no_underflow:
+                                    mov         ah,0
+                                    add         al, 48d
+
+                                    mov         [si],al
+
+                                    dec         si
+                                    dec         di
+
+                                    push        di          ;load into result
+
+                                    lea         di,result   ;di is address of result
+                                    add         di,cx       ;offset to cx + 1
+                                    dec         di
+                                    mov         [di],al     ;insert in di
+
+                                    pop         di
+
+                                    loop        sub_loop 
+                        ret
+SUB_STRNUM      ENDP
 
 STRLEN          PROC                                        ;output length of si in ax
                         push        si

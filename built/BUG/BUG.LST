@@ -1,0 +1,158 @@
+Microsoft (R) Macro Assembler Version 5.00                  8/16/23 15:46:04
+                                                             Page     1-1
+
+
+       1				.model small 
+       2 0064				.stack 100 
+       3 0000				.data 
+       4				 
+       5 0000  43 75 72 72 65 6E 74	str1        DB "Current Points : $" 
+       6       20 50 6F 69 6E 74 73	
+       7       20 3A 20 24		
+       8 0012  44 69 73 63 6F 75 6E	str2        DB "Discount Amount: $" 
+       9       74 20 41 6D 6F 75 6E	
+      10       74 3A 20 24		
+      11 0024  04C8			points_num  DW 1224d 
+      12 0026  24			            DB "$" 
+      13				 
+      14 0027  ??			discount    DB ?  
+      15				 
+      16 0000				.code 
+      17 0000				main proc 
+      18				 
+      19 0000  B8 ---- R		mov ax,@data 
+      20 0003  8E D8			mov ds,ax 
+      21 0005  B8 4C00			mov ax,4c00h 
+      22				 
+      23				; start 
+      24				 
+      25 0008  8D 16 0000 R		lea dx,str1 
+      26 000C  E8 0030 R		call print_str 
+      27				 
+      28 000F  A1 0024 R		mov ax,[points_num] 
+      29 0012  E8 0035 R		call print_num 
+      30				 
+      31 0015  B2 0A			mov dl,10d 
+      32 0017  E8 0053 R		call print_char 
+      33				             
+      34 001A  8D 16 0012 R		lea dx,str2 
+      35 001E  E8 0030 R		call print_str 
+      36				 
+      37 0021  BB 000A			mov bx,000Ah 
+      38 0024  BA 0000			mov dx,0000h 
+      39 0027  F7 F3			div bx 
+      40				 
+      41 0029  E8 005A R		call print_dec 
+      42				 
+      43				;end 
+      44				 
+      45 002C  B4 4C			mov ah,4ch 
+      46 002E  CD 21			int 21h 
+      47				 
+      48 0030  B4 09			print_str:  mov ah,09h      ;print valu
+					e from address in dx 
+      49 0032  CD 21			            int 21h 
+      50 0034  C3			            ret 
+      51				 
+      52 0035				print_num:  ;print from ax  
+      53 0035  50			                            push ax    
+Microsoft (R) Macro Assembler Version 5.00                  8/16/23 15:46:04
+                                                             Page     1-2
+
+
+					         ;preserves original ax value 
+      54 0036  BB 000A			                            mov bx,000A
+					h         
+      55 0039  B9 0000			                            mov cx,0000
+					h 
+      56 003C				            Divloop: 
+      57 003C  BA 0000			                            mov dx,0000
+					h 
+      58 003F  F7 F3			                            div bx 
+      59 0041  52			                            push dx 
+      60 0042  41			                            inc cx 
+      61 0043  85 C0			                            test ax,ax 
+      62 0045  75 F5			                            jnz Divloop
+					 
+      63 0047  B4 02			            mov ah,02h                 
+					         ;setup for print 
+      64 0049  5A			            IntPrint:       pop dx 
+      65 004A  83 C2 30			                            add dx,48d 
+      66 004D  CD 21			                            int 21h 
+      67 004F  E2 F8			                            loop IntPri
+					nt 
+      68				 
+      69 0051  58			            pop ax                     
+					         ;restore original ax value 
+      70 0052  C3			            ret 
+      71				 
+      72 0053				print_char: ;print from dl 
+      73 0053  50			            push ax                    
+					          
+      74 0054  B4 02			            mov ah,02h 
+      75 0056  CD 21			            int 21h 
+      76 0058  58			            pop ax 
+      77 0059  C3			            ret 
+      78				 
+      79 005A				print_dec:  ;print fixed point decimal 
+					AX = number, DX = mantissa 
+      80 005A  50			            push ax 
+      81 005B  52			            push dx 
+      82				             
+      83 005C  E8 0035 R		            call print_num 
+      84 005F  B2 2C			            mov dl,"," 
+      85 0061  8B C2			            mov ax,dx 
+      86 0063  E8 0035 R		            call print_num 
+      87				 
+      88 0066  5A			            pop dx 
+      89 0067  58			            pop ax 
+      90				 
+      91 0068				main endp 
+      92 0068				end main 
+Microsoft (R) Macro Assembler Version 5.00                  8/16/23 15:46:04
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	0028	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	0068	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+DISCOUNT . . . . . . . . . . . .  	L BYTE	0027	_DATA
+DIVLOOP  . . . . . . . . . . . .  	L NEAR	003C	_TEXT
+
+INTPRINT . . . . . . . . . . . .  	L NEAR	0049	_TEXT
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 0068
+
+POINTS_NUM . . . . . . . . . . .  	L WORD	0024	_DATA
+PRINT_CHAR . . . . . . . . . . .  	L NEAR	0053	_TEXT
+PRINT_DEC  . . . . . . . . . . .  	L NEAR	005A	_TEXT
+PRINT_NUM  . . . . . . . . . . .  	L NEAR	0035	_TEXT
+PRINT_STR  . . . . . . . . . . .  	L NEAR	0030	_TEXT
+
+STR1 . . . . . . . . . . . . . .  	L BYTE	0000	_DATA
+STR2 . . . . . . . . . . . . . .  	L BYTE	0012	_DATA
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  BUG		
+
+
+     88 Source  Lines
+     88 Total   Lines
+     25 Symbols
+
+  50484 + 466060 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors
