@@ -5,16 +5,26 @@
 strNum1             DB  "40257576"
                     DB  "$"
 
-strNum2             DB  "22832525"
+strNum2             DB  "00000005"
                     DB  "$"
 
 maxStrLen           DB  ?
+
+i                   DB  0
+j                   DB  0
+w                   DW  0
+len                 DB  0
+carry               DW  0
+remainder           DB  0
 
 normal1             DB  50  DUP("$")
 
 normal2             DB  50  DUP("$")
 
 result              DB  50  DUP("$")
+                    DB  "$"
+
+TEN                 DB  10d
 
 .CODE
 MAIN            PROC
@@ -39,6 +49,10 @@ call        NEWLINE
 lea         si,strNum1
 lea         di,strNum2
 call        MUL_STRNUM
+
+; lea         di,result
+; mov         ah,"U"
+; mov         [di],ah
 
 lea         dx,result
 call        PRINT_STR
@@ -205,164 +219,126 @@ MUL_STRNUM      PROC
                         call        LARGER_NUM              ;larger number in ax,bx will be in ax
                         mov         cx,ax                   ;longest length of si and di will be in CX
 
-                        ; ;offset si,di
-                        ; add         si,cx                   ;move to last character
-                        dec         si
-                        ; add         di,cx
-                        dec         di
+                        sub         cl,1                    ;decrement 1 because array range is 0 - (strLen  - 1)
 
-                        mov         bx,cx                   ;cx as i, bx as j, both begins at end of number
-                        mov         [maxStrLen],cl
+                        mov         [i],cl                   ;cl as i, ch as j, both begins at end of number
+                        mov         [j],cl
+                        mov         [len],cl
                         xor         ax,ax
-                        mul_loop_j:                         ;multiply numbers for j = n; j > 0; j--;; i = n; i > 0; i--
-                                                            ;anchor al
-                                    push        di
-                                    add         di,bx       ;di[bx]
-                                    mov         al,[di]     ;load number from second number to al
-                                    sub         al,48d
-                                    pop         di
 
+                        ;avalible registers ax,bx,dx
+                        mul_loop_j:
+                                    xor         cx,cx
+
+                                    ;get value from di where a(n), a(n-1)... a(0), where n is j     #reversed array order
+                                    mov         cl,[j]
+                                    push        di
+                                    add         di,cl
+                                    mov         al,[di]     ;al = di[cl]
+                                    sub         al,48d
+
+                                    mov         cl,[i]
                                     push        cx
 
-                                    xor         dx,dx
+                                    mov         [carry],0       ;remainder = 0, carry = 0
+                                    mov         [remainder],0
                                     mul_loop_i:
+                                                push        ax
+                                                
                                                 push        si
-                                                add         si,cx               ;si[cx]
-                                                mov         ah,[si]             ;load first number from si to ah
+                                                mov         cl,[i]
+                                                add         si,cl
+                                                mov         ah,[si]     ;ah = di[cl]
                                                 sub         ah,48d
                                                 pop         si
 
-                                                push        ax
-                                                mul         ah                  ;al x ah result will be in ax
-                                                add         ax,dx               ;add carry to multiplication result
-                                                xor         dx,dx
-
-                                                ; push        ax
-                                                ; mov         ah,0
-                                                ; call        PRINT_NUM
-                                                ; call        NEWLINE
-                                                ; pop         ax
-
-                                                cmp         ax,9d               ;if ax is more than 9, overflow
-                                                ja          mul_overflow        
-                                                jmp         mul_no_overflow
-
-                                                mul_overflow:
-                                                            push        bx
-                                                            mov         bx,10d  ;divide ax by 10
-
-                                                            div         bx      ;quotient ax will be the carry, remainder will be the current number
-
-                                                            pop         bx
-                                                            push        dx      ;exchange value of ax,dx
-                                                            mov         dx,ax   
-                                                            pop         ax      ;resulting value will be in lower register
-
-                                                mul_no_overflow:
-                                                ;store output in result
+                                                ;get number in result bl = w[i+j]
                                                 push        di
-                                                lea         di,result
-
-                                                push        cx                  ;set offset max-i + max-j to result address
-                                                push        bx
                                                 xor         bx,bx
-                                                mov         bl,[maxStrLen]
-                                                sub         bl,cl
-                                                add         di,bx
-                                                pop         bx
-                                                pop         cx
-
-                                                push        cx                  
-                                                push        bx
                                                 xor         cx,cx
-                                                mov         cl,[maxStrLen]      
-                                                sub         cl,bl
+                                                lea         di,result
+                                                mov         cl,[i]
+                                                add         cl,[j]
+                                                ; add         cl,ch
                                                 add         di,cl
-                                                pop         bx
-                                                pop         cx
-
-                                                mov         ah,[di]
-                                                cmp         ah,"$"          ;if character is $ set it to zero
-                                                je          mul_set_zero
-                                                jmp         mul_no_set_zero
-
-                                                mul_set_zero:
-                                                            mov         ah  ,"0"
-
-                                                mul_no_set_zero:
-                                                sub         ah,48d
-                                                add         al,ah           ;add to previous value in value of result[i+j]
-
-                                                cmp         al,9d               ;if al is more than 9, overflow
-                                                ja          mul_overflow2
-                                                jmp         mul_no_overflow2
-
-                                                ;i loop checkpoint
-                                                mul_loop_i_checkpoint:
-                                                jmp         mul_loop_i
-
-                                                ;j loop checkpoint
-                                                mul_loop_j_checkpoint:
-                                                jmp         mul_loop_j
-
-                                                mul_overflow2:
-                                                            sub         al,10d
-
-                                                            inc         di
-                                                            push        ax
-
-                                                            mov         ah,[di]
-                                                            cmp         ah,"$"      ;if new digit does not exist yet
-                                                            je          mul_overflow2_new
-                                                            jmp         mul_overflow2_no_new
-
-                                                            mul_overflow2_new:
-                                                                        mov     ah,"1"
-                                                                        mov     [di],ah     ;move to next digit, dont add
-
-                                                            call        PRINT_RESULT
-                                                            call        NEWLINE
-
-                                                                        jmp     mul_overflow2_new_end
-
-                                                            mul_overflow2_no_new:
-                                                                        add     ah,1
-                                                                        mov     [di],ah
-                                                                        jmp     mul_overflow2_new_end
-
-                                                            mul_overflow2_new_end:
-
-                                                            dec         di
-                                                            pop         ax
-
-                                                mul_no_overflow2:
-                                                add         al,48d
-                                                mov         [di],al
-
-                                                xor         ah,ah
-
-                                                cmp         cx,1
-                                                je          last_loop
-                                                jmp         not_last_loop
-                                                
-                                                last_loop:
-                                                            inc         di
-                                                            add         dl,48d
-                                                            mov         [di],dl         ;move last remainder to largest place 
-                                                            sub         dl,48d
-                                                            dec         di
-
-                                                not_last_loop:
-
+                                                mov         bl,[di]
                                                 pop         di
+
+                                                cmp         bl,"$"
+                                                je          mul_newchar
+                                                jmp         mul_no_newchar
+
+                                                mul_loop_i_checkpoint:
+                                                            jmp         mul_loop_i
+                                                mul_loop_j_checkpoint:
+                                                            jmp         mul_loop_j
+                    
+                                                mul_newchar:
+                                                            mov         bl,"0"
+                                                mul_no_newchar:
+                                                sub         bl,48d
+                                                mov         [w],bl
+                                                ;;get result part end
+
+                                                ;;ah = num1
+                                                ;;al = num2
+                                                mul         ah          ;t  = ah*al
+                                                add         ax,[w]      ;t += w[i+j]
+                                                add         ax,[carry]  ;t += carry
+
+                                                div         ten
+
+                                                mov         [carry],al
+                                                mov         [remainder],ah
+
+                                                push        di
+                                                xor         bx,bx
+                                                xor         cx,cx
+                                                lea         di,result
+                                                mov         cl,[i]
+                                                add         cl,[j]
+                                                ; add         cl,ch
+                                                add         di,cl
+                                                mov         bl,[remainder]
+                                                add         bl,48d
+                                                mov         [di],bl
+                                                pop         di
+
                                                 pop         ax
-                                                loop        mul_loop_i_checkpoint                  ;use cx(i) to loop
+                                                ;decrement i, loop until i < 0
+                                                mov         cl,[i]
+                                                dec         cl
+                                                mov         [i],cl
+
+                                                cmp         cl,-1
+                                                jg          mul_loop_i_checkpoint
+
+                                    push        di
+                                    xor         bx,bx
+                                    xor         cx,cx
+                                    lea         di,result
+                                    mov         cl,[i]
+                                    add         cl,[j]
+                                    ; add         cl,ch
+                                    add         di,cl
+                                    mov         bl,[carry]
+                                    add         bl,48d
+                                    mov         [di],bl
+                                    pop         di
+
 
                                     pop         cx
+                                    mov         [i],cl
 
-                                    dec         bx
-                                    cmp         bx,0
-                                    ja          mul_loop_j_checkpoint
+                                    pop         di
+                                    ;decrement j, loop until j < 0
+                                    mov         cl,[j]
+                                    dec         cl
+                                    mov         [j],cl
+
+                                    cmp         cl,-1
+                                    jg          mul_loop_j_checkpoint
+                        ret
 MUL_STRNUM      ENDP
 
 STRLEN          PROC                                        ;output length of si in ax
@@ -502,5 +478,17 @@ PRINT_RESULT    PROC
 
                             ret
 PRINT_RESULT    ENDP
+
+DEBUG_CHAR      PROC
+                            push        dx
+                            
+                            call        NEWLINE
+                            mov         dl,"T"
+                            call        PRINT_CHAR
+                            call        NEWLINE
+
+                            pop         dx
+                            ret
+DEBUG_CHAR      ENDP
 
 END MAIN

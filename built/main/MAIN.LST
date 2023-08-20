@@ -1,0 +1,123 @@
+Microsoft (R) Macro Assembler Version 5.00                  8/20/23 16:41:22
+                                                             Page     1-1
+
+
+       1				.MODEL small 
+       2 0064				.STACK 100 
+       3 0000				.DATA 
+       4				 
+       5 0000  20			password        DB 32 
+       6 0001  ??			                DB ? 
+       7 0002  0020[			                DB 32 DUP(0) 
+       8	   00			
+       9			 ]	
+      10				
+      11				 
+      12 0000				.CODE 
+      13 0000				MAIN PROC 
+      14				 
+      15 0000  B8 ---- R		mov ax,@data 
+      16 0003  8E D8			mov ds,ax 
+      17 0005  B8 4C00			mov ax,4c00h 
+      18				 
+      19				; start 
+      20 0008  33 C0			xor         ax,ax 
+      21				 
+      22 000A  BA 0000 R		mov         dx, offset password        
+					       ;input string 
+      23 000D  B4 0A			mov         ah,0Ah 
+      24 000F  CD 21			int         21h 
+      25				 
+      26 0011  E8 0026 R		call        NEWLINE 
+      27				 
+      28				; lea         dx,password+1 
+      29				; call        PRINT_STR 
+      30				 
+      31 0014  8A 16 0002 R		mov         dl,password+2              
+      32 0018  E8 002E R		call        print_char 
+      33				 
+      34				;end 
+      35				 
+      36 001B  B4 4C			mov ah,4ch 
+      37 001D  CD 21			int 21h 
+      38				 
+      39 001F				MAIN ENDP 
+      40				 
+      41 001F				PRINT_STR       PROC 
+      42 001F  50			                            push       
+					 ax 
+      43 0020  B4 09			                            mov        
+					 ah,09d 
+      44 0022  CD 21			                            int        
+					 21h 
+      45 0024  58			                            pop        
+					 ax 
+      46 0025  C3			                            ret 
+      47 0026				PRINT_STR       ENDP 
+      48				 
+      49 0026				NEWLINE         PROC 
+Microsoft (R) Macro Assembler Version 5.00                  8/20/23 16:41:22
+                                                             Page     1-2
+
+
+      50 0026  52			                            push    dx 
+      51 0027  B2 0A			                            mov     dl,
+					0Ah 
+      52 0029  E8 002E R		                            call PRINT_
+					CHAR 
+      53 002C  5A			                            pop     dx 
+      54 002D  C3			                            ret 
+      55 002E				NEWLINE         ENDP 
+      56				 
+      57 002E				PRINT_CHAR      PROC                   
+					                     ;print cjaracter o
+					f value in dl 
+      58 002E  50			                            push    ax 
+      59 002F  B4 02			                            mov     ah,
+					02h 
+      60 0031  CD 21			                            int     21h
+					 
+      61 0033  58			                            pop     ax 
+      62 0034  C3			                            ret 
+      63 0035				PRINT_CHAR      ENDP 
+      64				 
+      65 0035				END MAIN 
+Microsoft (R) Macro Assembler Version 5.00                  8/20/23 16:41:22
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	0022	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	0035	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 001F
+
+NEWLINE  . . . . . . . . . . . .  	N PROC	0026	_TEXT	Length = 0008
+
+PASSWORD . . . . . . . . . . . .  	L BYTE	0000	_DATA
+PRINT_CHAR . . . . . . . . . . .  	N PROC	002E	_TEXT	Length = 0007
+PRINT_STR  . . . . . . . . . . .  	N PROC	001F	_TEXT	Length = 0007
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  main		
+
+
+     62 Source  Lines
+     62 Total   Lines
+     19 Symbols
+
+  50464 + 466080 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

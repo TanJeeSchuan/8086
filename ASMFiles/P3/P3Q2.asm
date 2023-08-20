@@ -17,7 +17,7 @@ main proc
 
 mov ax,@data
 mov ds,ax
-mov es,ax
+; mov es,ax
 mov ax,4c00h
 
 ; start

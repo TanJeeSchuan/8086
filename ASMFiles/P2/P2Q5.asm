@@ -51,38 +51,21 @@ mul bl
 ; add dl,48d
 ; int 21h
 
-;;METHOD 1
-; mov bl,0Ah
-; div bl          ;divide ax by bl, al will be quotient, ah is remainder
+mov     bx,10d
+div     bl
 
-; mov cl,ah       ;save AH because remainder is last
+push    ax
+mov     dl,al
+add     dl,48d
+mov     ah,02h
+int     21h
+pop     ax
 
-; mov ah,02h      ;print quotient
-; mov dl,al
-; add dl,"0"
-; int 21h
+mov     dl,ah
+add     dl,48d
+mov     ah,02h
+int     21h
 
-; mov dl,cl       ;print remainder
-; add dl,"0"
-; int 21h
-
-; mov     bx,000Ah
-
-; div     bx
-; push    dx
-
-; div     bx
-; push    dx
-
-; mov     ah,02h
-
-; pop     dx
-; int     21h
-
-; pop     dx
-; int     21h
-
-call    PRINT_NUM
 
 ;end
 

@@ -25,11 +25,12 @@ loopStart:
                     mov     al,[si]             ;move si value to al
                     add     dl,al               ;add to dl
 
-                    add     si,1                ;to next element
+                    inc     si                ;to next element
                     inc     bx                  ;bx++
 
-                    cmp     bx,cx               ;if loopnumber < elementNumber, jmp
-                    jb      loopStart
+                    ; cmp     bx,cx               ;if loopnumber < elementNumber, jmp
+                    ; jb      loopStart
+                    loop    loopStart
 
 mov     ax,dx
 

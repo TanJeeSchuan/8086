@@ -119,7 +119,7 @@ LOWER_CASE      PROC                            ;reverse SI to DI, length in cx
                                 inc     bx              ;loop counter
 
                                 cmp     bx,cx
-                                jb      lCaseLoop       ;if =< string length
+                                jb      lCaseLoop       ;if < string length
 
                         ret
 LOWER_CASE      ENDP
