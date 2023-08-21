@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 5.00                  8/20/23 16:41:22
+Microsoft (R) Macro Assembler Version 5.00                  8/21/23 15:21:25
                                                              Page     1-1
 
 
@@ -6,83 +6,364 @@
        2 0064				.STACK 100 
        3 0000				.DATA 
        4				 
-       5 0000  20			password        DB 32 
+       5 0000  20			buffer          DB 32 
        6 0001  ??			                DB ? 
        7 0002  0020[			                DB 32 DUP(0) 
        8	   00			
        9			 ]	
       10				
-      11				 
-      12 0000				.CODE 
-      13 0000				MAIN PROC 
-      14				 
-      15 0000  B8 ---- R		mov ax,@data 
-      16 0003  8E D8			mov ds,ax 
-      17 0005  B8 4C00			mov ax,4c00h 
-      18				 
-      19				; start 
-      20 0008  33 C0			xor         ax,ax 
+      11 0022  24			                DB "$" 
+      12				 
+      13 0023  0015[			password        DB 21 DUP("0") 
+      14	   30			
+      15			 ]	
+      16				
+      17				 
+      18 0038  31 32 33 34 35 41 42	correctPass     DB "12345ABC" 
+      19       43			
+      20 0040  24			                DB "$" 
       21				 
-      22 000A  BA 0000 R		mov         dx, offset password        
-					       ;input string 
-      23 000D  B4 0A			mov         ah,0Ah 
-      24 000F  CD 21			int         21h 
+      22 0041  45 6E 74 65 72 20 50	enterText       DB "Enter Password: $" 
+      23       61 73 73 77 6F 72 64	
+      24       3A 20 24			
       25				 
-      26 0011  E8 0026 R		call        NEWLINE 
-      27				 
-      28				; lea         dx,password+1 
-      29				; call        PRINT_STR 
-      30				 
-      31 0014  8A 16 0002 R		mov         dl,password+2              
-      32 0018  E8 002E R		call        print_char 
-      33				 
-      34				;end 
+      26 0052  49 6E 63 6F 72 72 65	pwIncorrect     DB "Incorrect password!
+					 Chances left $" 
+      27       63 74 20 70 61 73 73	
+      28       77 6F 72 64 21 20 43	
+      29       68 61 6E 63 65 73 20	
+      30       6C 65 66 74 20 24	
+      31 0074  43 6F 72 72 65 63 74	pwCorrect       DB "Correct password! W
+					elcome!$" 
+      32       20 70 61 73 73 77 6F	
+      33       72 64 21 20 57 65 6C	
+      34       63 6F 6D 65 21 24	
       35				 
-      36 001B  B4 4C			mov ah,4ch 
-      37 001D  CD 21			int 21h 
-      38				 
-      39 001F				MAIN ENDP 
+      36 008F  03			loginChances    DB 3 
+      37				 
+      38 0000				.CODE 
+      39 0000				MAIN PROC 
       40				 
-      41 001F				PRINT_STR       PROC 
-      42 001F  50			                            push       
-					 ax 
-      43 0020  B4 09			                            mov        
-					 ah,09d 
-      44 0022  CD 21			                            int        
-					 21h 
-      45 0024  58			                            pop        
-					 ax 
-      46 0025  C3			                            ret 
-      47 0026				PRINT_STR       ENDP 
-      48				 
-      49 0026				NEWLINE         PROC 
-Microsoft (R) Macro Assembler Version 5.00                  8/20/23 16:41:22
+      41 0000  B8 ---- R		mov ax,@data 
+      42 0003  8E D8			mov ds,ax 
+      43 0005  B8 4C00			mov ax,4c00h 
+      44				 
+      45				; start 
+      46 0008				passCheck: 
+      47				 
+      48 0008  E8 00EF R		call        NEWLINE 
+      49 000B  E8 00EF R		call        NEWLINE 
+      50				 
+      51 000E  8D 16 0041 R		lea         dx,enterText 
+      52 0012  E8 00C4 R		call        PRINT_STR 
+Microsoft (R) Macro Assembler Version 5.00                  8/21/23 15:21:25
                                                              Page     1-2
 
 
-      50 0026  52			                            push    dx 
-      51 0027  B2 0A			                            mov     dl,
-					0Ah 
-      52 0029  E8 002E R		                            call PRINT_
-					CHAR 
-      53 002C  5A			                            pop     dx 
-      54 002D  C3			                            ret 
-      55 002E				NEWLINE         ENDP 
+      53				 
+      54 0015  8D 3E 0023 R		lea         di,password 
+      55 0019  E8 0079 R		call        input_str 
       56				 
-      57 002E				PRINT_CHAR      PROC                   
+      57 001C  E8 00EF R		call        NEWLINE 
+      58				 
+      59 001F  8D 36 0023 R		lea         si,password 
+      60 0023  8D 3E 0038 R		lea         di,correctPass 
+      61 0027  E8 00AB R		call        STRCMP                     
+					                     ;will return 0 if 
+					string matches   
+      62				 
+      63 002A  3D 0000			cmp         ax,0 
+      64 002D  74 22			jz          pass_correct               
+					                     ;jump if password 
+					is correct 
+      65				;;this code will run if password is inc
+					orrect 
+      66 002F  8A 16 008F R		            mov         dl,[loginChance
+					s] 
+      67 0033  80 FA 00			            cmp         dl,0 
+      68 0036  74 23			            jz          pass_check_end 
+      69				 
+      70 0038  8D 16 0052 R		            lea         dx,pwIncorrect 
+      71 003C  E8 00C4 R		            call        PRINT_STR 
+      72				 
+      73 003F  8A 16 008F R		            mov         dl,[loginChance
+					s] 
+      74 0043  FE CA			            dec         dl 
+      75 0045  88 16 008F R		            mov         [loginChances],
+					dl 
+      76 0049  80 C2 30			            add         dl,48d 
+      77 004C  E8 00F7 R		            call        PRINT_CHAR 
+      78				 
+      79 004F  EB B7			            jmp         passCheck 
+      80 0051				pass_correct: 
+      81 0051  E8 00EF R		            call        NEWLINE 
+      82 0054  8D 16 0074 R		            lea         dx,pwCorrect 
+      83 0058  E8 00C4 R		            call        PRINT_STR 
+      84 005B				pass_check_end: 
+      85				 
+      86 005B  E8 00EF R		call        NEWLINE 
+      87 005E  E8 00EF R		call        NEWLINE 
+      88				;end 
+      89				 
+      90 0061  B4 4C			mov ah,4ch 
+      91 0063  CD 21			int 21h 
+      92				 
+      93 0065				MAIN ENDP 
+      94				 
+      95 0065				STRLEN          PROC                   
+					                     ;output length of 
+					si in ax 
+      96 0065  56			                        push        si 
+Microsoft (R) Macro Assembler Version 5.00                  8/21/23 15:21:25
+                                                             Page     1-3
+
+
+      97 0066  33 D2			                        xor         dx,
+					dx 
+      98 0068  33 DB			                        xor         bx,
+					bx 
+      99 006A  33 C0			                        xor         ax,
+					ax 
+     100				 
+     101 006C				                        strlenLoop: 
+     102 006C  8A 1C			                                    mov
+					     bl,[si] 
+     103 006E  80 FB 24			                                    cmp
+					     bl,"$" 
+     104 0071  74 04			                                    je 
+					     strlenLoopEnd 
+     105				 
+     106 0073  46			                                    inc
+					     si 
+     107 0074  40			                                    inc
+					     ax 
+     108				 
+     109 0075  EB F5			                                    jmp
+					     strlenLoop 
+     110				 
+     111 0077				                        strlenLoopEnd: 
+     112				 
+     113 0077  5E			                        pop         si 
+     114 0078  C3			                        ret 
+     115 0079				STRLEN          ENDP 
+     116				 
+     117 0079				INPUT_STR       PROC                   
+					                                 ;read 
+					input and move to address in di 
+     118 0079  50			                            push       
+					 ax 
+     119 007A  52			                            push       
+					 dx 
+     120 007B  57			                            push       
+					 di 
+     121 007C  33 C0			                            xor        
+					 ax,ax 
+     122 007E  33 C9			                            xor        
+					 cx,cx 
+     123				 
+     124 0080  BA 0000 R		                            mov        
+					 dx, offset buffer               ;input
+					 string 
+     125 0083  B4 0A			                            mov        
+					 ah,0Ah 
+     126 0085  CD 21			                            int        
+					 21h 
+     127				 
+     128 0087  8A 0E 0001 R		                            mov        
+					 cl,[buffer+1]                   ;move 
+					length of input to cl 
+Microsoft (R) Macro Assembler Version 5.00                  8/21/23 15:21:25
+                                                             Page     1-4
+
+
+     129				 
+     130 008B  B4 24			                            mov        
+					 ah,"$" 
+     131 008D  8D 3E 0002 R		                            lea        
+					 di,buffer+2                     ;offse
+					t to start of string value 
+     132 0091  03 F9			                            add        
+					 di,cl                           ;move 
+					to after last character 
+ASMFiles\A\main.asm(116): warning A4031: Operand types must match
+     133 0093  88 25			                            mov        
+					 [di],ah                         ;move 
+					$ character to last place 
+     134				 
+     135 0095  5F			                            pop        
+					 di 
+     136 0096  57			                            push       
+					 di 
+     137				 
+     138 0097  8D 36 0002 R		                            lea        
+					 si,buffer+2 
+     139 009B  32 ED			                            xor        
+					 ch,ch 
+     140 009D  FE C1			                            inc        
+					 cl 
+     141 009F				                            input_str_c
+					py: 
+     142 009F  8A 24			                                       
+					 mov         ah,[si] 
+     143 00A1  88 25			                                       
+					 mov         [di],ah 
+     144				 
+     145 00A3  46			                                       
+					 inc         si 
+     146 00A4  47			                                       
+					 inc         di 
+     147 00A5  E2 F8			                                       
+					 loop        input_str_cpy 
+     148				 
+     149 00A7  5F			                            pop        
+					 di 
+     150 00A8  5A			                            pop        
+					 dx 
+     151 00A9  58			                            pop        
+					 ax 
+     152 00AA  C3			                            ret 
+     153 00AB				INPUT_STR       ENDP 
+     154				 
+     155 00AB				STRCMP          PROC                   
+					                     ;compares string i
+					n si and di, if equal will return 0 in 
+					ax 
+     156 00AB  56			                            push       
+					 si 
+Microsoft (R) Macro Assembler Version 5.00                  8/21/23 15:21:25
+                                                             Page     1-5
+
+
+     157 00AC  57			                            push       
+					 di 
+     158				 
+     159 00AD  33 C0			                            xor        
+					 ax,ax 
+     160 00AF				                            STRCMP_LOOP
+					_START: 
+     161 00AF  8A 04			                                       
+					 mov         al,[si] 
+     162 00B1  8A 25			                                       
+					 mov         ah,[di] 
+     163				                                       
+					  
+     164 00B3  46			                                       
+					 inc         si 
+     165 00B4  47			                                       
+					 inc         di 
+     166				 
+     167 00B5  3C 24			                                       
+					 cmp         al,"$" 
+     168 00B7  74 04			                                       
+					 je          STRCMP_LOOP_END 
+     169				 
+     170 00B9  3A C4			                                       
+					 cmp         al,ah 
+     171 00BB  74 F2			                                       
+					 je          STRCMP_LOOP_START 
+     172				 
+     173 00BD				                            STRCMP_LOOP
+					_END: 
+     174 00BD  2A C4			                            sub        
+					 al,ah               ;return sub of bot
+					h strings 
+     175 00BF  32 E4			                            xor        
+					 ah,ah 
+     176				 
+     177 00C1  5F			                            pop        
+					 di 
+     178 00C2  5E			                            pop        
+					 si 
+     179 00C3  C3			                            ret 
+     180 00C4				STRCMP          ENDP 
+     181				 
+     182 00C4				PRINT_STR       PROC 
+     183 00C4  50			                            push       
+					 ax 
+     184 00C5  B4 09			                            mov        
+					 ah,09d 
+     185 00C7  CD 21			                            int        
+					 21h 
+     186 00C9  58			                            pop        
+					 ax 
+     187 00CA  C3			                            ret 
+     188 00CB				PRINT_STR       ENDP 
+Microsoft (R) Macro Assembler Version 5.00                  8/21/23 15:21:25
+                                                             Page     1-6
+
+
+     189				 
+     190 00CB				PRINT_NUM       PROC                   
+					                     ;print from ax    
+					           
+     191 00CB  50			                        push    ax     
+					                     ;preserves origina
+					l register values 
+     192 00CC  53			                        push    bx 
+     193 00CD  51			                        push    cx 
+     194 00CE  52			                        push    dx 
+     195 00CF  BB 000A			                        mov     bx,000A
+					h         
+     196 00D2  B9 0000			                        mov     cx,0000
+					h 
+     197 00D5				            Divloop: 
+     198 00D5  BA 0000			                        mov     dx,0000
+					h 
+     199 00D8  F7 F3			                        div     bx 
+     200 00DA  52			                        push    dx 
+     201 00DB  41			                        inc     cx 
+     202 00DC  85 C0			                        test    ax,ax 
+     203 00DE  75 F5			                        jnz     Divloop
+					 
+     204				 
+     205 00E0  B4 02			                        mov ah,02h     
+					                     ;setup for print 
+     206				 
+     207 00E2				            IntPrint:    
+     208 00E2  5A			                        pop     dx 
+     209 00E3  83 C2 30			                        add     dx,48d 
+     210 00E6  CD 21			                        int     21h 
+     211 00E8  E2 F8			                        loop    IntPrin
+					t 
+     212				 
+     213 00EA  5A			                        pop dx         
+					                     ;restore original 
+					ax value 
+     214 00EB  59			                        pop cx 
+     215 00EC  5B			                        pop bx 
+     216 00ED  58			                        pop ax 
+     217 00EE  C3			                        ret 
+     218 00EF				PRINT_NUM       ENDP 
+     219				 
+     220 00EF				NEWLINE         PROC 
+     221 00EF  52			                            push    dx 
+     222 00F0  B2 0A			                            mov     dl,
+					0Ah 
+     223 00F2  E8 00F7 R		                            call PRINT_
+					CHAR 
+     224 00F5  5A			                            pop     dx 
+     225 00F6  C3			                            ret 
+     226 00F7				NEWLINE         ENDP 
+     227				 
+     228 00F7				PRINT_CHAR      PROC                   
+Microsoft (R) Macro Assembler Version 5.00                  8/21/23 15:21:25
+                                                             Page     1-7
+
+
 					                     ;print cjaracter o
 					f value in dl 
-      58 002E  50			                            push    ax 
-      59 002F  B4 02			                            mov     ah,
+     229 00F7  50			                            push    ax 
+     230 00F8  B4 02			                            mov     ah,
 					02h 
-      60 0031  CD 21			                            int     21h
+     231 00FA  CD 21			                            int     21h
 					 
-      61 0033  58			                            pop     ax 
-      62 0034  C3			                            ret 
-      63 0035				PRINT_CHAR      ENDP 
-      64				 
-      65 0035				END MAIN 
-Microsoft (R) Macro Assembler Version 5.00                  8/20/23 16:41:22
+     232 00FC  58			                            pop     ax 
+     233 00FD  C3			                            ret 
+     234 00FE				PRINT_CHAR      ENDP 
+     235				 
+     236				 
+     237 00FE				END MAIN 
+Microsoft (R) Macro Assembler Version 5.00                  8/21/23 15:21:25
                                                              Symbols-1
 
 
@@ -91,33 +372,64 @@ Segments and Groups:
                 N a m e         	Length	 Align	Combine Class
 
 DGROUP . . . . . . . . . . . . .  	GROUP
-  _DATA  . . . . . . . . . . . .  	0022	WORD	PUBLIC	'DATA'
+  _DATA  . . . . . . . . . . . .  	0090	WORD	PUBLIC	'DATA'
   STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
-_TEXT  . . . . . . . . . . . . .  	0035	WORD	PUBLIC	'CODE'
+_TEXT  . . . . . . . . . . . . .  	00FE	WORD	PUBLIC	'CODE'
 
 Symbols:            
 
                 N a m e         	Type	 Value	 Attr
 
-MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 001F
+BUFFER . . . . . . . . . . . . .  	L BYTE	0000	_DATA
 
-NEWLINE  . . . . . . . . . . . .  	N PROC	0026	_TEXT	Length = 0008
+CORRECTPASS  . . . . . . . . . .  	L BYTE	0038	_DATA
 
-PASSWORD . . . . . . . . . . . .  	L BYTE	0000	_DATA
-PRINT_CHAR . . . . . . . . . . .  	N PROC	002E	_TEXT	Length = 0007
-PRINT_STR  . . . . . . . . . . .  	N PROC	001F	_TEXT	Length = 0007
+DIVLOOP  . . . . . . . . . . . .  	L NEAR	00D5	_TEXT
+
+ENTERTEXT  . . . . . . . . . . .  	L BYTE	0041	_DATA
+
+INPUT_STR  . . . . . . . . . . .  	N PROC	0079	_TEXT	Length = 0032
+INPUT_STR_CPY  . . . . . . . . .  	L NEAR	009F	_TEXT
+INTPRINT . . . . . . . . . . . .  	L NEAR	00E2	_TEXT
+
+LOGINCHANCES . . . . . . . . . .  	L BYTE	008F	_DATA
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 0065
+
+NEWLINE  . . . . . . . . . . . .  	N PROC	00EF	_TEXT	Length = 0008
+
+PASSCHECK  . . . . . . . . . . .  	L NEAR	0008	_TEXT
+PASSWORD . . . . . . . . . . . .  	L BYTE	0023	_DATA	Length = 0015
+PASS_CHECK_END . . . . . . . . .  	L NEAR	005B	_TEXT
+PASS_CORRECT . . . . . . . . . .  	L NEAR	0051	_TEXT
+PRINT_CHAR . . . . . . . . . . .  	N PROC	00F7	_TEXT	Length = 0007
+PRINT_NUM  . . . . . . . . . . .  	N PROC	00CB	_TEXT	Length = 0024
+PRINT_STR  . . . . . . . . . . .  	N PROC	00C4	_TEXT	Length = 0007
+PWCORRECT  . . . . . . . . . . .  	L BYTE	0074	_DATA
+PWINCORRECT  . . . . . . . . . .  	L BYTE	0052	_DATA
+
+STRCMP . . . . . . . . . . . . .  	N PROC	00AB	_TEXT	Length = 0019
+STRCMP_LOOP_END  . . . . . . . .  	L NEAR	00BD	_TEXT
+STRCMP_LOOP_START  . . . . . . .  	L NEAR	00AF	_TEXT
+STRLEN . . . . . . . . . . . . .  	N PROC	0065	_TEXT	Length = 0014
+STRLENLOOP . . . . . . . . . . .  	L NEAR	006C	_TEXT
+STRLENLOOPEND  . . . . . . . . .  	L NEAR	0077	_TEXT
 
 @CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
 @CODESIZE  . . . . . . . . . . .  	TEXT  0		
 @DATASIZE  . . . . . . . . . . .  	TEXT  0		
 @FILENAME  . . . . . . . . . . .  	TEXT  main		
 
+Microsoft (R) Macro Assembler Version 5.00                  8/21/23 15:21:25
+                                                             Symbols-2
 
-     62 Source  Lines
-     62 Total   Lines
-     19 Symbols
 
-  50464 + 466080 Bytes symbol space free
 
-      0 Warning Errors
+    221 Source  Lines
+    221 Total   Lines
+     39 Symbols
+
+  50388 + 449772 Bytes symbol space free
+
+      1 Warning Errors
       0 Severe  Errors
