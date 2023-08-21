@@ -19,12 +19,17 @@ pwCorrect       DB "Correct password! Welcome!$"
 
 loginChances    DB 3
 
+logo            DB "				ABC$"
+
 .CODE
 MAIN PROC
 
 mov ax,@data
 mov ds,ax
 mov ax,4c00h
+
+lea         dx,logo
+call        PRINT_STR
 
 ; start
 passCheck:
@@ -49,7 +54,7 @@ jz          pass_correct                                    ;jump if password is
 ;;this code will run if password is incorrect
             mov         dl,[loginChances]
             cmp         dl,0
-            jz          pass_check_end
+            jz          exit                                ;if no chances left
 
             lea         dx,pwIncorrect
             call        PRINT_STR
@@ -69,8 +74,10 @@ pass_check_end:
 
 call        NEWLINE
 call        NEWLINE
-;end
 
+
+;end
+exit:
 mov ah,4ch
 int 21h
 
