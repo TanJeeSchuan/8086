@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 5.00                  8/19/23 13:34:21
+Microsoft (R) Macro Assembler Version 5.00                  8/26/23 12:39:49
                                                              Page     1-1
 
 
@@ -34,87 +34,100 @@
       30				 
       31				; start 
       32				 
-      33 000A  E8 007D R		call    NEWLINE 
+      33 000A  E8 0084 R		call    NEWLINE 
       34				 
       35 000D  8D 16 000A R		lea     dx,inital 
-      36 0011  E8 0076 R		call    PRINT_STR 
+      36 0011  E8 007D R		call    PRINT_STR 
       37				 
-      38 0014  E8 007D R		call    NEWLINE 
+      38 0014  E8 0084 R		call    NEWLINE 
       39				 
       40 0017  8D 16 002C R		lea     dx,data1Name 
-      41 001B  E8 0076 R		call    PRINT_STR 
+      41 001B  E8 007D R		call    PRINT_STR 
       42				 
       43 001E  8D 16 0000 R		lea     dx,data1 
-      44 0022  E8 0076 R		call    PRINT_STR 
+      44 0022  E8 007D R		call    PRINT_STR 
       45				 
-      46 0025  E8 007D R		call    NEWLINE 
+      46 0025  E8 0084 R		call    NEWLINE 
       47				 
       48 0028  8D 16 0034 R		lea     dx,data2Name 
-      49 002C  E8 0076 R		call    PRINT_STR 
+      49 002C  E8 007D R		call    PRINT_STR 
       50				 
       51 002F  8D 16 0005 R		lea     dx,data2 
-      52 0033  E8 0076 R		call    PRINT_STR 
+      52 0033  E8 007D R		call    PRINT_STR 
       53				 
-      54 0036  E8 007D R		call    NEWLINE 
-Microsoft (R) Macro Assembler Version 5.00                  8/19/23 13:34:21
+      54 0036  E8 0084 R		call    NEWLINE 
+Microsoft (R) Macro Assembler Version 5.00                  8/26/23 12:39:49
                                                              Page     1-2
 
 
-      55 0039  E8 007D R		call    NEWLINE 
+      55 0039  E8 0084 R		call    NEWLINE 
       56				 
       57 003C  8D 36 0000 R		lea     si,data1 
       58 0040  8D 3E 0005 R		lea     di,data2 
-      59 0044  B9 0004			mov     cx,0004h                ;number
-					 of times to repeat move byte (length o
-					f string to move）              
-      60 0047  F3/ A4			rep     movsb 
+      59 0044				replacementLoop1: 
+      60 0044  8A 04			        mov         al,[si] 
       61				 
-      62 0049  8D 16 001A R		lea     dx,after 
-      63 004D  E8 0076 R		call    PRINT_STR 
+      62 0046  3C 24			        cmp         al,"$"      ;read u
+					ntil $ 
+      63 0048  74 06			        je          replacementLoop1exi
+					t 
       64				 
-      65 0050  E8 007D R		call    NEWLINE 
-      66				 
-      67 0053  8D 16 002C R		lea     dx,data1Name 
-      68 0057  E8 0076 R		call    PRINT_STR 
-      69				 
-      70 005A  8D 16 0000 R		lea     dx,data1 
-      71 005E  E8 0076 R		call    PRINT_STR 
-      72				 
-      73 0061  E8 007D R		call    NEWLINE 
-      74				 
-      75 0064  8D 16 0034 R		lea     dx,data2Name 
-      76 0068  E8 0076 R		call    PRINT_STR 
-      77				 
-      78 006B  8D 16 0005 R		lea     dx,data2 
-      79 006F  E8 0076 R		call    PRINT_STR 
-      80				;end 
+      65 004A  88 05			        mov         [di],al 
+      66 004C  46			        inc         si 
+      67 004D  47			        inc         di 
+      68 004E  EB F4			        jmp         replacementLoop1 
+      69 0050				replacementLoop1exit: 
+      70				 
+      71 0050  8D 16 001A R		lea     dx,after 
+      72 0054  E8 007D R		call    PRINT_STR 
+      73				 
+      74 0057  E8 0084 R		call    NEWLINE 
+      75				 
+      76 005A  8D 16 002C R		lea     dx,data1Name 
+      77 005E  E8 007D R		call    PRINT_STR 
+      78				 
+      79 0061  8D 16 0000 R		lea     dx,data1 
+      80 0065  E8 007D R		call    PRINT_STR 
       81				 
-      82 0072  B4 4C			mov ah,4ch 
-      83 0074  CD 21			int 21h 
-      84				 
-      85 0076				main endp 
+      82 0068  E8 0084 R		call    NEWLINE 
+      83				 
+      84 006B  8D 16 0034 R		lea     dx,data2Name 
+      85 006F  E8 007D R		call    PRINT_STR 
       86				 
-      87 0076				PRINT_STR       PROC 
-      88 0076  50			                        push    ax 
-      89 0077  B4 09			                        mov     ah,09h 
-      90 0079  CD 21			                        int     21h 
-      91 007B  58			                        pop    ax 
-      92 007C  C3			                        ret 
-      93 007D				PRINT_STR       ENDP 
-      94				 
-      95 007D				NEWLINE         PROC 
-      96 007D  50			                        push    ax 
-      97 007E  52			                        push    dx 
-      98 007F  B2 0A			                        mov     dl,10d 
-      99 0081  B4 02			                        mov     ah,02h 
-     100 0083  CD 21			                        int     21h 
-     101 0085  5A			                        pop     dx 
-     102 0086  58			                        pop     ax 
-     103 0087  C3			                        ret 
-     104 0088				NEWLINE         ENDP 
-     105				 
-     106 0088				end main 
-Microsoft (R) Macro Assembler Version 5.00                  8/19/23 13:34:21
+      87 0072  8D 16 0005 R		lea     dx,data2 
+      88 0076  E8 007D R		call    PRINT_STR 
+      89				;end 
+      90				 
+      91 0079  B4 4C			mov ah,4ch 
+      92 007B  CD 21			int 21h 
+      93				 
+      94 007D				main endp 
+      95				 
+      96 007D				PRINT_STR       PROC 
+      97 007D  50			                        push    ax 
+      98 007E  B4 09			                        mov     ah,09h 
+      99 0080  CD 21			                        int     21h 
+     100 0082  58			                        pop    ax 
+     101 0083  C3			                        ret 
+     102 0084				PRINT_STR       ENDP 
+     103				 
+     104 0084				NEWLINE         PROC 
+     105 0084  50			                        push    ax 
+     106 0085  52			                        push    dx 
+Microsoft (R) Macro Assembler Version 5.00                  8/26/23 12:39:49
+                                                             Page     1-3
+
+
+     107 0086  B2 0A			                        mov     dl,10d 
+     108 0088  B4 02			                        mov     ah,02h 
+     109 008A  CD 21			                        int     21h 
+     110 008C  5A			                        pop     dx 
+     111 008D  58			                        pop     ax 
+     112 008E  C3			                        ret 
+     113 008F				NEWLINE         ENDP 
+     114				 
+     115 008F				end main 
+Microsoft (R) Macro Assembler Version 5.00                  8/26/23 12:39:49
                                                              Symbols-1
 
 
@@ -125,7 +138,7 @@ Segments and Groups:
 DGROUP . . . . . . . . . . . . .  	GROUP
   _DATA  . . . . . . . . . . . .  	003C	WORD	PUBLIC	'DATA'
   STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
-_TEXT  . . . . . . . . . . . . .  	0088	WORD	PUBLIC	'CODE'
+_TEXT  . . . . . . . . . . . . .  	008F	WORD	PUBLIC	'CODE'
 
 Symbols:            
 
@@ -140,11 +153,14 @@ DATA2NAME  . . . . . . . . . . .  	L BYTE	0034	_DATA
 
 INITAL . . . . . . . . . . . . .  	L BYTE	000A	_DATA
 
-MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 0076
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 007D
 
-NEWLINE  . . . . . . . . . . . .  	N PROC	007D	_TEXT	Length = 000B
+NEWLINE  . . . . . . . . . . . .  	N PROC	0084	_TEXT	Length = 000B
 
-PRINT_STR  . . . . . . . . . . .  	N PROC	0076	_TEXT	Length = 0007
+PRINT_STR  . . . . . . . . . . .  	N PROC	007D	_TEXT	Length = 0007
+
+REPLACEMENTLOOP1 . . . . . . . .  	L NEAR	0044	_TEXT
+REPLACEMENTLOOP1EXIT . . . . . .  	L NEAR	0050	_TEXT
 
 @CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
 @CODESIZE  . . . . . . . . . . .  	TEXT  0		
@@ -152,11 +168,11 @@ PRINT_STR  . . . . . . . . . . .  	N PROC	0076	_TEXT	Length = 0007
 @FILENAME  . . . . . . . . . . .  	TEXT  P3Q1		
 
 
-     97 Source  Lines
-     97 Total   Lines
-     23 Symbols
+    106 Source  Lines
+    106 Total   Lines
+     25 Symbols
 
-  50536 + 466008 Bytes symbol space free
+  50460 + 466084 Bytes symbol space free
 
       0 Warning Errors
       0 Severe  Errors

@@ -8,7 +8,6 @@ data2       DB    4   dup ('*'),'$'
 inital      DB    "Initial Content$"
 after       DB    "After Replacement$"
 reversed    DB    "After Reversed$"
-lowerCase   DB    "After Changed Case$"
 
 data1Name   DB    "data1: $"
 data2Name   DB    "data2: $"
@@ -18,6 +17,7 @@ main proc
 
 mov ax,@data
 mov ds,ax
+; mov es,ax
 mov ax,4c00h
 
 ; start
@@ -36,17 +36,8 @@ call    NEWLINE
 
 lea     si,data1
 lea     di,data2
-replacementLoop1:
-        mov         al,[si]
-
-        cmp         al,"$"      ;read until $
-        je          replacementLoop1exit
-
-        mov         [di],al
-        inc         si
-        inc         di
-        jmp         replacementLoop1
-replacementLoop1exit:
+mov     cx,0004h                ;number of times to repeat move byte (length of string to move)       
+rep     movsb
 
 lea     dx,after
 call    PRINT_STR
@@ -68,31 +59,15 @@ lea     di,data2
 mov     cx,4d               ;length of string
 call    REVERSE_STR
 
-call    PRINT_DATA
-
-call    NEWLINE
-call    NEWLINE
-
-lea     dx,lowerCase
-call    PRINT_STR
-
-call    NEWLINE
-
-lea     si,data1
-lea     di,data2
-call    LOWER_CASE
-
-call    PRINT_DATA  
+call    PRINT_DATA   
 ;end
 
 mov ah,4ch
 int 21h
 
-
-
 main endp
 
-PRINT_DATA      PROC                            ;print comparision of data1 and data2
+PRINT_DATA      PROC
                         lea     dx,data1Name
                         call    PRINT_STR
 
@@ -109,26 +84,6 @@ PRINT_DATA      PROC                            ;print comparision of data1 and 
                         
                         ret
 PRINT_DATA      ENDP
-
-LOWER_CASE      PROC                            
-                        lCaseLoop:
-                                mov     dl  ,   [si]
-
-                                cmp     dl,"$"
-                                je      lCaseLoopExit
-
-                                add     dl  ,   32d     ;turn to lower case
-
-                                mov     [di],   dl
-
-                                inc     si              ;move backwards
-                                inc     di              ;move forwards
-
-                                jmp     lCaseLoop
-
-                        lCaseLoopExit:
-                        ret
-LOWER_CASE      ENDP
 
 REVERSE_STR     PROC                            ;reverse SI to DI, length in cx
                         mov     bx  ,   0d      ;BX to be loop counter

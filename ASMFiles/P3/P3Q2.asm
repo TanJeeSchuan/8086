@@ -17,7 +17,6 @@ main proc
 
 mov ax,@data
 mov ds,ax
-; mov es,ax
 mov ax,4c00h
 
 ; start
@@ -36,8 +35,17 @@ call    NEWLINE
 
 lea     si,data1
 lea     di,data2
-mov     cx,0004h                ;number of times to repeat move byte (length of string to move)       
-rep     movsb
+replacementLoop1:
+        mov         al,[si]
+
+        cmp         al,"$"      ;read until $
+        je          replacementLoop1exit
+
+        mov         [di],al
+        inc         si
+        inc         di
+        jmp         replacementLoop1
+replacementLoop1exit:
 
 lea     dx,after
 call    PRINT_STR
