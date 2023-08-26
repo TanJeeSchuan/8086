@@ -17,9 +17,54 @@ enterText       DB "Enter Password: $"
 pwIncorrect     DB "Incorrect password! Chances left $"
 pwCorrect       DB "Correct password! Welcome!$"
 
-loginChances    DB 3
+loginChances    DB 5
 
 logo            DB "				ABC$"
+
+;ORDER SYSTEM
+itemHeader      DB "Item ID"
+                DB 09h
+                DB 09h
+                DB "Product Name"
+                DB 09h
+                DB "Price"
+                DB "$"
+
+item            DB 1                        
+                DB "APPLE$-------------"               
+                DB "1.20$-----"              
+
+                DB 2       
+                DB "BANANA$------------" 
+                DB "5.50$-----"
+
+                DB 3       
+                DB "DURIAN$------------" 
+                DB "25.79$----"
+
+                DB 4       
+                DB "RAMBUTN$-----------"
+                DB "4.00$-----"
+
+                DB 5       
+                DB "PEACH$-------------" 
+                DB "10.00$----"    
+
+                DB 6       
+                DB "PEAR$--------------" 
+                DB "15.00$----"
+
+                DB "$"
+
+itemSelection   DB "Select the item: $"
+
+wrongItemSelection DB "Wrong item selection!"
+
+;;offsets for item "array"
+itemSize    EQU     30
+id          EQU     0
+itemName    EQU     1
+itemPrice   EQU     20
 
 .CODE
 MAIN PROC
@@ -32,26 +77,26 @@ lea         dx,logo
 call        PRINT_STR
 
 ; start
+
 passCheck:
+            call        NEWLINE
+            call        NEWLINE
 
-call        NEWLINE
-call        NEWLINE
+            lea         dx,enterText
+            call        PRINT_STR
 
-lea         dx,enterText
-call        PRINT_STR
+            lea         di,password
+            call        input_str
 
-lea         di,password
-call        input_str
+            call        NEWLINE
 
-call        NEWLINE
+            lea         si,password
+            lea         di,correctPass
+            call        STRCMP                              ;will return 0 if string matches  
 
-lea         si,password
-lea         di,correctPass
-call        STRCMP                                          ;will return 0 if string matches  
-
-cmp         ax,0
-jz          pass_correct                                    ;jump if password is correct
-;;this code will run if password is incorrect
+            cmp         ax,0
+            jz          pass_correct                        ;jump if password is correct
+            ;;this code will run if password is incorrect
             mov         dl,[loginChances]
             cmp         dl,0
             jz          exit                                ;if no chances left
@@ -66,6 +111,10 @@ jz          pass_correct                                    ;jump if password is
             call        PRINT_CHAR
 
             jmp         passCheck
+exit:
+            mov ah,4ch
+            int 21h
+
 pass_correct:
             call        NEWLINE
             lea         dx,pwCorrect
@@ -75,9 +124,91 @@ pass_check_end:
 call        NEWLINE
 call        NEWLINE
 
+lea         dx,itemHeader
+call        PRINT_STR
+
+call        NEWLINE
+
+;print all items
+xor         ax,ax
+xor         cx,cx
+xor         di,di
+
+lea         si,item                             ;address of item array
+print_item_loop: 
+            mov         al,[si]                 ;move id in si to al
+            cmp         al,"$"                  ;if is end of array, exit loop
+            je          print_item_loop_exit    
+
+            call        PRINT_NUM               ;print id
+            
+            push        ax
+            push        dx
+            mov         ah,02h
+            mov         dl,9d
+            int         21h                     ;print 2 of tabs
+            int         21h
+            pop         dx
+            pop         ax
+
+            push        si
+            add         si,itemName             ;offset si to address of itemName
+            mov         dx,si
+            call        PRINT_STR               ;print string in SI
+            pop         si
+
+            push        ax
+            push        dx
+            mov         ah,02h
+            mov         dl,9d
+            int         21h                     ;print 2 of tabs
+            int         21h
+            pop         dx
+            pop         ax
+
+
+            push        si
+            add         si,itemPrice            ;offset si to address of itemPrice
+            mov         dx,si
+            call        PRINT_STR               ;print string in SI
+            pop         si
+
+            call        NEWLINE
+
+            add         si,itemSize             ;increment si by the size of a item element
+
+            jmp         print_item_loop
+print_item_loop_exit:
+
+;input and validation
+ITEM_SELECTION_INPUT:
+            call        NEWLINE
+            lea         dx,itemSelection
+            call        PRINT_STR
+            mov         ah,01h
+            int         21h
+
+            cmp         al,"1"
+            jb          WRONG_ITEM_SELECTION_INPUT
+            cmp         al,"6"
+            ja          WRONG_ITEM_SELECTION_INPUT
+
+            call        NEWLINE
+
+            jmp         CORRECT_ITEM_SELECTION_INPUT
+
+            WRONG_ITEM_SELECTION_INPUT:
+                        call        NEWLINE
+                        lea         dx,wrongItemSelection
+                        call        PRINT_STR
+                        call        NEWLINE
+                        jmp         ITEM_SELECTION_INPUT
+
+CORRECT_ITEM_SELECTION_INPUT:
+
+
 
 ;end
-exit:
 mov ah,4ch
 int 21h
 
@@ -223,6 +354,23 @@ PRINT_CHAR      PROC                                        ;print cjaracter of 
                             pop     ax
                             ret
 PRINT_CHAR      ENDP
+
+; PRINT_TABS      PROC                                        ;print number of spaces in cx
+;                             push    ax
+;                             push    cx
+;                             push    dx
+
+;                             PRINT_SPACES_LOOP:
+;                                     mov     dl,09d
+;                                     mov     ah,02h
+;                                     int     21h
+;                                     loop    PRINT_SPACES_LOOP
+
+;                             pop     dx
+;                             pop     cx
+;                             pop     ax
+;                             ret
+; PRINT_TABS      ENDP
 
 
 END MAIN
