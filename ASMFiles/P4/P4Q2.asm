@@ -2,14 +2,13 @@
 .stack 100
 .data
 
-str1    DB  "There are $"
-str2    DB  " positive and $"
-str3    DB  " negative values in the list.$"
+str1    DB  10d
+        DB  "Do you want to continue printing (y/n)? $"
+str2    DB  "Please enter y or n only"
+        DB  10d
+        DB  "$"
 
-list    DB  12, 29, -9, 5, -48, 20, 0
-
-posInt  DB  0
-negInt  DB  0
+char    DB  "A"
 
 .code
 main proc
@@ -21,7 +20,43 @@ mov ax,0h
 
 ; start
 
+mov         dl,[char]
+call        print_char
 
+jmp         loopStart
+
+error:      
+            call        NEWLINE
+            lea         dx,str2
+            call        PRINT_STR
+
+loopStart:
+            lea         dx,str1
+            call        PRINT_STR
+
+            mov         ah,01h
+            int         21h
+
+            cmp         al,"y"
+            je          incChar
+
+            cmp         al,"n"
+            je          loopEnd
+
+            jmp         error
+
+            incChar:
+                        mov         dl,[char]
+                        inc         dl
+                        mov         [char],dl
+
+                        call        NEWLINE
+                        mov         dl,[char]
+                        call        print_char
+
+                        jmp         loopStart   
+
+loopEnd:
 
 ;end
 
@@ -70,5 +105,21 @@ PRINT_NUM       PROC                        ;print ax
 
                             ret
 PRINT_NUM       ENDP
+
+PRINT_CHAR      PROC                                        ;print cjaracter of value in dl
+                            push    ax
+                            mov     ah,02h
+                            int     21h
+                            pop     ax
+                            ret
+PRINT_CHAR      ENDP
+
+NEWLINE         PROC
+                            push    dx
+                            mov     dl,0Ah
+                            call PRINT_CHAR
+                            pop     dx
+                            ret
+NEWLINE         ENDP
 
 end main
