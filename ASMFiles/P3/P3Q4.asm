@@ -25,15 +25,11 @@ loopStart:
                     mov     al,[si]             ;move si value to al
                     add     dl,al               ;add to dl
 
-                    inc     si                ;to next element
-                    inc     bx                  ;bx++
+                    inc     si                  ;to next element
 
-                    ; cmp     bx,cx               ;if loopnumber < elementNumber, jmp
-                    ; jb      loopStart
                     loop    loopStart
 
 mov     ax,dx
-
 call    PRINT_NUM
 ;end
 
