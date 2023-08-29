@@ -2,12 +2,13 @@
 .stack 100
 .data
 
-str1    DB "In English: $"
-str2    DB "In Eggnglish: $"
+str1    DB  "Enter a word: $"
+str2    DB  "The second character is $"
 
-input   DB "You like english and espresso, excellent emotional ! $"
-output  DB 100 DUP("$")
-        DB "$"
+
+buffer  DB  20
+        DB  ?
+        DB  20 DUP("$")
 
 .code
 main proc
@@ -22,54 +23,17 @@ mov ax,0h
 lea         dx,str1
 call        PRINT_STR
 
-lea         dx,input
-call        PRINT_STR
-
-lea         si,input
-lea         di,output
-strLoop:
-            mov         al,[si]
-
-            cmp         al,"$"
-            je          strLoopEnd
-
-            cmp         al,"e"
-            je          addEgg?
-
-            noAddEgg:
-            mov         [di],al
-            
-            jmp         addEggEnd
-
-            addEgg?:
-                        mov         ah,[si-1]
-                        cmp         ah," "
-                        jne         noAddEgg
-
-            addEgg:
-                        mov         ah,"e"
-                        mov         [di],ah
-                        inc         di
-
-                        mov         ah,"g"
-                        mov         [di],ah
-                        inc         di
-                        mov         [di],ah
-            addEggEnd:
-            inc         si
-            inc         di
-            jmp         strLoop
-strLoopEnd:
+lea         dx,buffer
+mov         ah,0Ah
+int         21h
 
 call        NEWLINE
 
 lea         dx,str2
 call        PRINT_STR
 
-lea         dx,output
-call        PRINT_STR
-
-call        NEWLINE
+mov         dl,buffer + 2 + 1
+call        PRINT_CHAR
 
 ;end
 
