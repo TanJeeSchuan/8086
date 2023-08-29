@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 20:27:17
+Microsoft (R) Macro Assembler Version 5.00                  8/26/23 13:20:26
                                                              Page     1-1
 
 
@@ -17,128 +17,130 @@
       13				 
       14 0000  B8 ---- R		mov ax,@data 
       15 0003  8E D8			mov ds,ax 
-      16 0005  8E C0			mov es,ax 
-      17 0007  B8 4C00			mov ax,4c00h 
-      18				 
-      19				; start 
-      20				 
-      21 000A  33 C0			xor     ax,ax 
-      22 000C  33 DB			xor     bx,bx 
-      23 000E  33 C9			xor     cx,cx 
-      24 0010  33 D2			xor     dx,dx 
-      25				 
-      26 0012  B9 0006			mov     cx,6d    ;print how many values
+      16 0005  B8 4C00			mov ax,4c00h 
+      17				 
+      18				; start 
+      19				 
+      20 0008  33 C0			xor     ax,ax 
+      21 000A  33 DB			xor     bx,bx 
+      22 000C  33 C9			xor     cx,cx 
+      23 000E  33 D2			xor     dx,dx 
+      24				 
+      25 0010  B9 0008			mov     cx,8d    ;print how many values
 					 
-      27				 
-      28 0015  8D 36 0000 R		lea     si,fibonacciArr 
-      29				 
-      30 0019  83 C6 03			add     si,3d   ;start from the third e
+      26				 
+      27 0013  8D 36 0000 R		lea     si,fibonacciArr 
+      28				 
+      29 0017  83 C6 03			add     si,3d   ;start from the third e
 					lement of array 
-      31				 
-      32 001C				fiboLoop:        
-      33 001C  33 DB			                xor     bx,bx 
-      34 001E  8A 44 FE			                mov     al,[si - 2] 
-      35 0021  8A 64 FF			                mov     ah,[si - 1] 
-      36				 
-      37 0024  02 D8			                add     bl,al 
-      38 0026  02 DC			                add     bl,ah 
-      39				 
-      40 0028  88 1C			                mov     [si],bl 
-      41				 
-      42 002A  46			                inc     si 
-      43				 
-      44 002B  33 C0			                xor     ax,ax 
-      45 002D  8A C3			                mov     al,bl 
-      46 002F  E8 003B R		                call    PRINT_NUM 
-      47 0032  E8 005E R		                call    NEWLINE 
-      48				 
-      49 0035  E2 E5			                loop    fiboLoop 
-      50				                 
-      51				 
-      52				;end 
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 20:27:17
+      30				 
+      31 001A				fiboLoop:        
+      32 001A  33 DB			                xor     bx,bx 
+      33 001C  8A 44 FE			                mov     al,[si - 2] 
+      34 001F  8A 64 FF			                mov     ah,[si - 1] 
+      35				 
+      36 0022  02 D8			                add     bl,al 
+      37 0024  02 DC			                add     bl,ah 
+      38				 
+      39 0026  88 1C			                mov     [si],bl 
+      40				 
+      41 0028  46			                inc     si 
+      42				 
+      43 0029  33 C0			                xor     ax,ax 
+      44 002B  8A C3			                mov     al,bl 
+      45 002D  E8 003C R		                call    PRINT_NUM 
+      46				 
+      47 0030  B2 2C			                mov     dl,"," 
+      48 0032  B4 02			                mov     ah,02h 
+      49 0034  CD 21			                int     21h 
+      50				 
+      51 0036  E2 E2			                loop    fiboLoop 
+      52				                 
+Microsoft (R) Macro Assembler Version 5.00                  8/26/23 13:20:26
                                                              Page     1-2
 
 
       53				 
-      54 0037  B4 4C			mov ah,4ch 
-      55 0039  CD 21			int 21h 
-      56				 
-      57 003B				main endp 
+      54				;end 
+      55				 
+      56 0038  B4 4C			mov ah,4ch 
+      57 003A  CD 21			int 21h 
       58				 
-      59 003B				PRINT_NUM           PROC               
+      59 003C				main endp 
+      60				 
+      61 003C				PRINT_NUM           PROC               
 					         ;print ax 
-      60 003B  50			                            push    ax 
-      61 003C  53			                            push    bx 
-      62 003D  51			                            push    cx 
-      63 003E  52			                            push    dx 
-      64				 
-      65 003F  BB 000A			                            mov     bx,
+      62 003C  50			                            push    ax 
+      63 003D  53			                            push    bx 
+      64 003E  51			                            push    cx 
+      65 003F  52			                            push    dx 
+      66				 
+      67 0040  BB 000A			                            mov     bx,
 					0Ah      ;initalise divisor 
-      66 0042  B9 0000			                            mov     cx,
+      68 0043  B9 0000			                            mov     cx,
 					0h 
-      67				                             
-      68 0045				                            divLoop:   
+      69				                             
+      70 0046				                            divLoop:   
 					  
-      69 0045  33 D2			                                       
+      71 0046  33 D2			                                       
 					 xor     dx,dx       ;clear remainder 
-      70 0047  F7 F3			                                       
+      72 0048  F7 F3			                                       
 					 div     bx 
-      71 0049  52			                                       
+      73 004A  52			                                       
 					 push    dx          ;save remainder 
-      72 004A  41			                                       
+      74 004B  41			                                       
 					 inc     cx          ;count looped numb
 					er 
-      73 004B  85 C0			                                       
+      75 004C  85 C0			                                       
 					 test    ax,ax       ;if ax != 0, conti
 					nue 
-      74 004D  75 F6			                                       
+      76 004E  75 F6			                                       
 					 jnz     divLoop 
-      75				 
-      76 004F  B4 02			                            mov     ah,
-					02h 
       77				 
-      78 0051				                            printLoop: 
+      78 0050  B4 02			                            mov     ah,
+					02h 
+      79				 
+      80 0052				                            printLoop: 
 					  
-      79 0051  5A			                                       
+      81 0052  5A			                                       
 					 pop     dx          ;get remainder 
-      80 0052  80 C2 30			                                       
+      82 0053  80 C2 30			                                       
 					 add     dl,"0" 
-      81 0055  CD 21			                                       
+      83 0056  CD 21			                                       
 					 int     21h         ;print 
-      82 0057  E2 F8			                                       
+      84 0058  E2 F8			                                       
 					 loop    printLoop   ;loop until cx is 
 					zero (the number of times divLoop) 
-      83				 
-      84 0059  5A			                            pop    dx 
-      85 005A  59			                            pop    cx 
-      86 005B  5B			                            pop    bx 
-      87 005C  58			                            pop    ax 
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 20:27:17
+      85				 
+      86 005A  5A			                            pop    dx 
+      87 005B  59			                            pop    cx 
+Microsoft (R) Macro Assembler Version 5.00                  8/26/23 13:20:26
                                                              Page     1-3
 
 
-      88				 
-      89 005D  C3			                            ret 
+      88 005C  5B			                            pop    bx 
+      89 005D  58			                            pop    ax 
       90				 
-      91 005E				PRINT_NUM           ENDP 
+      91 005E  C3			                            ret 
       92				 
-      93 005E				NEWLINE             PROC 
-      94 005E  50			                            push    ax 
-      95 005F  52			                            push    dx 
-      96 0060  B2 0A			                            mov     dl,
+      93 005F				PRINT_NUM           ENDP 
+      94				 
+      95 005F				NEWLINE             PROC 
+      96 005F  50			                            push    ax 
+      97 0060  52			                            push    dx 
+      98 0061  B2 0A			                            mov     dl,
 					10d 
-      97 0062  B4 02			                            mov     ah,
+      99 0063  B4 02			                            mov     ah,
 					02h 
-      98 0064  CD 21			                            int     21h
+     100 0065  CD 21			                            int     21h
 					 
-      99 0066  5A			                            pop     dx 
-     100 0067  58			                            pop     ax 
-     101 0068  C3			                            ret 
-     102 0069				NEWLINE             ENDP 
-     103				 
-     104 0069				end main 
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 20:27:17
+     101 0067  5A			                            pop     dx 
+     102 0068  58			                            pop     ax 
+     103 0069  C3			                            ret 
+     104 006A				NEWLINE             ENDP 
+     105				 
+     106 006A				end main 
+Microsoft (R) Macro Assembler Version 5.00                  8/26/23 13:20:26
                                                              Symbols-1
 
 
@@ -149,23 +151,23 @@ Segments and Groups:
 DGROUP . . . . . . . . . . . . .  	GROUP
   _DATA  . . . . . . . . . . . .  	0034	WORD	PUBLIC	'DATA'
   STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
-_TEXT  . . . . . . . . . . . . .  	0069	WORD	PUBLIC	'CODE'
+_TEXT  . . . . . . . . . . . . .  	006A	WORD	PUBLIC	'CODE'
 
 Symbols:            
 
                 N a m e         	Type	 Value	 Attr
 
-DIVLOOP  . . . . . . . . . . . .  	L NEAR	0045	_TEXT
+DIVLOOP  . . . . . . . . . . . .  	L NEAR	0046	_TEXT
 
-FIBOLOOP . . . . . . . . . . . .  	L NEAR	001C	_TEXT
+FIBOLOOP . . . . . . . . . . . .  	L NEAR	001A	_TEXT
 FIBONACCIARR . . . . . . . . . .  	L BYTE	0000	_DATA
 
-MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 003B
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 003C
 
-NEWLINE  . . . . . . . . . . . .  	N PROC	005E	_TEXT	Length = 000B
+NEWLINE  . . . . . . . . . . . .  	N PROC	005F	_TEXT	Length = 000B
 
-PRINTLOOP  . . . . . . . . . . .  	L NEAR	0051	_TEXT
-PRINT_NUM  . . . . . . . . . . .  	N PROC	003B	_TEXT	Length = 0023
+PRINTLOOP  . . . . . . . . . . .  	L NEAR	0052	_TEXT
+PRINT_NUM  . . . . . . . . . . .  	N PROC	003C	_TEXT	Length = 0023
 
 @CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
 @CODESIZE  . . . . . . . . . . .  	TEXT  0		
@@ -173,8 +175,8 @@ PRINT_NUM  . . . . . . . . . . .  	N PROC	003B	_TEXT	Length = 0023
 @FILENAME  . . . . . . . . . . .  	TEXT  P3Q5		
 
 
-    101 Source  Lines
-    101 Total   Lines
+    103 Source  Lines
+    103 Total   Lines
      21 Symbols
 
   50384 + 466160 Bytes symbol space free

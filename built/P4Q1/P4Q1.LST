@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 21:04:40
+Microsoft (R) Macro Assembler Version 5.00                  8/26/23 14:12:12
                                                              Page     1-1
 
 
@@ -18,153 +18,151 @@
       13       68 65 20 6C 69 73 74	
       14       2E 24			
       15				 
-      16 0038  0C 1D F7 05 D0 14 ED	list    DB  12, 29, -9, 5, -48, 20, -19
-					,0 
-      17       00			
-      18				 
-      19 0040  00			posInt  DB  0 
-      20 0041  00			negInt  DB  0 
-      21				 
-      22 0000				.code 
-      23 0000				main proc 
-      24				 
-      25 0000  B8 ---- R		mov ax,@data 
-      26 0003  8E D8			mov ds,ax 
-      27 0005  8E C0			mov es,ax 
-      28 0007  B8 0000			mov ax,0h 
-      29				 
-      30				; start 
+      16 0038  0C 1D F7 05 D0 14 00	list    DB  12, 29, -9, 5, -48, 20, 0 
+      17				 
+      18 003F  00			posInt  DB  0 
+      19 0040  00			negInt  DB  0 
+      20				 
+      21 0000				.code 
+      22 0000				main proc 
+      23				 
+      24 0000  B8 ---- R		mov ax,@data 
+      25 0003  8E D8			mov ds,ax 
+      26 0005  8E C0			mov es,ax 
+      27 0007  B8 0000			mov ax,0h 
+      28				 
+      29				; start 
+      30				 
       31				 
-      32				 
-      33 000A  8D 36 0038 R		lea     si,list 
-      34				 
-      35 000E				loopStart:       
-      36 000E  8A 04			                mov     al,[si] 
-      37				 
-      38 0010  46			                inc     si 
-      39				 
-      40 0011  84 C0			                test    al,al 
-      41				 
-      42 0013  74 1D			                jz      exitLoop 
-      43				 
-      44 0015  78 03			                js     negative        
-					    ;if signed flag is set, al is negat
-					ive 
-      45				                 
-      46 0017  EB 0D 90			                jmp     positive 
-      47 001A				                negative: 
-      48 001A  8A 1E 0041 R		                            mov     bl,
+      32 000A  8D 36 0038 R		lea     si,list 
+      33				 
+      34 000E				loopStart:       
+      35 000E  8A 04			                mov     al,[si] 
+      36				 
+      37 0010  46			                inc     si 
+      38				 
+      39 0011  3C 00			                CMP     al,0 
+      40				 
+      41 0013  7C 05			                jl      negative       
+					     ;if signed flag is set, al is nega
+					tive 
+      42				                 
+      43 0015  7F 0F			                jg      positive 
+      44				 
+      45 0017  EB 19 90			                jmp     exitLoop 
+      46 001A				                negative: 
+      47 001A  8A 1E 0040 R		                            mov     bl,
 					[negInt] 
-      49 001E  FE C3			                            inc     bl 
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 21:04:40
+      48 001E  FE C3			                            inc     bl 
+      49 0020  88 1E 0040 R		                            mov     [ne
+					gInt],bl 
+Microsoft (R) Macro Assembler Version 5.00                  8/26/23 14:12:12
                                                              Page     1-2
 
 
-      50 0020  88 1E 0041 R		                            mov     [ne
-					gInt],bl 
-      51 0024  EB E8			                            jmp     loo
+      50 0024  EB E8			                            jmp     loo
 					pStart 
-      52				 
-      53 0026				                positive: 
-      54 0026  8A 1E 0040 R		                            mov     bl,
+      51				 
+      52 0026				                positive: 
+      53 0026  8A 1E 003F R		                            mov     bl,
 					[posInt] 
-      55 002A  FE C3			                            inc     bl 
-      56 002C  88 1E 0040 R		                            mov     [po
+      54 002A  FE C3			                            inc     bl 
+      55 002C  88 1E 003F R		                            mov     [po
 					sInt],bl 
-      57 0030  EB DC			                            jmp     loo
+      56 0030  EB DC			                            jmp     loo
 					pStart     
-      58				 
-      59 0032				exitLoop: 
-      60				 
-      61 0032  8D 16 0000 R		lea     dx,str1 
-      62 0036  E8 005B R		call    PRINT_STR 
-      63				 
-      64 0039  33 C0			xor     ax,ax 
-      65 003B  A0 0040 R		mov     al,[posInt] 
-      66 003E  E8 0062 R		call    PRINT_NUM 
-      67				 
-      68 0041  8D 16 000B R		lea     dx,str2 
-      69 0045  E8 005B R		call    PRINT_STR 
-      70				 
-      71 0048  33 C0			xor     ax,ax 
-      72 004A  A0 0041 R		mov     al,[negInt] 
-      73 004D  E8 0062 R		call    PRINT_NUM 
-      74				 
-      75 0050  8D 16 001A R		lea     dx,str3 
-      76 0054  E8 005B R		call    PRINT_STR 
-      77				;end 
-      78				 
-      79 0057  B4 4C			mov ah,4ch 
-      80 0059  CD 21			int 21h 
-      81				 
-      82 005B				main endp 
-      83				 
-      84 005B				PRINT_STR       PROC 
-      85 005B  50			                        push    ax 
-      86 005C  B4 09			                        mov     ah,09h 
-      87 005E  CD 21			                        int     21h 
-      88 0060  58			                        pop    ax 
-      89 0061  C3			                        ret 
-      90 0062				PRINT_STR       ENDP 
-      91				 
-      92 0062				PRINT_NUM       PROC                   
+      57				 
+      58 0032				exitLoop: 
+      59				 
+      60 0032  8D 16 0000 R		lea     dx,str1 
+      61 0036  E8 005B R		call    PRINT_STR 
+      62				 
+      63 0039  33 C0			xor     ax,ax 
+      64 003B  A0 003F R		mov     al,[posInt] 
+      65 003E  E8 0062 R		call    PRINT_NUM 
+      66				 
+      67 0041  8D 16 000B R		lea     dx,str2 
+      68 0045  E8 005B R		call    PRINT_STR 
+      69				 
+      70 0048  33 C0			xor     ax,ax 
+      71 004A  A0 0040 R		mov     al,[negInt] 
+      72 004D  E8 0062 R		call    PRINT_NUM 
+      73				 
+      74 0050  8D 16 001A R		lea     dx,str3 
+      75 0054  E8 005B R		call    PRINT_STR 
+      76				;end 
+      77				 
+      78 0057  B4 4C			mov ah,4ch 
+      79 0059  CD 21			int 21h 
+      80				 
+      81 005B				main endp 
+      82				 
+      83 005B				PRINT_STR       PROC 
+      84 005B  50			                        push    ax 
+      85 005C  B4 09			                        mov     ah,09h 
+      86 005E  CD 21			                        int     21h 
+      87 0060  58			                        pop    ax 
+      88 0061  C3			                        ret 
+      89 0062				PRINT_STR       ENDP 
+      90				 
+      91 0062				PRINT_NUM       PROC                   
 					     ;print ax 
-      93 0062  50			                            push    ax 
-      94 0063  53			                            push    bx 
-      95 0064  51			                            push    cx 
-      96 0065  52			                            push    dx 
-      97				 
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 21:04:40
+      92 0062  50			                            push    ax 
+      93 0063  53			                            push    bx 
+      94 0064  51			                            push    cx 
+      95 0065  52			                            push    dx 
+      96				 
+      97 0066  BB 000A			                            mov     bx,
+					0Ah      ;initalise divisor 
+Microsoft (R) Macro Assembler Version 5.00                  8/26/23 14:12:12
                                                              Page     1-3
 
 
-      98 0066  BB 000A			                            mov     bx,
-					0Ah      ;initalise divisor 
-      99 0069  B9 0000			                            mov     cx,
+      98 0069  B9 0000			                            mov     cx,
 					0h 
-     100				                             
-     101 006C				                            divLoop:   
+      99				                             
+     100 006C				                            divLoop:   
 					  
-     102 006C  33 D2			                                       
+     101 006C  33 D2			                                       
 					 xor     dx,dx       ;clear remainder 
-     103 006E  F7 F3			                                       
+     102 006E  F7 F3			                                       
 					 div     bx 
-     104 0070  52			                                       
+     103 0070  52			                                       
 					 push    dx          ;save remainder 
-     105 0071  41			                                       
+     104 0071  41			                                       
 					 inc     cx          ;count looped numb
 					er 
-     106 0072  85 C0			                                       
+     105 0072  85 C0			                                       
 					 test    ax,ax       ;if ax != 0, conti
 					nue 
-     107 0074  75 F6			                                       
+     106 0074  75 F6			                                       
 					 jnz     divLoop 
-     108				 
-     109 0076  B4 02			                            mov     ah,
+     107				 
+     108 0076  B4 02			                            mov     ah,
 					02h 
-     110				 
-     111 0078				                            printLoop: 
+     109				 
+     110 0078				                            printLoop: 
 					  
-     112 0078  5A			                                       
+     111 0078  5A			                                       
 					 pop     dx          ;get remainder 
-     113 0079  80 C2 30			                                       
+     112 0079  80 C2 30			                                       
 					 add     dl,"0" 
-     114 007C  CD 21			                                       
+     113 007C  CD 21			                                       
 					 int     21h         ;print 
-     115 007E  E2 F8			                                       
+     114 007E  E2 F8			                                       
 					 loop    printLoop   ;loop until cx is 
 					zero (the number of times divLoop) 
-     116				 
-     117 0080  58			                            pop    ax 
-     118 0081  5B			                            pop    bx 
-     119 0082  59			                            pop    cx 
-     120 0083  5A			                            pop    dx 
-     121				 
-     122 0084  C3			                            ret 
-     123 0085				PRINT_NUM       ENDP 
-     124				 
-     125 0085				end main 
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 21:04:40
+     115				 
+     116 0080  58			                            pop    ax 
+     117 0081  5B			                            pop    bx 
+     118 0082  59			                            pop    cx 
+     119 0083  5A			                            pop    dx 
+     120				 
+     121 0084  C3			                            ret 
+     122 0085				PRINT_NUM       ENDP 
+     123				 
+     124 0085				end main 
+Microsoft (R) Macro Assembler Version 5.00                  8/26/23 14:12:12
                                                              Symbols-1
 
 
@@ -173,7 +171,7 @@ Segments and Groups:
                 N a m e         	Length	 Align	Combine Class
 
 DGROUP . . . . . . . . . . . . .  	GROUP
-  _DATA  . . . . . . . . . . . .  	0042	WORD	PUBLIC	'DATA'
+  _DATA  . . . . . . . . . . . .  	0041	WORD	PUBLIC	'DATA'
   STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
 _TEXT  . . . . . . . . . . . . .  	0085	WORD	PUBLIC	'CODE'
 
@@ -191,9 +189,9 @@ LOOPSTART  . . . . . . . . . . .  	L NEAR	000E	_TEXT
 MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 005B
 
 NEGATIVE . . . . . . . . . . . .  	L NEAR	001A	_TEXT
-NEGINT . . . . . . . . . . . . .  	L BYTE	0041	_DATA
+NEGINT . . . . . . . . . . . . .  	L BYTE	0040	_DATA
 
-POSINT . . . . . . . . . . . . .  	L BYTE	0040	_DATA
+POSINT . . . . . . . . . . . . .  	L BYTE	003F	_DATA
 POSITIVE . . . . . . . . . . . .  	L NEAR	0026	_TEXT
 PRINTLOOP  . . . . . . . . . . .  	L NEAR	0078	_TEXT
 PRINT_NUM  . . . . . . . . . . .  	N PROC	0062	_TEXT	Length = 0023

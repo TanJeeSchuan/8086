@@ -19,7 +19,7 @@ xor     bx,bx
 xor     cx,cx
 xor     dx,dx
 
-mov     cx,6d    ;print how many values
+mov     cx,8d    ;print how many values
 
 lea     si,fibonacciArr
 
@@ -40,7 +40,10 @@ fiboLoop:
                 xor     ax,ax
                 mov     al,bl
                 call    PRINT_NUM
-                call    NEWLINE
+
+                mov     dl,","
+                mov     ah,02h
+                int     21h
 
                 loop    fiboLoop
                 

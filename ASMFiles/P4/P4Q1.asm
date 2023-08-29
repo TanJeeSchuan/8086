@@ -29,13 +29,13 @@ loopStart:
 
                 inc     si
 
-                test    al,al
+                CMP     al,0
 
-                jz      exitLoop
-
-                js     negative            ;if signed flag is set, al is negative
+                jl      negative            ;if signed flag is set, al is negative
                 
-                jmp     positive
+                jg      positive
+
+                jmp     exitLoop
                 negative:
                             mov     bl,[negInt]
                             inc     bl
