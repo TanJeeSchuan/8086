@@ -1,0 +1,260 @@
+Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:58:10
+                                                             Page     1-1
+
+
+       1				.model small 
+       2 0064				.stack 100 
+       3 0000				.data 
+       4				 
+       5 0000  47 72 65 65 6E 20 3A	str1    DB      "Green : 'G'" 
+       6       20 27 47 27		
+       7 000B  0A			        DB      10d 
+       8 000C  52 65 64 20 20 20 3A	        DB      "Red   : 'R'"  
+       9       20 27 52 27		
+      10 0017  0A			        DB      10d 
+      11 0018  42 6C 75 65 20 20 3A	        DB      "Blue  : 'B'" 
+      12       20 27 42 27		
+      13 0023  0A			        DB      10d  
+      14 0024  50 6C 65 61 73 65 20	        DB      "Please enter G, B, or 
+					R for font's color : $" 
+      15       65 6E 74 65 72 20 47	
+      16       2C 20 42 2C 20 6F 72	
+      17       20 52 20 66 6F 72 20	
+      18       66 6F 6E 74 27 73 20	
+      19       63 6F 6C 6F 72 20 3A	
+      20       20 24			
+      21				 
+      22 0050  59 6F 75 20 63 68 6F	green   DB      "You choose green colou
+					r! $" 
+      23       6F 73 65 20 67 72 65	
+      24       65 6E 20 63 6F 6C 6F	
+      25       75 72 21 20 24		
+      26 006A  59 6F 75 20 63 68 6F	red     DB      "You choose red colour!
+					 $" 
+      27       6F 73 65 20 72 65 64	
+      28       20 63 6F 6C 6F 75 72	
+      29       21 20 24			
+      30 0082  59 6F 75 20 63 68 6F	blue    DB      "You choose blue colour
+					! $" 
+      31       6F 73 65 20 62 6C 75	
+      32       65 20 63 6F 6C 6F 75	
+      33       72 21 20 24		
+      34				 
+      35				 
+      36 0000				.code 
+      37 0000				main proc 
+      38				 
+      39 0000  B8 ---- R		mov ax,@data 
+      40 0003  8E D8			mov ds,ax 
+      41 0005  B8 0000			mov ax,0h 
+      42				 
+      43				; start 
+      44				 
+      45 0008  8D 16 0000 R		lea         dx,str1 
+      46 000C  E8 0062 R		call        PRINT_STR 
+      47				 
+      48 000F  B4 01			mov         ah,01h 
+      49 0011  CD 21			int         21h 
+      50				 
+Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:58:10
+                                                             Page     1-2
+
+
+      51 0013  E8 0093 R		call        NEWLINE 
+      52				 
+      53 0016  3C 47			cmp         al,"G" 
+      54 0018  74 0B			je          greenSel 
+      55				 
+      56 001A  3C 52			cmp         al,"R" 
+      57 001C  74 1A			je          redSel 
+      58				 
+      59 001E  3C 42			cmp         al,"B" 
+      60 0020  74 29			je          blueSel 
+      61				 
+      62 0022  EB 3A 90			jmp         colourExit 
+      63				 
+      64 0025				greenSel: 
+      65 0025  33 C0			xor         ax,ax 
+      66 0027  B4 09			mov         ah,09h 
+      67 0029  BB 0002			mov         bx,00000010b 
+      68 002C  CD 10			int         10h 
+      69				 
+      70 002E  8D 16 0050 R		lea         dx,green 
+      71 0032  E8 0062 R		call        PRINT_STR 
+      72 0035  EB 27 90			jmp         colourExit 
+      73				 
+      74 0038				redSel: 
+      75 0038  33 C0			xor         ax,ax 
+      76 003A  B4 09			mov         ah,09h 
+      77 003C  BB 0004			mov         bx,00000100b 
+      78 003F  CD 10			int         10h 
+      79				 
+      80 0041  8D 16 006A R		lea         dx,red 
+      81 0045  E8 0062 R		call        PRINT_STR 
+      82 0048  EB 14 90			jmp         colourExit 
+      83				 
+      84 004B				blueSel: 
+      85 004B  33 C0			xor         ax,ax 
+      86 004D  B4 09			mov         ah,09h 
+      87 004F  BB 0071			mov         bx,01110001b 
+      88 0052  CD 10			int         10h 
+      89				 
+      90 0054  8D 16 0082 R		lea         dx,blue 
+      91 0058  E8 0062 R		call        PRINT_STR 
+      92 005B  EB 01 90			jmp         colourExit 
+      93				 
+      94 005E				colourExit: 
+      95				 
+      96				;end 
+      97				 
+      98 005E  B4 4C			mov ah,4ch 
+      99 0060  CD 21			int 21h 
+     100				 
+     101 0062				main endp 
+     102				 
+     103 0062				PRINT_STR       PROC 
+     104 0062  50			                        push    ax 
+Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:58:10
+                                                             Page     1-3
+
+
+     105 0063  B4 09			                        mov     ah,09h 
+     106 0065  CD 21			                        int     21h 
+     107 0067  58			                        pop    ax 
+     108 0068  C3			                        ret 
+     109 0069				PRINT_STR       ENDP 
+     110				 
+     111 0069				PRINT_NUM       PROC                   
+					     ;print ax 
+     112 0069  50			                            push    ax 
+     113 006A  53			                            push    bx 
+     114 006B  51			                            push    cx 
+     115 006C  52			                            push    dx 
+     116				 
+     117 006D  BB 000A			                            mov     bx,
+					0Ah      ;initalise divisor 
+     118 0070  B9 0000			                            mov     cx,
+					0h 
+     119				                             
+     120 0073				                            divLoop:   
+					  
+     121 0073  33 D2			                                       
+					 xor     dx,dx       ;clear remainder 
+     122 0075  F7 F3			                                       
+					 div     bx 
+     123 0077  52			                                       
+					 push    dx          ;save remainder 
+     124 0078  41			                                       
+					 inc     cx          ;count looped numb
+					er 
+     125 0079  85 C0			                                       
+					 test    ax,ax       ;if ax != 0, conti
+					nue 
+     126 007B  75 F6			                                       
+					 jnz     divLoop 
+     127				 
+     128 007D  B4 02			                            mov     ah,
+					02h 
+     129				 
+     130 007F				                            printLoop: 
+					  
+     131 007F  5A			                                       
+					 pop     dx          ;get remainder 
+     132 0080  80 C2 30			                                       
+					 add     dl,"0" 
+     133 0083  CD 21			                                       
+					 int     21h         ;print 
+     134 0085  E2 F8			                                       
+					 loop    printLoop   ;loop until cx is 
+					zero (the number of times divLoop) 
+     135				 
+     136 0087  5A			                            pop    dx 
+     137 0088  59			                            pop    cx 
+     138 0089  5B			                            pop    bx 
+     139 008A  58			                            pop    ax 
+Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:58:10
+                                                             Page     1-4
+
+
+     140				 
+     141 008B  C3			                            ret 
+     142 008C				PRINT_NUM       ENDP 
+     143				 
+     144 008C				PRINT_CHAR      PROC                   
+					                     ;print cjaracter o
+					f value in dl 
+     145 008C  50			                            push    ax 
+     146 008D  B4 02			                            mov     ah,
+					02h 
+     147 008F  CD 21			                            int     21h
+					 
+     148 0091  58			                            pop     ax 
+     149 0092  C3			                            ret 
+     150 0093				PRINT_CHAR      ENDP 
+     151				 
+     152 0093				NEWLINE         PROC 
+     153 0093  52			                            push    dx 
+     154 0094  B2 0A			                            mov     dl,
+					0Ah 
+     155 0096  E8 008C R		                            call PRINT_
+					CHAR 
+     156 0099  5A			                            pop     dx 
+     157 009A  C3			                            ret 
+     158 009B				NEWLINE         ENDP 
+     159				 
+     160 009B				end main 
+Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:58:10
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	009B	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	009B	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+BLUE . . . . . . . . . . . . . .  	L BYTE	0082	_DATA
+BLUESEL  . . . . . . . . . . . .  	L NEAR	004B	_TEXT
+
+COLOUREXIT . . . . . . . . . . .  	L NEAR	005E	_TEXT
+
+DIVLOOP  . . . . . . . . . . . .  	L NEAR	0073	_TEXT
+
+GREEN  . . . . . . . . . . . . .  	L BYTE	0050	_DATA
+GREENSEL . . . . . . . . . . . .  	L NEAR	0025	_TEXT
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 0062
+
+NEWLINE  . . . . . . . . . . . .  	N PROC	0093	_TEXT	Length = 0008
+
+PRINTLOOP  . . . . . . . . . . .  	L NEAR	007F	_TEXT
+PRINT_CHAR . . . . . . . . . . .  	N PROC	008C	_TEXT	Length = 0007
+PRINT_NUM  . . . . . . . . . . .  	N PROC	0069	_TEXT	Length = 0023
+PRINT_STR  . . . . . . . . . . .  	N PROC	0062	_TEXT	Length = 0007
+
+RED  . . . . . . . . . . . . . .  	L BYTE	006A	_DATA
+REDSEL . . . . . . . . . . . . .  	L NEAR	0038	_TEXT
+
+STR1 . . . . . . . . . . . . . .  	L BYTE	0000	_DATA
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  P5Q4		
+
+
+    142 Source  Lines
+    142 Total   Lines
+     29 Symbols
+
+  50538 + 466006 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors
