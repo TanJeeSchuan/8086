@@ -72,7 +72,6 @@ MAIN PROC
 mov ax,@data
 mov ds,ax
 mov ax,4c00h
-
 lea         dx,logo
 call        PRINT_STR
 

@@ -2,9 +2,15 @@
 .stack 100
 .data
 
-str1    DB  "Enter a word: $"
-str2    DB  "The second character is $"
+str1    DB      "Enter secret word: $"
+str2    DB      "Enter encryption key (1-9): $"
+str3    DB      "The encrypted key is $"
 
+secretWord DB   20 DUP("$")
+
+key     DB      ?
+
+encryptedWord   DB      20 DUP("$")
 
 buffer  DB  20
         DB  ?
@@ -15,25 +21,55 @@ main proc
 
 mov ax,@data
 mov ds,ax
-mov es,ax
 mov ax,0h
 
 ; start
+call    NEWLINE
 
-lea         dx,str1
-call        PRINT_STR
+lea     dx,str1
+call    PRINT_STR
 
-lea         dx,buffer
-mov         ah,0Ah
-int         21h
+lea     dx,buffer
+mov     ah,0Ah
+int     21h
 
-call        NEWLINE
+call    NEWLINE
 
-lea         dx,str2
-call        PRINT_STR
+lea     dx,str2
+call    PRINT_STR
 
-mov         dl,buffer + 2 + 1
-call        PRINT_CHAR
+mov     ah,01h
+int     21h
+sub     al,48d
+mov     [key], al
+
+lea     si,buffer+2
+lea     di,encryptedWord
+mov     cl,[buffer+1]
+encryptionLoop:
+        mov     al,[si]
+        
+        cmp     al,"$"
+        je      encryptionLoopExit
+
+        add     al,[key]
+
+        mov     [di],al
+
+        inc     si
+        inc     di
+        loop    encryptionLoop
+encryptionLoopExit:
+
+call    NEWLINE
+
+lea     dx,str3
+call    PRINT_STR
+
+lea     dx,encryptedWord
+call    PRINT_STR
+
+call    NEWLINE
 
 ;end
 
@@ -75,10 +111,10 @@ PRINT_NUM       PROC                        ;print ax
                                         int     21h         ;print
                                         loop    printLoop   ;loop until cx is zero (the number of times divLoop)
 
-                            pop    ax
-                            pop    bx
-                            pop    cx
                             pop    dx
+                            pop    cx
+                            pop    bx
+                            pop    ax
 
                             ret
 PRINT_NUM       ENDP
