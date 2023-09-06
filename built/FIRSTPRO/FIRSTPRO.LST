@@ -1,0 +1,1324 @@
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-1
+
+
+       1				.MODEL SMALL 
+       2 0064				.STACK 100 
+       3 0000				.DATA 
+       4				 
+       5				;Header 
+       6 0000  57 65 6C 63 6F 6D 65		WLC_MSG db "Welcome to Boots Te
+					chnologies" ,13,10,'$' 
+       7       20 74 6F 20 42 6F 6F	
+       8       74 73 20 54 65 63 68	
+       9       6E 6F 6C 6F 67 69 65	
+      10       73 0D 0A 24		
+      11 0020  0D 0A 24				NL DB 0DH,0AH,'$'              
+					  ;NEW LINE 
+      12				;MENU OPTION 
+      13 0023  0A 0D 4B 45 59 53 20		INFO_CAT  DB 10,13,"KEYS     
+						    ITEMS  $" 
+      14       20 20 20 20 09 20 20	
+      15       20 20 49 54 45 4D 53	
+      16       20 20 24			
+      17 003B  0A 0D 20 31 09 09 49		CATEGORY1 DB 10,13," 1	
+						IPHONE 11 Series	$" 
+      18       50 48 4F 4E 45 20 31	
+      19       31 20 53 65 72 69 65	
+      20       73 09 24			
+      21 0053  0A 0D 20 32 09 09 49		CATEGORY2 DB 10,13," 2	
+						IPHONE 12 Series	$" 
+      22       50 48 4F 4E 45 20 31	
+      23       32 20 53 65 72 69 65	
+      24       73 09 24			
+      25 006B  0A 0D 20 33 09 09 49		CATEGORY3 DB 10,13," 3	
+						IPHONE 13 Series	$" 
+      26       50 48 4F 4E 45 20 31	
+      27       33 20 53 65 72 69 65	
+      28       73 09 24			
+      29 0083  0A 0D 50 4C 45 41 53		PROMPT_CAT DB 10,13,"PLEASE ENT
+					ER THE KEY OF AVAILABLE CATEGORIES ABOV
+					E: $" 
+      30       45 20 45 4E 54 45 52	
+      31       20 54 48 45 20 4B 45	
+      32       59 20 4F 46 20 41 56	
+      33       41 49 4C 41 42 4C 45	
+      34       20 43 41 54 45 47 4F	
+      35       52 49 45 53 20 41 42	
+      36       4F 56 45 3A 20 24	
+      37				;..........SERIES 
+      38 00BA  0A 0D 4B 45 59 53 20		INFO_PHONE  DB 10,13,"KEYS     
+						    DESCRIPTION		PRICE  
+					$" 
+      39       20 20 20 20 09 20 20	
+      40       20 20 44 45 53 43 52	
+      41       49 50 54 49 4F 4E 09	
+      42       09 50 52 49 43 45 20	
+      43       20 24			
+      44 00DF  0A 0D 44 4F 20 59 4F		PROMPT_PHONE DB 10,13,"DO YOU W
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-2
+
+
+					ANT TO ORDER ? (Y=YES || N=NO,BACK TO C
+					ATEGORY MENU ) $" 
+      45       55 20 57 41 4E 54 20	
+      46       54 4F 20 4F 52 44 45	
+      47       52 20 3F 20 28 59 3D	
+      48       59 45 53 20 7C 7C 20	
+      49       4E 3D 4E 4F 2C 42 41	
+      50       43 4B 20 54 4F 20 43	
+      51       41 54 45 47 4F 52 59	
+      52       20 4D 45 4E 55 20 29	
+      53       20 24			
+      54 0120  0A 0D 50 4C 45 41 53		PROMPT_ORDER DB 10,13,"PLEASE S
+					ELECT THE KEY OF AVAILABLE OPTIONS ABOV
+					E: $" 
+      55       45 20 53 45 4C 45 43	
+      56       54 20 54 48 45 20 4B	
+      57       45 59 20 4F 46 20 41	
+      58       56 41 49 4C 41 42 4C	
+      59       45 20 4F 50 54 49 4F	
+      60       4E 53 20 41 42 4F 56	
+      61       45 3A 20 24		
+      62 0155  0A 0D 50 4C 45 41 53		PROMPT_CAPACITY DB 10,13,"PLEAS
+					E SELECT THE CAPACITY(GB): $" 
+      63       45 20 53 45 4C 45 43	
+      64       54 20 54 48 45 20 43	
+      65       41 50 41 43 49 54 59	
+      66       28 47 42 29 3A 20 24	
+      67				;IPHONE11 SERIES 
+      68 0178  0A 0D 20 31 09 09 49		PHONE11_1 DB 10,13," 1	
+						IPHONE 11        	600USD(
+					64GB) $"			;downpa
+					y120    before downpay 600/12=50  600/2
+					4=25    480/12=40   480/2
+      69       50 48 4F 4E 45 20 31	
+      70       31 20 20 20 20 20 20	
+      71       20 20 09 36 30 30 55	
+      72       53 44 28 36 34 47 42	
+      73       29 20 24			
+      74 019E  0A 0D 20 32 20 20 20		PHONE11_2 DB 10,13," 2    
+						IPHONE 11PRO	   	840USD(
+					64GB) $"			;downpa
+					y120    before downpay 840/12=70
+						840/24=35	720/12=60  720/
+					24=3
+      75       20 09 49 50 48 4F 4E	
+      76       45 20 31 31 50 52 4F	
+      77       09 20 20 20 09 38 34	
+      78       30 55 53 44 28 36 34	
+      79       47 42 29 20 24		
+      80				 
+      81 01C6  0A 0D 36 34 47 42 20		CAPACITY11_1 DB 10,13,"64GB $"
+							 
+      82       24			
+      83 01CE  0A 0D 31 32 38 47 42		CAPACITY11_2 DB 10,13,"128GB $"
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-3
+
+
+							;+24   624   be4 624/12
+					=52  624/24=26	504/12-42     504/24=21
+					 
+      84       20 24			
+      85				 
+      86				 
+      87 01D7  ????				QTY11_1 DW ? 
+      88 01D9  ????				QTY11_2 DW ? 
+      89				 
+      90 01DB  ????				DOWNPAY11_1 DW ? 
+      91 01DD  ????				DOWNPAY11_2 DW ? 
+      92					 
+      93 01DF  ????				MONTHLY11_1 DW ? 
+      94 01E1  ??				INS11_CHOICE DB ? 
+      95 01E2  ??				DOWNPAY_CHOICE DB ? 
+      96				 
+      97 01E3  0A 0D 57 4F 55 4C 44		PROMPT_DOWNPAY11 DB 10,13,"WOUL
+					D YOU LIKE TO MAKE AN EARLY PAYMENT (18
+					0USD) ? $" 
+      98       20 59 4F 55 20 4C 49	
+      99       4B 45 20 54 4F 20 4D	
+     100       41 4B 45 20 41 4E 20	
+     101       45 41 52 4C 59 20 50	
+     102       41 59 4D 45 4E 54 20	
+     103       28 31 38 30 55 53 44	
+     104       29 20 3F 20 24		
+     105				 
+     106 0219  0A 0D 52 4D 24			RM DB 10,13,"RM$" 
+     107 021E  0A 0D 48 45 52 45 27		SHOWINST DB 10,13,"HERE'S YOUR 
+					MONTHLY REPAYMENT :) $" 
+     108       53 20 59 4F 55 52 20	
+     109       4D 4F 4E 54 48 4C 59	
+     110       20 52 45 50 41 59 4D	
+     111       45 4E 54 20 3A 29 20	
+     112       24			
+     113				 
+     114					  
+     115				 
+     116				;IPHONE12 SERIES 
+     117 0242  0A 0D 20 31 09 09 49		PHONE12_1 DB 10,13," 1	
+						IPHONE 12		RM2800(
+					128GB) $" 
+     118       50 48 4F 4E 45 20 31	
+     119       32 09 09 52 4D 32 38	
+     120       30 30 28 31 32 38 47	
+     121       42 29 20 24		
+     122 0262  0A 0D 20 32 09 09 49		PHONE12_2 DB 10,13," 2	
+						IPHONE 12PRO		RM3100(
+					128GB) $" 
+     123       50 48 4F 4E 45 20 31	
+     124       32 50 52 4F 09 09 52	
+     125       4D 33 31 30 30 28 31	
+     126       32 38 47 42 29 20 24	
+     127 0285  0A 0D 20 33 09 09 49		PHONE12_3 DB 10,13," 3	
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-4
+
+
+						IPHONE 12PROMAX		RM3400(
+					128GB) $" 
+     128       50 48 4F 4E 45 20 31	
+     129       32 50 52 4F 4D 41 58	
+     130       09 09 52 4D 33 34 30	
+     131       30 28 31 32 38 47 42	
+     132       29 20 24			
+     133				 
+     134 02AB  0A 0D 31 32 38 47 42		CAPACITY12_1 DB 10,13,"128GB $"
+					 
+     135       20 24			
+     136 02B4  0A 0D 32 35 36 47 42		CAPACITY12_2 DB 10,13,"256GB $"
+					 
+     137       20 24			
+     138 02BD  0A 0D 35 31 32 47 42		CAPACITY12_3 DB 10,13,"512GB $"
+					 
+     139       20 24			
+     140				 
+     141				 
+     142				;IPHONE13 SERIES 
+     143 02C6  0A 0D 20 31 09 09 49		PHONE13_1 DB 10,13," 1	
+						IPHONE 13MINI		RM3200(
+					256GB) $" 
+     144       50 48 4F 4E 45 20 31	
+     145       33 4D 49 4E 49 09 09	
+     146       52 4D 33 32 30 30 28	
+     147       32 35 36 47 42 29 20	
+     148       24			
+     149 02EA  0A 0D 20 32 09 09 49		PHONE13_2 DB 10,13," 2	
+						IPHONE 13		RM3500(
+					256GB) $" 
+     150       50 48 4F 4E 45 20 31	
+     151       33 09 09 52 4D 33 35	
+     152       30 30 28 32 35 36 47	
+     153       42 29 20 24		
+     154 030A  0A 0D 20 33 09 09 49		PHONE13_3 DB 10,13," 3	
+						IPHONE 13PROMAX		RM4100(
+					256GB) $" 
+     155       50 48 4F 4E 45 20 31	
+     156       33 50 52 4F 4D 41 58	
+     157       09 09 52 4D 34 31 30	
+     158       30 28 32 35 36 47 42	
+     159       29 20 24			
+     160				 
+     161 0330  0A 0D 32 35 36 47 42		CAPACITY13_1 DB 10,13,"256GB $"
+					 
+     162       20 24			
+     163 0339  0A 0D 35 31 32 47 42		CAPACITY13_2 DB 10,13,"512GB $"
+					 
+     164       20 24			
+     165				 
+     166				;INSTALLMENT 
+     167 0342  0A 0D 20 43 48 4F 4F		PROMPT_INST11 DB 10,13," CHOOSI
+					NG 12 MONTHS / 24 MONTHS REPAYMENT ? $"
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-5
+
+
+					 
+     168       53 49 4E 47 20 31 32	
+     169       20 4D 4F 4E 54 48 53	
+     170       20 2F 20 32 34 20 4D	
+     171       4F 4E 54 48 53 20 52	
+     172       45 50 41 59 4D 45 4E	
+     173       54 20 3F 20 24		
+     174				 
+     175				;ENTER OPTION 
+     176 0371  0A 0D 45 4E 54 45 52		E_CHOICE DB 10,13,'ENTER YOUR C
+					HOICE:$'     
+     177       20 59 4F 55 52 20 43	
+     178       48 4F 49 43 45 3A 24	
+     179 0386  0A 0D 45 4E 54 45 52		E_QUANTITY DB 10,13,'ENTER QUAN
+					TITY: $' 
+     180       20 51 55 41 4E 54 49	
+     181       54 59 3A 20 24		
+     182				 
+     183				;ERROR DISPLAYED 
+     184 0399  0A 0D 45 52 52 4F 52		ER_MSG DB 10,13,'ERROR INPUT$' 
+					  
+     185       20 49 4E 50 55 54 24	
+     186				 
+     187				;DECLARE VARIABLES 
+     188 03A7  ??				USEROPTION DB ? 
+     189 03A8  ??				INPUT1 DB ? 
+     190 03A9  ??				INPUT2 DB ? 
+     191 03AA  ??				INPUTCAPACITY11 DB ? 
+     192 03AB  ??				INPUTCAPACITY12 DB ? 
+     193 03AC  ??				INPUTCAPACITY13 DB ? 
+     194				 
+     195 03AD  ????				A DW ? 
+     196 03AF  ????				B DW ? 
+     197 03B1  ??				INST Db ? 
+     198 03B2  ????				PRICE DW ? 
+     199 03B4  ????				PRICE11_1 DW ? 
+     200 03B6  ????				PRICE11_2 DW ? 
+     201				 
+     202 03B8  ????				PRICE12_1 Dw ? 
+     203 03BA  ????				PRICE12_2 Dw ? 
+     204 03BC  ????				PRICE12_3 Dw ? 
+     205				 
+     206 03BE  ????				PRICE13_1 Dw ? 
+     207 03C0  ????				PRICE13_2 Dw ? 
+     208 03C2  ????				PRICE13_3 Dw ? 
+     209				 
+     210 03C4  00				QTY11 DB 0 
+     211 03C5  00				ATTEMP DB 0 
+     212 03C6  ????				R1 Dw ? 
+     213					 
+     214 0000				.CODE	 
+     215				 
+     216					 
+     217				 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-6
+
+
+     218 0000				print_num: 
+     219 0000  53			    push bx       ; Save CX register 
+     220 0001  52			    push dx       ; Save DX register 
+     221				 
+     222 0002  BB 000A			    mov bx, 10    ; Set CX to 10, to di
+					vide by 10 repeatedly 
+     223 0005  B9 0000			    mov cx, 0     ; Initialize BX to 0,
+					 to store the reversed number 
+     224				     
+     225 0008				reverse_loop: 
+     226 0008  33 D2			    xor dx, dx    ; Clear DX for the di
+					vision 
+     227 000A  F7 F3			    div bx        ; Divide AX by 10, re
+					sult in AX (quotient) and DX (remainder
+					) 
+     228 000C  80 C2 30			    add dl, '0'   ; Convert remainder t
+					o ASCII 
+     229 000F  52			    push dx       ; Push ASCII digit on
+					to the stack 
+     230 0010  41			    inc cx        ; Increment the count
+					 of digits 
+     231				 
+     232 0011  85 C0			    test ax, ax   ; Check if AX is zero
+					 (end of division) 
+     233 0013  75 F3			    jnz reverse_loop ; If not zero, con
+					tinue dividing 
+     234				     
+     235 0015				print_loop: 
+     236 0015  5A			    pop dx        ; Pop ASCII digit fro
+					m the stack 
+     237 0016  B4 02			    mov ah, 2     ; DOS function to pri
+					nt a character 
+     238 0018  CD 21			    int 21h       ; Call DOS interrupt 
+     239 001A  49			    dec cx        ; Decrement the count
+					 of digits 
+     240 001B  75 F8			    jnz print_loop ; If not zero, print
+					 the next digit 
+     241				 
+     242 001D  5A			    pop dx        ; Restore the saved D
+					X register 
+     243 001E  5B			    pop bx        ; Restore the saved C
+					X register 
+     244 001F  C3			    ret 
+     245 0020				CAT_MENU: 
+     246					 
+     247 0020  B4 09				MOV AH,9 
+     248 0022  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     249 0026  CD 21			     	INT 21H 
+     250					 
+     251 0028  B4 09				MOV AH,9  
+     252 002A  8D 16 0023 R		     	LEA DX,INFO_CAT                
+					 ;PRINT INFO STRING 
+     253 002E  CD 21			     	INT 21H                      
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-7
+
+
+     254				 
+     255 0030  B4 09				MOV AH,9 
+     256 0032  8D 16 003B R			LEA DX,CATEGORY1	;PRINT 
+					CATEGORY1 STRING 
+     257 0036  CD 21				INT 21H 
+     258				 
+     259 0038  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     260 003C  CD 21			     	INT 21H 
+     261				 
+     262 003E  8D 16 0053 R			LEA DX,CATEGORY2	;PRINT 
+					CATEGORY2 STRING 
+     263 0042  CD 21				INT 21H 
+     264				 
+     265 0044  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     266 0048  CD 21			     	INT 21H 
+     267				 
+     268 004A  8D 16 006B R			LEA DX,CATEGORY3	;PRINT 
+					CATEGORY3 STRING 
+     269 004E  CD 21				INT 21H 
+     270				 
+     271 0050  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     272 0054  CD 21			     	INT 21H 
+     273					 
+     274 0056  8D 16 0083 R			LEA DX,PROMPT_CAT 
+     275 005A  CD 21				INT 21H 
+     276					 
+     277 005C  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     278 0060  CD 21			     	INT 21H 
+     279					 
+     280 0062  EB 01 90				JMP ASKCAT 
+     281				 
+     282 0065				ASKCAT: 
+     283 0065  8D 16 0371 R			LEA DX,E_CHOICE 
+     284 0069  CD 21				INT 21H 
+     285					 
+     286					 
+     287 006B  B4 01				MOV AH,1                    ;TA
+					KE AN INPUT & SAVED TO AL 
+     288 006D  CD 21				INT 21H  
+     289					 
+     290 006F  3C 31				CMP AL,49                   ;IF
+					 AL=1 GO TO SERIES11 LABEL 
+     291 0071  74 0E			     	JE TOSERIES11 
+     292				      
+     293					 
+     294 0073  3C 32			     	CMP AL,50                   ;IF
+					 AL=2 GO TO SERIES12 LABEL 
+     295 0075  74 0D			     	JE TOSERIES12 
+     296				      
+     297 0077  8A CB				MOV CL,BL 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-8
+
+
+     298 0079  80 F9 33			     	CMP CL,51                   ;IF
+					 AL=3 GO TO SERIES13 LABEL 
+     299 007C  74 09			     	JE TOSERIES13 
+     300				 
+     301 007E  EB 0A 90				JMP ERRORCAT                ;IF
+					 WRONG KEYWORD IS PRESSED THEN ERROR 
+     302				 
+     303 0081				TOSERIES11: 
+     304 0081  EB 11 90				JMP SERIES11 
+     305				 
+     306 0084				TOSERIES12: 
+     307 0084  E9 0362 R			JMP SERIES12 
+     308				 
+     309 0087				TOSERIES13: 
+     310 0087  E9 03F5 R			JMP SERIES13 
+     311				 
+     312 008A				ERRORCAT:   
+     313				                   
+     314 008A  8D 16 0399 R		     LEA DX,ER_MSG               ;PRINT
+					 ERROR MESSAGE  
+     315 008E  B4 09			     MOV AH,9 
+     316 0090  CD 21			     INT 21H  
+     317				                                 ;IF US
+					ER GIVES AN ERROR THEN USER WILL BE ASK
+					ED TO INPUT AGAIN 
+     318 0092  EB D1			     JMP ASKCAT 
+     319				 
+     320 0094				SERIES11: 
+     321 0094  B4 09				MOV AH,9 
+     322 0096  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     323 009A  CD 21			     	INT 21H 
+     324					 
+     325 009C  B3 0A				MOV BL,10                   ;CO
+					LOR CODE 
+     326 009E  B4 09			     	MOV AH,9  
+     327 00A0  B0 00			     	MOV AL,0   
+     328 00A2  CD 10			     	INT 10H                 
+     329				       
+     330 00A4  B4 09				MOV AH,9  
+     331 00A6  8D 16 00BA R		     	LEA DX,INFO_PHONE              
+					   ;PRINT INFO STRING 
+     332 00AA  CD 21			     	INT 21H                      
+     333				      
+     334 00AC  B3 0B			     	MOV BL,11                   ;CO
+					LOR CODE 
+     335 00AE  B4 09			     	MOV AH,9  
+     336 00B0  B0 00			     	MOV AL,0   
+     337 00B2  CD 10			     	INT 10H    
+     338				 
+     339 00B4  B4 09				MOV AH,9 
+     340 00B6  8D 16 0178 R			LEA DX,PHONE11_1	;PRINT 
+					PHONE11 STRING 
+     341 00BA  CD 21				INT 21H 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-9
+
+
+     342				 
+     343 00BC  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     344 00C0  CD 21			     	INT 21H 
+     345				 
+     346 00C2  8D 16 019E R			LEA DX,PHONE11_2	;PRINT 
+					PHONE11PRO STRING 
+     347 00C6  CD 21				INT 21H 
+     348				 
+     349 00C8  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     350 00CC  CD 21			     	INT 21H 
+     351				 
+     352 00CE  B4 09				MOV AH,9 
+     353 00D0  8D 16 00DF R			LEA DX,PROMPT_PHONE 
+     354 00D4  CD 21				INT 21H 
+     355					 
+     356 00D6  8D 16 0020 R			LEA DX,NL 
+     357 00DA  CD 21				INT 21H 
+     358				 
+     359 00DC  EB 01 90				JMP ASKPHONE11 
+     360				 
+     361 00DF				ASKPHONE11: 
+     362 00DF  8D 16 0371 R			LEA DX,E_CHOICE 
+     363 00E3  CD 21				INT 21H 
+     364				 
+     365 00E5  B4 01				MOV AH,1                    ;TA
+					KE AN INPUT & SAVED TO AL 
+     366 00E7  CD 21				INT 21H  
+     367				 
+     368 00E9  A2 03A7 R			MOV USEROPTION,AL 
+     369					 
+     370 00EC  80 3E 03A7 R 31			CMP USEROPTION,49	
+						;'Y' 
+     371 00F1  74 0D				JE BUYPHONE11 
+     372				 
+     373 00F3  80 3E 03A7 R 32			CMP USEROPTION,50	
+						;'N' 
+     374 00F8  74 03				JE LOGOUT 
+     375				 
+     376 00FA  E9 0357 R			JMP ERRORPHONE11 
+     377				 
+     378 00FD				LOGOUT: 
+     379 00FD  E9 0020 R			JMP CAT_MENU 
+     380				 
+     381 0100				BUYPHONE11: 
+     382 0100  B4 09				MOV AH,09H 
+     383 0102  8D 16 0120 R			LEA DX,PROMPT_ORDER 
+     384 0106  CD 21				INT 21H 
+     385 0108  8D 16 0371 R			LEA DX,E_CHOICE 
+     386 010C  CD 21				INT 21H 
+     387					;JMP ORDER11 
+     388				 
+     389 010E				ORDER11: 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-10
+
+
+     390 010E  B4 01				MOV AH,1 
+     391 0110  CD 21				int 21h 
+     392 0112  A2 03A8 R			MOV INPUT1,AL 
+     393 0115  80 3E 03A8 R 31			CMP INPUT1,49 
+     394 011A  74 0A				JE IPHONE11 
+     395 011C  80 3E 03A8 R 32			CMP INPUT1,50 
+     396 0121  74 1E				JE IPHONE11PRO 
+     397				 
+     398 0123  E9 0357 R			JMP ERRORPHONE11 
+     399				 
+     400 0126				IPHONE11: 
+     401 0126  E8 04A7 R			CALL CAPACITY11 
+     402				 
+     403 0129  B4 01				MOV AH,01H 
+     404 012B  CD 21				INT 21H 
+     405				 
+     406 012D  A2 03AA R			MOV INPUTCAPACITY11,AL 
+     407 0130  80 3E 03AA R 31			CMP INPUTCAPACITY11,'1' 
+     408 0135  74 25				JE  CAP11_64 
+     409 0137  80 3E 03AA R 32			CMP INPUTCAPACITY11,'2' 
+     410 013C  74 30				JE CAP11_128 
+     411				 
+     412 013E  E9 0357 R			JMP ERRORPHONE11 
+     413				 
+     414 0141				IPHONE11PRO: 
+     415 0141  E8 04A7 R			CALL CAPACITY11 
+     416 0144  B4 01				MOV AH,01H 
+     417 0146  CD 21				INT 21H 
+     418 0148  A2 03AA R			MOV INPUTCAPACITY11,AL 
+     419 014B  80 3E 03AA R 31			CMP INPUTCAPACITY11,'1' 
+     420 0150  74 13				JE  CAP11PRO_64 
+     421 0152  80 3E 03AA R 32			CMP INPUTCAPACITY11,'2' 
+     422 0157  74 1E				JE CAP11PRO_128 
+     423				 
+     424 0159  E9 0357 R			JMP ERRORPHONE11 
+     425				 
+     426 015C				CAP11_64: 
+     427 015C  C7 06 03B4 R 0258		MOV PRICE11_1,600	
+						 
+     428 0162  EB 22 90				JMP DOWNPAY11_64 
+     429				 
+     430 0165				CAP11PRO_64: 
+     431 0165  C7 06 03B6 R 0348		MOV PRICE11_2,840 
+     432 016B  EB 38 90				JMP DOWNPAY11PRO_64 
+     433				 
+     434 016E				CAP11_128: 
+     435 016E  C7 06 03B4 R 0270		MOV PRICE11_1,624 
+     436 0174  EB 54 90				JMP DOWNPAY11_128 
+     437				 
+     438 0177				CAP11PRO_128: 
+     439 0177  C7 06 03B6 R 0360		MOV PRICE11_2,864 
+     440 017D  EB 6A 90				JMP DOWNPAY11PRO_128 
+     441				 
+     442 0180				TOINS11_64: 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-11
+
+
+     443 0180  E9 023F R			JMP INS11_64 
+     444 0183				TOINS11_128: 
+     445 0183  E9 025E R			JMP INS11_128 
+     446				 
+     447 0186				DOWNPAY11_64: 
+     448 0186					REPEATASK1: 
+     449 0186  B4 09				MOV AH,09H 
+     450 0188  8D 16 01E3 R			LEA DX,PROMPT_DOWNPAY11 
+     451 018C  CD 21				INT 21H 
+     452					 
+     453 018E  B4 01				MOV AH,01H 
+     454 0190  CD 21				INT 21H 
+     455				 
+     456 0192  A2 01E2 R			MOV DOWNPAY_CHOICE,AL 
+     457 0195  80 3E 01E2 R 59			CMP DOWNPAY_CHOICE,'Y' 
+     458 019A  74 6A				JE EARLYPAY11_64 
+     459				 
+     460 019C  80 3E 01E2 R 4E			CMP DOWNPAY_CHOICE,'N' 
+     461 01A1  74 DD				JE TOINS11_64 
+     462				 
+     463 01A3  EB E1				JMP REPEATASK1 
+     464				 
+     465 01A5				DOWNPAY11PRO_64: 
+     466 01A5					REPEATASK2: 
+     467 01A5  B4 09				MOV AH,09H 
+     468 01A7  8D 16 01E3 R			LEA DX,PROMPT_DOWNPAY11 
+     469 01AB  CD 21				INT 21H 
+     470					 
+     471 01AD  B4 01				MOV AH,01H 
+     472 01AF  CD 21				INT 21H 
+     473				 
+     474 01B1  A2 01E2 R			MOV DOWNPAY_CHOICE,AL 
+     475 01B4  80 3E 01E2 R 59			CMP DOWNPAY_CHOICE,'Y' 
+     476 01B9  74 5E				JE EARLYPAY11PRO_64 
+     477				 
+     478 01BB  80 3E 01E2 R 4E			CMP DOWNPAY_CHOICE,'N' 
+     479 01C0  74 02				JE TOINS11PRO_64 
+     480				 
+     481 01C2  EB E1				JMP REPEATASK2 
+     482				 
+     483 01C4				TOINS11PRO_64: 
+     484 01C4  E9 02CB R			JMP INS11PRO_64 
+     485 01C7				TOINS11PRO_128: 
+     486 01C7  E9 02EA R			JMP INS11PRO_128 
+     487				 
+     488 01CA				DOWNPAY11_128: 
+     489 01CA					REPEATASK3: 
+     490 01CA  B4 09				MOV AH,09H 
+     491 01CC  8D 16 01E3 R			LEA DX,PROMPT_DOWNPAY11 
+     492 01D0  CD 21				INT 21H 
+     493					 
+     494 01D2  B4 01				MOV AH,01H 
+     495 01D4  CD 21				INT 21H 
+     496				 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-12
+
+
+     497 01D6  A2 01E2 R			MOV DOWNPAY_CHOICE,AL 
+     498 01D9  80 3E 01E2 R 59			CMP DOWNPAY_CHOICE,'Y' 
+     499 01DE  74 4C				JE EARLYPAY11_128 
+     500				 
+     501 01E0  80 3E 01E2 R 4E			CMP DOWNPAY_CHOICE,'N' 
+     502 01E5  74 9C				JE TOINS11_128 
+     503					 
+     504 01E7  EB E1				JMP REPEATASK3 
+     505				 
+     506 01E9				DOWNPAY11PRO_128: 
+     507 01E9					REPEATASK4: 
+     508 01E9  B4 09				MOV AH,09H 
+     509 01EB  8D 16 01E3 R			LEA DX,PROMPT_DOWNPAY11 
+     510 01EF  CD 21				INT 21H 
+     511					 
+     512 01F1  B4 01				MOV AH,01H 
+     513 01F3  CD 21				INT 21H 
+     514				 
+     515 01F5  A2 01E2 R			MOV DOWNPAY_CHOICE,AL 
+     516 01F8  80 3E 01E2 R 59			CMP DOWNPAY_CHOICE,'Y' 
+     517					;JE EARLYPAY11PRO_128 
+     518				 
+     519 01FD  80 3E 01E1 R 4E			CMP INS11_CHOICE,'N' 
+     520 0202  74 C3				JE TOINS11PRO_128 
+     521 0204  EB E3				JMP REPEATASK4 
+     522				 
+     523 0206				EARLYPAY11_64: 
+     524 0206  A1 03B4 R			MOV AX,PRICE11_1 
+     525 0209  C7 06 03AF R 0078		MOV B,120 
+     526 020F  2B 06 03AF R			SUB AX,B 
+     527 0213  A3 03B4 R			MOV PRICE11_1,AX 
+     528					 
+     529 0216  EB 27 90				JMP INS11_64	 
+     530				 
+     531 0219				EARLYPAY11PRO_64: 
+     532 0219  A1 03B6 R			MOV AX,PRICE11_2 
+     533 021C  C7 06 03AF R 012C		MOV B,300 
+     534 0222  2B 06 03AF R			SUB AX,B 
+     535 0226  A3 03B6 R			MOV PRICE11_2,AX 
+     536					 
+     537 0229  E9 02CB R			JMP INS11PRO_64	 
+     538				 
+     539 022C				EARLYPAY11_128: 
+     540 022C  A1 03B4 R			MOV AX,PRICE11_1 
+     541 022F  C7 06 03AF R 0078		MOV B,120 
+     542 0235  2B 06 03AF R			SUB AX,B 
+     543 0239  A3 03B4 R			MOV PRICE11_1,AX 
+     544					 
+     545 023C  EB 20 90				JMP INS11_128	 
+     546				 
+     547				 
+     548 023F				INS11_64: 
+     549					 
+     550 023F					REPEAT1: 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-13
+
+
+     551 023F  B4 09				MOV AH,09H 
+     552 0241  8D 16 0342 R			LEA DX,PROMPT_INST11 
+     553 0245  CD 21				INT 21H 
+     554					 
+     555 0247  B4 01				MOV AH,01H 
+     556 0249  CD 21				INT 21H 
+     557					 
+     558 024B  A2 03B1 R			MOV INST,AL 
+     559 024E  80 3E 03B1 R 31			CMP INST,'1' 
+     560 0253  74 28				JE DIV11_12 
+     561 0255  80 3E 03B1 R 32			CMP INST,'2' 
+     562 025A  74 48				JE DIV11_24 
+     563				 
+     564 025C  EB E1				JMP REPEAT1 
+     565				 
+     566 025E				INS11_128: 
+     567				 
+     568 025E					REPEAT2: 
+     569 025E  B4 09				MOV AH,09H 
+     570 0260  8D 16 0342 R			LEA DX,PROMPT_INST11 
+     571 0264  CD 21				INT 21H 
+     572					 
+     573 0266  B4 01				MOV AH,01H 
+     574 0268  CD 21				INT 21H 
+     575					 
+     576 026A  A2 03B1 R			MOV INST,AL 
+     577 026D  80 3E 03B1 R 31			CMP INST,'1' 
+     578 0272  74 09				JE DIV11_12 
+     579 0274  80 3E 03B1 R 32			CMP INST,'2' 
+     580 0279  74 29				JE DIV11_24 
+     581				 
+     582 027B  EB E1				JMP REPEAT2 
+     583					 
+     584 027D				DIV11_12: 
+     585 027D  B4 09				MOV AH,09H 
+     586 027F  8D 16 0219 R			LEA DX,RM 
+     587 0283  CD 21				INT 21H 
+     588					 
+     589 0285  A1 03B4 R			MOV AX,PRICE11_1	 
+     590 0288  BB 000C				MOV BX,12 
+     591 028B  BA 0000				MOV DX,0 
+     592 028E  F7 F3				DIV BX 
+     593					 
+     594 0290  A3 03C6 R			MOV R1,AX 
+     595 0293  A1 03C6 R			mov ax, [R1] ; Load the number 
+					800 into AX register 
+     596					 
+     597 0296  E8 0000 R		  call print_num ; Call a function to p
+					rint the number 
+     598				; 
+     599 0299  B4 09			    	MOV AH,09H 
+     600 029B  8D 16 021E R			LEA DX,SHOWINST 
+     601 029F  CD 21				INT 21H 
+     602 02A1  E9 04D0 R			JMP EXIT_PROGRAM 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-14
+
+
+     603					 
+     604 02A4				DIV11_24: 
+     605 02A4  B4 09				MOV AH,09H 
+     606 02A6  8D 16 0219 R			LEA DX,RM 
+     607 02AA  CD 21				INT 21H 
+     608				 
+     609 02AC  A1 03B4 R			MOV AX,PRICE11_1	 
+     610 02AF  BB 0018				MOV BX,24 
+     611 02B2  BA 0000				MOV DX,0 
+     612 02B5  F7 F3				DIV BX 
+     613					 
+     614 02B7  A3 03C6 R			MOV R1,AX 
+     615 02BA  A1 03C6 R		mov ax, [R1] ; Load the number 800 into
+					 AX register 
+     616					 
+     617 02BD  E8 0000 R		  call print_num ; Call a function to p
+					rint the number 
+     618				; 
+     619 02C0  B4 09			    	MOV AH,09H 
+     620 02C2  8D 16 021E R			LEA DX,SHOWINST 
+     621 02C6  CD 21				INT 21H 
+     622 02C8  E9 04D0 R			JMP EXIT_PROGRAM 
+     623				 
+     624 02CB				INS11PRO_64: 
+     625					 
+     626 02CB					REPEAT3: 
+     627 02CB  B4 09				MOV AH,09H 
+     628 02CD  8D 16 0342 R			LEA DX,PROMPT_INST11 
+     629 02D1  CD 21				INT 21H 
+     630					 
+     631 02D3  B4 01				MOV AH,01H 
+     632 02D5  CD 21				INT 21H 
+     633					 
+     634 02D7  A2 03B1 R			MOV INST,AL 
+     635 02DA  80 3E 03B1 R 31			CMP INST,'1' 
+     636 02DF  74 28				JE DIV11PRO_12 
+     637 02E1  80 3E 03B1 R 32			CMP INST,'2' 
+     638 02E6  74 48				JE DIV11PRO_24 
+     639				 
+     640 02E8  EB E1				JMP REPEAT3 
+     641				 
+     642 02EA				INS11PRO_128: 
+     643				 
+     644 02EA					REPEAT4: 
+     645 02EA  B4 09				MOV AH,09H 
+     646 02EC  8D 16 0342 R			LEA DX,PROMPT_INST11 
+     647 02F0  CD 21				INT 21H 
+     648					 
+     649 02F2  B4 01				MOV AH,01H 
+     650 02F4  CD 21				INT 21H 
+     651					 
+     652 02F6  A2 03B1 R			MOV INST,AL 
+     653 02F9  80 3E 03B1 R 31			CMP INST,'1' 
+     654 02FE  74 09				JE DIV11PRO_12 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-15
+
+
+     655 0300  80 3E 03B1 R 32			CMP INST,'2' 
+     656 0305  74 29				JE DIV11PRO_24 
+     657				 
+     658 0307  EB E1				JMP REPEAT4 
+     659				 
+     660				 
+     661				 
+     662 0309				DIV11PRO_12: 
+     663 0309  B4 09				MOV AH,09H 
+     664 030B  8D 16 0219 R			LEA DX,RM 
+     665 030F  CD 21				INT 21H 
+     666				 
+     667 0311  A1 03B6 R			MOV AX,PRICE11_2	 
+     668 0314  BB 000C				MOV BX,12 
+     669 0317  BA 0000				MOV DX,0 
+     670 031A  F7 F3				DIV BX 
+     671					 
+     672 031C  A3 03C6 R			MOV R1,AX 
+     673 031F  A1 03C6 R		mov ax, [R1] ; Load the number 800 into
+					 AX register 
+     674					 
+     675 0322  E8 0000 R		  call print_num ; Call a function to p
+					rint the number 
+     676				; 
+     677 0325  B4 09			    	MOV AH,09H 
+     678 0327  8D 16 021E R			LEA DX,SHOWINST 
+     679 032B  CD 21				INT 21H 
+     680 032D  E9 04D0 R			JMP EXIT_PROGRAM 
+     681				 
+     682				 
+     683				 
+     684 0330				DIV11PRO_24: 
+     685 0330  B4 09				MOV AH,09H 
+     686 0332  8D 16 0219 R			LEA DX,RM 
+     687 0336  CD 21				INT 21H 
+     688				 
+     689 0338  A1 03B6 R			MOV AX,PRICE11_2	 
+     690 033B  BB 0018				MOV BX,24 
+     691 033E  BA 0000				MOV DX,0 
+     692 0341  F7 F3				DIV BX 
+     693					 
+     694 0343  A3 03C6 R			MOV R1,AX 
+     695 0346  A1 03C6 R		mov ax, [R1] ; Load the number 800 into
+					 AX register 
+     696					 
+     697 0349  E8 0000 R		  call print_num ; Call a function to p
+					rint the number 
+     698				; 
+     699 034C  B4 09			    	MOV AH,09H 
+     700 034E  8D 16 021E R			LEA DX,SHOWINST 
+     701 0352  CD 21				INT 21H 
+     702 0354  E9 04D0 R			JMP EXIT_PROGRAM 
+     703				 
+     704				 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-16
+
+
+     705				 
+     706				 
+     707 0357				ERRORPHONE11: 
+     708 0357  8D 16 0399 R			LEA DX,ER_MSG               ;PR
+					INT ERROR MESSAGE  
+     709 035B  B4 09			     	MOV AH,9 
+     710 035D  CD 21			     	INT 21H  
+     711				                                 ;IF US
+					ER GIVES AN ERROR THEN USER WILL BE ASK
+					ED TO INPUT AGAIN 
+     712 035F  E9 00DF R		     	JMP ASKPHONE11 
+     713					 
+     714				 
+     715 0362				SERIES12: 
+     716 0362  B4 09				MOV AH,9 
+     717 0364  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     718 0368  CD 21			     	INT 21H 
+     719					      
+     720				       
+     721 036A  B4 09				MOV AH,9  
+     722 036C  8D 16 00BA R		     	LEA DX,INFO_PHONE              
+					   ;PRINT INFO STRING 
+     723 0370  CD 21			     	INT 21H                      
+     724				       
+     725				 
+     726 0372  B4 09				MOV AH,9 
+     727 0374  8D 16 0242 R			LEA DX,PHONE12_1	;PRINT 
+					PHONE12 STRING 
+     728 0378  CD 21				INT 21H 
+     729				 
+     730 037A  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     731 037E  CD 21			     	INT 21H 
+     732				 
+     733 0380  8D 16 0262 R			LEA DX,PHONE12_2	;PRINT 
+					PHONE12PRO STRING 
+     734 0384  CD 21				INT 21H 
+     735				 
+     736 0386  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     737 038A  CD 21			     	INT 21H 
+     738				 
+     739 038C  8D 16 0285 R			LEA DX,PHONE12_3	;PRINT 
+					PHONE12PROMAX STRING 
+     740 0390  CD 21				INT 21H 
+     741				 
+     742 0392  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     743 0396  CD 21			     	INT 21H 
+     744				 
+     745 0398  B4 09				MOV AH,9 
+     746 039A  8D 16 00DF R			LEA DX,PROMPT_PHONE 
+     747 039E  CD 21				INT 21H 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-17
+
+
+     748					 
+     749 03A0  8D 16 0020 R			LEA DX,NL 
+     750 03A4  CD 21				INT 21H 
+     751				 
+     752 03A6  EB 01 90				JMP ASKPHONE12 
+     753				 
+     754 03A9				ASKPHONE12: 
+     755 03A9  8D 16 0371 R			LEA DX,E_CHOICE 
+     756 03AD  CD 21				INT 21H 
+     757				 
+     758 03AF  B4 01				MOV AH,1                    ;TA
+					KE AN INPUT & SAVED TO AL 
+     759 03B1  CD 21				INT 21H  
+     760				 
+     761 03B3  A2 03A7 R			MOV USEROPTION,AL 
+     762					 
+     763 03B6  80 3E 03A7 R 31			CMP USEROPTION,49 
+     764 03BB  74 0D				JE BUYPHONE12 
+     765				 
+     766 03BD  80 3E 03A7 R 32			CMP USEROPTION,50 
+     767 03C2  74 03				JE BACK1 
+     768				 
+     769 03C4  EB 24 90				JMP ERRORPHONE12 
+     770				 
+     771 03C7				BACK1: 
+     772 03C7  E9 0020 R			JMP CAT_MENU 
+     773 03CA				BUYPHONE12: 
+     774 03CA  B8 0AF0				MOV AX,2800 
+     775 03CD  A3 03B8 R			MOV PRICE12_1,AX 
+     776 03D0  B8 0C1C				MOV AX,3100 
+     777 03D3  A3 03BA R			MOV PRICE12_2,AX 
+     778 03D6  B8 0D48				MOV AX,3400 
+     779 03D9  A3 03BC R			MOV PRICE12_3,AX 
+     780 03DC  B4 09				MOV AH,09H 
+     781 03DE  8D 16 0120 R			LEA DX,PROMPT_ORDER 
+     782 03E2  CD 21				INT 21H 
+     783 03E4  8D 16 0371 R			LEA DX,E_CHOICE 
+     784 03E8  CD 21				INT 21H 
+     785				 
+     786				 
+     787 03EA				ERRORPHONE12: 
+     788 03EA  8D 16 0399 R			LEA DX,ER_MSG               ;PR
+					INT ERROR MESSAGE  
+     789 03EE  B4 09			     	MOV AH,9 
+     790 03F0  CD 21			     	INT 21H  
+     791				                                 ;IF US
+					ER GIVES AN ERROR THEN USER WILL BE ASK
+					ED TO INPUT AGAIN 
+     792 03F2  E9 00DF R		     	JMP ASKPHONE11 
+     793				 
+     794 03F5				SERIES13: 
+     795 03F5  B4 09				MOV AH,9 
+     796 03F7  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-18
+
+
+     797 03FB  CD 21			     	INT 21H 
+     798					 
+     799 03FD  B3 0A				MOV BL,10                   ;CO
+					LOR CODE 
+     800 03FF  B4 09			     	MOV AH,9  
+     801 0401  B0 00			     	MOV AL,0   
+     802 0403  CD 10			     	INT 10H                 
+     803				       
+     804 0405  B4 09				MOV AH,9  
+     805 0407  8D 16 00BA R		     	LEA DX,INFO_PHONE              
+					   ;PRINT INFO STRING 
+     806 040B  CD 21			     	INT 21H                      
+     807				    
+     808				 
+     809 040D  B4 09				MOV AH,9 
+     810 040F  8D 16 02C6 R			LEA DX,PHONE13_1	;PRINT 
+					PHONE13 STRING 
+     811 0413  CD 21				INT 21H 
+     812				 
+     813 0415  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     814 0419  CD 21			     	INT 21H 
+     815				 
+     816 041B  8D 16 02EA R			LEA DX,PHONE13_2	;PRINT 
+					PHONE13PRO STRING 
+     817 041F  CD 21				INT 21H 
+     818				 
+     819 0421  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     820 0425  CD 21			     	INT 21H 
+     821				 
+     822 0427  8D 16 030A R			LEA DX,PHONE13_3	;PRINT 
+					PHONE13PROMAX STRING 
+     823 042B  CD 21				INT 21H 
+     824				 
+     825 042D  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+     826 0431  CD 21			     	INT 21H 
+     827				 
+     828 0433  B4 09				MOV AH,9 
+     829 0435  8D 16 00DF R			LEA DX,PROMPT_PHONE 
+     830 0439  CD 21				INT 21H 
+     831					 
+     832 043B  8D 16 0020 R			LEA DX,NL 
+     833 043F  CD 21				INT 21H 
+     834				 
+     835 0441  EB 01 90				JMP ASKPHONE13 
+     836					 
+     837				 
+     838 0444				ASKPHONE13: 
+     839 0444  8D 16 0371 R			LEA DX,E_CHOICE 
+     840 0448  CD 21				INT 21H 
+     841				 
+     842 044A  B4 01				MOV AH,1                    ;TA
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-19
+
+
+					KE AN INPUT & SAVED TO AL 
+     843 044C  CD 21				INT 21H  
+     844				 
+     845 044E  A2 03A7 R			MOV USEROPTION,AL 
+     846					 
+     847 0451  80 3E 03A7 R 31			CMP USEROPTION,49 
+     848 0456  74 0D				JE BUYPHONE13 
+     849				 
+     850 0458  80 3E 03A7 R 32			CMP USEROPTION,50 
+     851 045D  74 03				JE BACK 
+     852				 
+     853 045F  EB 24 90				JMP ERRORPHONE13 
+     854 0462				BACK: 
+     855 0462  E9 0020 R			JMP CAT_MENU 
+     856				 
+     857				 
+     858 0465				BUYPHONE13: 
+     859 0465  B8 0C80				MOV AX,3200 
+     860 0468  A3 03BE R			MOV PRICE13_1,AX 
+     861 046B  B8 0DAC				MOV AX,3500 
+     862 046E  A3 03C0 R			MOV PRICE13_2,AX 
+     863 0471  B8 1004				MOV AX,4100 
+     864 0474  A3 03C2 R			MOV PRICE13_3,AX 
+     865 0477  B4 09				MOV AH,09H 
+     866 0479  8D 16 0120 R			LEA DX,PROMPT_ORDER 
+     867 047D  CD 21				INT 21H 
+     868 047F  8D 16 0371 R			LEA DX,E_CHOICE 
+     869 0483  CD 21				INT 21H 
+     870					 
+     871				 
+     872				 
+     873 0485				ERRORPHONE13: 
+     874 0485  8D 16 0399 R			LEA DX,ER_MSG               ;PR
+					INT ERROR MESSAGE  
+     875 0489  B4 09			     	MOV AH,9 
+     876 048B  CD 21			     	INT 21H  
+     877				                                 ;IF US
+					ER GIVES AN ERROR THEN USER WILL BE ASK
+					ED TO INPUT AGAIN 
+     878 048D  EB B5			     	JMP ASKPHONE13 
+     879				 
+     880				 
+     881				 
+     882 048F				main proc 
+     883 048F  B8 ---- R			mov ax,@data 
+     884 0492  8E D8				mov ds,ax 
+     885					 
+     886 0494  B4 09				MOV AH,09h 
+     887 0496  8D 16 0000 R			LEA DX,WLC_MSG 
+     888 049A  CD 21				INT 21H 
+     889					 
+     890 049C  B4 09				MOV AH,9 
+     891 049E  8D 16 0020 R			LEA DX,NL                   ;PR
+					INT A NEW LINE 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Page     1-20
+
+
+     892 04A2  CD 21			     	INT 21H      
+     893				 
+     894					 
+     895				 
+     896 04A4  E9 0020 R			JMP CAT_MENU 
+     897				 
+     898				 
+     899				 
+     900 04A7				main endp 
+     901				 
+     902					 
+     903					 
+     904 04A7				CAPACITY11 proc 
+     905 04A7  50				PUSH AX 
+     906 04A8  B4 09				MOV AH,09H 
+     907 04AA  8D 16 0155 R			LEA DX,PROMPT_CAPACITY 
+     908 04AE  CD 21				INT 21H 
+     909 04B0  8D 16 01C6 R			LEA DX,CAPACITY11_1 
+     910 04B4  CD 21				INT 21H 
+     911 04B6  8D 16 01CE R			LEA DX,CAPACITY11_2 
+     912 04BA  CD 21				INT 21H 
+     913 04BC  8D 16 0020 R			LEA DX,NL 
+     914 04C0  CD 21				INT 21H 
+     915 04C2  8D 16 0371 R			LEA DX,E_CHOICE 
+     916 04C6  CD 21				INT 21H 
+     917 04C8  8D 16 0020 R			LEA DX,NL 
+     918 04CC  CD 21				INT 21H 
+     919 04CE  58				POP AX 
+     920 04CF  C3				RET 
+     921 04D0				CAPACITY11 endp 
+     922				 
+     923				 
+     924 04D0				EXIT_PROGRAM:	 
+     925 04D0  B4 4C				mov ah,4ch 
+     926 04D2  CD 21				int 21h  
+     927 04D4				end main	 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	03C8	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	04D4	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+A  . . . . . . . . . . . . . . .  	L WORD	03AD	_DATA
+ASKCAT . . . . . . . . . . . . .  	L NEAR	0065	_TEXT
+ASKPHONE11 . . . . . . . . . . .  	L NEAR	00DF	_TEXT
+ASKPHONE12 . . . . . . . . . . .  	L NEAR	03A9	_TEXT
+ASKPHONE13 . . . . . . . . . . .  	L NEAR	0444	_TEXT
+ATTEMP . . . . . . . . . . . . .  	L BYTE	03C5	_DATA
+
+B  . . . . . . . . . . . . . . .  	L WORD	03AF	_DATA
+BACK . . . . . . . . . . . . . .  	L NEAR	0462	_TEXT
+BACK1  . . . . . . . . . . . . .  	L NEAR	03C7	_TEXT
+BUYPHONE11 . . . . . . . . . . .  	L NEAR	0100	_TEXT
+BUYPHONE12 . . . . . . . . . . .  	L NEAR	03CA	_TEXT
+BUYPHONE13 . . . . . . . . . . .  	L NEAR	0465	_TEXT
+
+CAP11PRO_128 . . . . . . . . . .  	L NEAR	0177	_TEXT
+CAP11PRO_64  . . . . . . . . . .  	L NEAR	0165	_TEXT
+CAP11_128  . . . . . . . . . . .  	L NEAR	016E	_TEXT
+CAP11_64 . . . . . . . . . . . .  	L NEAR	015C	_TEXT
+CAPACITY11 . . . . . . . . . . .  	N PROC	04A7	_TEXT	Length = 0029
+CAPACITY11_1 . . . . . . . . . .  	L BYTE	01C6	_DATA
+CAPACITY11_2 . . . . . . . . . .  	L BYTE	01CE	_DATA
+CAPACITY12_1 . . . . . . . . . .  	L BYTE	02AB	_DATA
+CAPACITY12_2 . . . . . . . . . .  	L BYTE	02B4	_DATA
+CAPACITY12_3 . . . . . . . . . .  	L BYTE	02BD	_DATA
+CAPACITY13_1 . . . . . . . . . .  	L BYTE	0330	_DATA
+CAPACITY13_2 . . . . . . . . . .  	L BYTE	0339	_DATA
+CATEGORY1  . . . . . . . . . . .  	L BYTE	003B	_DATA
+CATEGORY2  . . . . . . . . . . .  	L BYTE	0053	_DATA
+CATEGORY3  . . . . . . . . . . .  	L BYTE	006B	_DATA
+CAT_MENU . . . . . . . . . . . .  	L NEAR	0020	_TEXT
+
+DIV11PRO_12  . . . . . . . . . .  	L NEAR	0309	_TEXT
+DIV11PRO_24  . . . . . . . . . .  	L NEAR	0330	_TEXT
+DIV11_12 . . . . . . . . . . . .  	L NEAR	027D	_TEXT
+DIV11_24 . . . . . . . . . . . .  	L NEAR	02A4	_TEXT
+DOWNPAY11PRO_128 . . . . . . . .  	L NEAR	01E9	_TEXT
+DOWNPAY11PRO_64  . . . . . . . .  	L NEAR	01A5	_TEXT
+DOWNPAY11_1  . . . . . . . . . .  	L WORD	01DB	_DATA
+DOWNPAY11_128  . . . . . . . . .  	L NEAR	01CA	_TEXT
+DOWNPAY11_2  . . . . . . . . . .  	L WORD	01DD	_DATA
+DOWNPAY11_64 . . . . . . . . . .  	L NEAR	0186	_TEXT
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Symbols-2
+
+
+DOWNPAY_CHOICE . . . . . . . . .  	L BYTE	01E2	_DATA
+
+EARLYPAY11PRO_64 . . . . . . . .  	L NEAR	0219	_TEXT
+EARLYPAY11_128 . . . . . . . . .  	L NEAR	022C	_TEXT
+EARLYPAY11_64  . . . . . . . . .  	L NEAR	0206	_TEXT
+ERRORCAT . . . . . . . . . . . .  	L NEAR	008A	_TEXT
+ERRORPHONE11 . . . . . . . . . .  	L NEAR	0357	_TEXT
+ERRORPHONE12 . . . . . . . . . .  	L NEAR	03EA	_TEXT
+ERRORPHONE13 . . . . . . . . . .  	L NEAR	0485	_TEXT
+ER_MSG . . . . . . . . . . . . .  	L BYTE	0399	_DATA
+EXIT_PROGRAM . . . . . . . . . .  	L NEAR	04D0	_TEXT
+E_CHOICE . . . . . . . . . . . .  	L BYTE	0371	_DATA
+E_QUANTITY . . . . . . . . . . .  	L BYTE	0386	_DATA
+
+INFO_CAT . . . . . . . . . . . .  	L BYTE	0023	_DATA
+INFO_PHONE . . . . . . . . . . .  	L BYTE	00BA	_DATA
+INPUT1 . . . . . . . . . . . . .  	L BYTE	03A8	_DATA
+INPUT2 . . . . . . . . . . . . .  	L BYTE	03A9	_DATA
+INPUTCAPACITY11  . . . . . . . .  	L BYTE	03AA	_DATA
+INPUTCAPACITY12  . . . . . . . .  	L BYTE	03AB	_DATA
+INPUTCAPACITY13  . . . . . . . .  	L BYTE	03AC	_DATA
+INS11PRO_128 . . . . . . . . . .  	L NEAR	02EA	_TEXT
+INS11PRO_64  . . . . . . . . . .  	L NEAR	02CB	_TEXT
+INS11_128  . . . . . . . . . . .  	L NEAR	025E	_TEXT
+INS11_64 . . . . . . . . . . . .  	L NEAR	023F	_TEXT
+INS11_CHOICE . . . . . . . . . .  	L BYTE	01E1	_DATA
+INST . . . . . . . . . . . . . .  	L BYTE	03B1	_DATA
+IPHONE11 . . . . . . . . . . . .  	L NEAR	0126	_TEXT
+IPHONE11PRO  . . . . . . . . . .  	L NEAR	0141	_TEXT
+
+LOGOUT . . . . . . . . . . . . .  	L NEAR	00FD	_TEXT
+
+MAIN . . . . . . . . . . . . . .  	N PROC	048F	_TEXT	Length = 0018
+MONTHLY11_1  . . . . . . . . . .  	L WORD	01DF	_DATA
+
+NL . . . . . . . . . . . . . . .  	L BYTE	0020	_DATA
+
+ORDER11  . . . . . . . . . . . .  	L NEAR	010E	_TEXT
+
+PHONE11_1  . . . . . . . . . . .  	L BYTE	0178	_DATA
+PHONE11_2  . . . . . . . . . . .  	L BYTE	019E	_DATA
+PHONE12_1  . . . . . . . . . . .  	L BYTE	0242	_DATA
+PHONE12_2  . . . . . . . . . . .  	L BYTE	0262	_DATA
+PHONE12_3  . . . . . . . . . . .  	L BYTE	0285	_DATA
+PHONE13_1  . . . . . . . . . . .  	L BYTE	02C6	_DATA
+PHONE13_2  . . . . . . . . . . .  	L BYTE	02EA	_DATA
+PHONE13_3  . . . . . . . . . . .  	L BYTE	030A	_DATA
+PRICE  . . . . . . . . . . . . .  	L WORD	03B2	_DATA
+PRICE11_1  . . . . . . . . . . .  	L WORD	03B4	_DATA
+PRICE11_2  . . . . . . . . . . .  	L WORD	03B6	_DATA
+PRICE12_1  . . . . . . . . . . .  	L WORD	03B8	_DATA
+PRICE12_2  . . . . . . . . . . .  	L WORD	03BA	_DATA
+PRICE12_3  . . . . . . . . . . .  	L WORD	03BC	_DATA
+PRICE13_1  . . . . . . . . . . .  	L WORD	03BE	_DATA
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Symbols-3
+
+
+PRICE13_2  . . . . . . . . . . .  	L WORD	03C0	_DATA
+PRICE13_3  . . . . . . . . . . .  	L WORD	03C2	_DATA
+PRINT_LOOP . . . . . . . . . . .  	L NEAR	0015	_TEXT
+PRINT_NUM  . . . . . . . . . . .  	L NEAR	0000	_TEXT
+PROMPT_CAPACITY  . . . . . . . .  	L BYTE	0155	_DATA
+PROMPT_CAT . . . . . . . . . . .  	L BYTE	0083	_DATA
+PROMPT_DOWNPAY11 . . . . . . . .  	L BYTE	01E3	_DATA
+PROMPT_INST11  . . . . . . . . .  	L BYTE	0342	_DATA
+PROMPT_ORDER . . . . . . . . . .  	L BYTE	0120	_DATA
+PROMPT_PHONE . . . . . . . . . .  	L BYTE	00DF	_DATA
+
+QTY11  . . . . . . . . . . . . .  	L BYTE	03C4	_DATA
+QTY11_1  . . . . . . . . . . . .  	L WORD	01D7	_DATA
+QTY11_2  . . . . . . . . . . . .  	L WORD	01D9	_DATA
+
+R1 . . . . . . . . . . . . . . .  	L WORD	03C6	_DATA
+REPEAT1  . . . . . . . . . . . .  	L NEAR	023F	_TEXT
+REPEAT2  . . . . . . . . . . . .  	L NEAR	025E	_TEXT
+REPEAT3  . . . . . . . . . . . .  	L NEAR	02CB	_TEXT
+REPEAT4  . . . . . . . . . . . .  	L NEAR	02EA	_TEXT
+REPEATASK1 . . . . . . . . . . .  	L NEAR	0186	_TEXT
+REPEATASK2 . . . . . . . . . . .  	L NEAR	01A5	_TEXT
+REPEATASK3 . . . . . . . . . . .  	L NEAR	01CA	_TEXT
+REPEATASK4 . . . . . . . . . . .  	L NEAR	01E9	_TEXT
+REVERSE_LOOP . . . . . . . . . .  	L NEAR	0008	_TEXT
+RM . . . . . . . . . . . . . . .  	L BYTE	0219	_DATA
+
+SERIES11 . . . . . . . . . . . .  	L NEAR	0094	_TEXT
+SERIES12 . . . . . . . . . . . .  	L NEAR	0362	_TEXT
+SERIES13 . . . . . . . . . . . .  	L NEAR	03F5	_TEXT
+SHOWINST . . . . . . . . . . . .  	L BYTE	021E	_DATA
+
+TOINS11PRO_128 . . . . . . . . .  	L NEAR	01C7	_TEXT
+TOINS11PRO_64  . . . . . . . . .  	L NEAR	01C4	_TEXT
+TOINS11_128  . . . . . . . . . .  	L NEAR	0183	_TEXT
+TOINS11_64 . . . . . . . . . . .  	L NEAR	0180	_TEXT
+TOSERIES11 . . . . . . . . . . .  	L NEAR	0081	_TEXT
+TOSERIES12 . . . . . . . . . . .  	L NEAR	0084	_TEXT
+TOSERIES13 . . . . . . . . . . .  	L NEAR	0087	_TEXT
+
+USEROPTION . . . . . . . . . . .  	L BYTE	03A7	_DATA
+
+WLC_MSG  . . . . . . . . . . . .  	L BYTE	0000	_DATA
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  FIRSTPRO		
+
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:58:14
+                                                             Symbols-4
+
+
+
+    812 Source  Lines
+    812 Total   Lines
+    136 Symbols
+
+  50410 + 449750 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

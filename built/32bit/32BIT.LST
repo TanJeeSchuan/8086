@@ -1,0 +1,198 @@
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:13:07
+                                                             Page     1-1
+
+
+       1				.MODEL SMALL 
+       2 0064				.STACK 100 
+       3 0000				.DATA 
+       4				 
+       5 0000  00BC			long1       DW  00BCh 
+       6 0002  614F			            DW  614Fh 
+       7				 
+       8 0004  0002[			result      DW  2   DUP(?) 
+       9	   ????			
+      10			 ]	
+      11				
+      12 0008  24			            DB  "$" 
+      13				 
+      14 0000				.CODE 
+      15 0000				MAIN        PROC 
+      16 0000  B8 ---- R		mov         ax, @DATA 
+      17 0003  8E D8			mov         ds, ax 
+      18 0005  33 C0			xor         ax, ax 
+      19				 
+      20				 
+      21 0007  8D 36 0000 R		lea         si, long1 
+      22				 
+      23 000B  83 C6 02			add         si, 2 
+      24				 
+      25 000E  33 C0			xor         ax, ax 
+      26 0010  BB 000A			mov         bx, 10d 
+      27 0013  B9 0002			mov         cx, 2d      ;j = n - 1 
+      28 0016  33 D2			xor         dx, dx      ;r = 0 
+      29 0018  8D 3E 0006 R		lea         di, result + 2 
+      30 001C				long_print_loop: 
+      31 001C  8B C2			            mov         ax, dx 
+      32 001E  F7 E3			            mul         bx 
+      33 0020  8B D0			            mov         dx, ax 
+      34				 
+      35 0022  33 C0			            xor         ax,ax 
+      36				 
+      37 0024  8B 04			            mov         ax, [si] 
+      38 0026  03 C2			            add         ax, dx         
+					 ;remainder * base + u[j] 
+      39 0028  33 D2			            xor         dx, dx 
+      40 002A  F7 F3			            div         bx             
+					 ;DONT TOUCH DX 
+      41				 
+      42				            ; ;;print dx 
+      43				            ; push        ax 
+      44				            ; mov         ax,dx 
+      45				            ; call        print_num 
+      46				            ; pop         ax 
+      47				            ; call        newline 
+      48				             
+      49 002C  89 05			            mov         [di],ax 
+      50				 
+      51 002E  83 EE 02			            sub         si, 2 
+      52 0031  83 EF 02			            sub         di, 2 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:13:07
+                                                             Page     1-2
+
+
+      53 0034  E2 E6			            loop        long_print_loop
+					 
+      54				 
+      55 0036  A1 0006 R		mov         ax,[result+2] 
+      56 0039  E8 0040 R		call        print_num 
+      57				 
+      58				 
+      59 003C  B4 4C			mov         ah, 4ch 
+      60 003E  CD 21			int         21h 
+      61 0040				MAIN        ENDP 
+      62				 
+      63 0040				PRINT_NUM       PROC                   
+					     ;print ax 
+      64 0040  50			                            push    ax 
+      65 0041  53			                            push    bx 
+      66 0042  51			                            push    cx 
+      67 0043  52			                            push    dx 
+      68				 
+      69 0044  BB 000A			                            mov     bx,
+					0Ah      ;initalise divisor 
+      70 0047  B9 0000			                            mov     cx,
+					0h 
+      71				                             
+      72 004A				                            divLoop:   
+					  
+      73 004A  33 D2			                                       
+					 xor     dx,dx       ;clear remainder 
+      74 004C  F7 F3			                                       
+					 div     bx 
+      75 004E  52			                                       
+					 push    dx          ;save remainder 
+      76 004F  41			                                       
+					 inc     cx          ;count looped numb
+					er 
+      77 0050  85 C0			                                       
+					 test    ax,ax       ;if ax != 0, conti
+					nue 
+      78 0052  75 F6			                                       
+					 jnz     divLoop 
+      79				 
+      80 0054  B4 02			                            mov     ah,
+					02h 
+      81				 
+      82 0056				                            printLoop: 
+					  
+      83 0056  5A			                                       
+					 pop     dx          ;get remainder 
+      84 0057  80 C2 30			                                       
+					 add     dl,"0" 
+      85 005A  CD 21			                                       
+					 int     21h         ;print 
+      86 005C  E2 F8			                                       
+					 loop    printLoop   ;loop until cx is 
+					zero (the number of times divLoop) 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:13:07
+                                                             Page     1-3
+
+
+      87				 
+      88 005E  5A			                            pop    dx 
+      89 005F  59			                            pop    cx 
+      90 0060  5B			                            pop    bx 
+      91 0061  58			                            pop    ax 
+      92				 
+      93 0062  C3			                            ret 
+      94 0063				PRINT_NUM       ENDP 
+      95				 
+      96 0063				PRINT_CHAR      PROC                   
+					                     ;print cjaracter o
+					f value in dl 
+      97 0063  50			                            push    ax 
+      98 0064  B4 02			                            mov     ah,
+					02h 
+      99 0066  CD 21			                            int     21h
+					 
+     100 0068  58			                            pop     ax 
+     101 0069  C3			                            ret 
+     102 006A				PRINT_CHAR      ENDP 
+     103				 
+     104 006A				NEWLINE         PROC 
+     105 006A  52			                            push    dx 
+     106 006B  B2 0A			                            mov     dl,
+					0Ah 
+     107 006D  E8 0063 R		                            call PRINT_
+					CHAR 
+     108 0070  5A			                            pop     dx 
+     109 0071  C3			                            ret 
+     110 0072				NEWLINE         ENDP 
+     111				 
+     112 0072				END         MAIN 
+Microsoft (R) Macro Assembler Version 5.00                  9/5/23 22:13:07
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	0009	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	0072	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+DIVLOOP  . . . . . . . . . . . .  	L NEAR	004A	_TEXT
+
+LONG1  . . . . . . . . . . . . .  	L WORD	0000	_DATA
+LONG_PRINT_LOOP  . . . . . . . .  	L NEAR	001C	_TEXT
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 0040
+
+NEWLINE  . . . . . . . . . . . .  	N PROC	006A	_TEXT	Length = 0008
+
+PRINTLOOP  . . . . . . . . . . .  	L NEAR	0056	_TEXT
+PRINT_CHAR . . . . . . . . . . .  	N PROC	0063	_TEXT	Length = 0007
+PRINT_NUM  . . . . . . . . . . .  	N PROC	0040	_TEXT	Length = 0023
+
+RESULT . . . . . . . . . . . . .  	L WORD	0004	_DATA	Length = 0002
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  32bit		
+
+
+    109 Source  Lines
+    109 Total   Lines
+     23 Symbols
+
+  50372 + 466172 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

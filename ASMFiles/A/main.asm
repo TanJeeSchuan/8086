@@ -30,13 +30,9 @@ itemHeader      DB "Item ID"
                 DB "Price"
                 DB "$"
 
-item            DB 1                        
-                DB "APPLE$-------------"               
-                DB "1.20$-----"              
+item            DB 1, "APPLE$-------------1.20$-----"              
 
-                DB 2       
-                DB "BANANA$------------" 
-                DB "5.50$-----"
+                DB 2, "BANANA$------------5.50$-----"
 
                 DB 3       
                 DB "DURIAN$------------" 
@@ -246,11 +242,12 @@ INPUT_STR       PROC                                        ;read input and move
                             mov         ah,0Ah
                             int         21h
 
+                            xor         cx,cx
                             mov         cl,[buffer+1]                   ;move length of input to cl
 
-                            mov         ah,"$"
-                            lea         di,buffer+2                     ;offset to start of string value
-                            add         di,cl                           ;move to after last character
+                            mov         ah, "$"
+                            lea         di, buffer+2                     ;offset to start of string value
+                            add         di, cx                           ;move to after last character
                             mov         [di],ah                         ;move $ character to last place
 
                             pop         di

@@ -1,0 +1,242 @@
+Microsoft (R) Macro Assembler Version 5.00                  9/6/23 20:57:45
+                                                             Page     1-1
+
+
+       1				.model small 
+       2 0064				.stack 100 
+       3 0000				.data 
+       4				 
+       5 0000  45 6E 74 65 72 20 65	str1    DB      "Enter encrypted word: 
+					$" 
+       6       6E 63 72 79 70 74 65	
+       7       64 20 77 6F 72 64 3A	
+       8       20 24			
+       9 0017  45 6E 74 65 72 20 64	str2    DB      "Enter decryption key (
+					1-9): $" 
+      10       65 63 72 79 70 74 69	
+      11       6F 6E 20 6B 65 79 20	
+      12       28 31 2D 39 29 3A 20	
+      13       24			
+      14 0034  54 68 65 20 64 65 63	str3    DB      "The decrypted word is 
+					$" 
+      15       72 79 70 74 65 64 20	
+      16       77 6F 72 64 20 69 73	
+      17       20 24			
+      18				 
+      19 004B  0014[			secretWord DB   20 DUP("$") 
+      20	   24			
+      21			 ]	
+      22				
+      23				 
+      24 005F  ??			key     DB      ? 
+      25				 
+      26 0060  0014[			decryptedWord   DB      20 DUP("$") 
+      27	   24			
+      28			 ]	
+      29				
+      30				 
+      31 0074  14			buffer  DB  20 
+      32 0075  ??			        DB  ? 
+      33 0076  0014[			        DB  20 DUP("$") 
+      34	   24			
+      35			 ]	
+      36				
+      37				 
+      38 0000				.code 
+      39 0000				main proc 
+      40				 
+      41 0000  B8 ---- R		mov ax,@data 
+      42 0003  8E D8			mov ds,ax 
+      43 0005  B8 0000			mov ax,0h 
+      44				 
+      45				; start 
+      46				 
+      47 0008  B8 0063			mov     ax,99d          ;initialise val
+					ue 
+      48 000B  BB 0003			mov     bx,3d 
+      49				 
+      50 000E  33 D2			xor     dx,dx           ;set to 0 
+Microsoft (R) Macro Assembler Version 5.00                  9/6/23 20:57:45
+                                                             Page     1-2
+
+
+      51 0010  F7 F3			div     bx              ;ax/bx  dx 是r
+					emainder 
+      52				 
+      53 0012  E8 003A R		call    PRINT_NUM       ;print ax 
+      54				 
+      55 0015  B9 0004			mov     cx,4            ;precision (几
+					个小数位?) 
+      56				 
+      57 0018  52			push    dx           
+      58 0019  B2 2E			mov     dl, "." 
+      59 001B  E8 005D R		call    PRINT_CHAR 
+      60 001E  5A			pop     dx 
+      61				 
+      62 001F				decimalLoop: 
+      63 001F  8B C2			        mov         ax,dx    
+      64 0021  BA 000A			        mov         dx,10    
+      65 0024  F7 E2			        mul         dx          ;remain
+					der*10 
+      66				 
+      67 0026  33 D2			        xor         dx,dx 
+      68 0028  F7 F3			        div         bx          ;(remai
+					nder*10)/bx 
+      69				 
+      70 002A  E8 003A R		        call        PRINT_NUM   ;print 
+					ax 
+      71				 
+      72 002D  E2 F0			        loop        decimalLoop 
+      73				 
+      74				 
+      75				;end 
+      76				 
+      77 002F  B4 4C			mov ah,4ch 
+      78 0031  CD 21			int 21h 
+      79				 
+      80 0033				main endp 
+      81				 
+      82 0033				PRINT_STR       PROC 
+      83 0033  50			                        push    ax 
+      84 0034  B4 09			                        mov     ah,09h 
+      85 0036  CD 21			                        int     21h 
+      86 0038  58			                        pop    ax 
+      87 0039  C3			                        ret 
+      88 003A				PRINT_STR       ENDP 
+      89				 
+      90 003A				PRINT_NUM       PROC                   
+					     ;print ax 
+      91 003A  50			                            push    ax 
+      92 003B  53			                            push    bx 
+      93 003C  51			                            push    cx 
+      94 003D  52			                            push    dx 
+      95				 
+      96 003E  BB 000A			                            mov     bx,
+					0Ah      ;initalise divisor 
+      97 0041  B9 0000			                            mov     cx,
+Microsoft (R) Macro Assembler Version 5.00                  9/6/23 20:57:45
+                                                             Page     1-3
+
+
+					0h 
+      98				                             
+      99 0044				                            divLoop:   
+					  
+     100 0044  33 D2			                                       
+					 xor     dx,dx       ;clear remainder 
+     101 0046  F7 F3			                                       
+					 div     bx 
+     102 0048  52			                                       
+					 push    dx          ;save remainder 
+     103 0049  41			                                       
+					 inc     cx          ;count looped numb
+					er 
+     104 004A  85 C0			                                       
+					 test    ax,ax       ;if ax != 0, conti
+					nue 
+     105 004C  75 F6			                                       
+					 jnz     divLoop 
+     106				 
+     107 004E  B4 02			                            mov     ah,
+					02h 
+     108				 
+     109 0050				                            printLoop: 
+					  
+     110 0050  5A			                                       
+					 pop     dx          ;get remainder 
+     111 0051  80 C2 30			                                       
+					 add     dl,"0" 
+     112 0054  CD 21			                                       
+					 int     21h         ;print 
+     113 0056  E2 F8			                                       
+					 loop    printLoop   ;loop until cx is 
+					zero (the number of times divLoop) 
+     114				 
+     115 0058  5A			                            pop    dx 
+     116 0059  59			                            pop    cx 
+     117 005A  5B			                            pop    bx 
+     118 005B  58			                            pop    ax 
+     119				 
+     120 005C  C3			                            ret 
+     121 005D				PRINT_NUM       ENDP 
+     122				 
+     123 005D				PRINT_CHAR      PROC                   
+					                     ;print cjaracter o
+					f value in dl 
+     124 005D  50			                            push    ax 
+     125 005E  B4 02			                            mov     ah,
+					02h 
+     126 0060  CD 21			                            int     21h
+					 
+     127 0062  58			                            pop     ax 
+     128 0063  C3			                            ret 
+     129 0064				PRINT_CHAR      ENDP 
+     130				 
+Microsoft (R) Macro Assembler Version 5.00                  9/6/23 20:57:45
+                                                             Page     1-4
+
+
+     131 0064				NEWLINE         PROC 
+     132 0064  52			                            push    dx 
+     133 0065  B2 0A			                            mov     dl,
+					0Ah 
+     134 0067  E8 005D R		                            call PRINT_
+					CHAR 
+     135 006A  5A			                            pop     dx 
+     136 006B  C3			                            ret 
+     137 006C				NEWLINE         ENDP 
+     138				 
+     139 006C				end main 
+Microsoft (R) Macro Assembler Version 5.00                  9/6/23 20:57:45
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	008A	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	006C	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+BUFFER . . . . . . . . . . . . .  	L BYTE	0074	_DATA
+
+DECIMALLOOP  . . . . . . . . . .  	L NEAR	001F	_TEXT
+DECRYPTEDWORD  . . . . . . . . .  	L BYTE	0060	_DATA	Length = 0014
+DIVLOOP  . . . . . . . . . . . .  	L NEAR	0044	_TEXT
+
+KEY  . . . . . . . . . . . . . .  	L BYTE	005F	_DATA
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 0033
+
+NEWLINE  . . . . . . . . . . . .  	N PROC	0064	_TEXT	Length = 0008
+
+PRINTLOOP  . . . . . . . . . . .  	L NEAR	0050	_TEXT
+PRINT_CHAR . . . . . . . . . . .  	N PROC	005D	_TEXT	Length = 0007
+PRINT_NUM  . . . . . . . . . . .  	N PROC	003A	_TEXT	Length = 0023
+PRINT_STR  . . . . . . . . . . .  	N PROC	0033	_TEXT	Length = 0007
+
+SECRETWORD . . . . . . . . . . .  	L BYTE	004B	_DATA	Length = 0014
+STR1 . . . . . . . . . . . . . .  	L BYTE	0000	_DATA
+STR2 . . . . . . . . . . . . . .  	L BYTE	0017	_DATA
+STR3 . . . . . . . . . . . . . .  	L BYTE	0034	_DATA
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  decimal		
+
+
+    120 Source  Lines
+    120 Total   Lines
+     29 Symbols
+
+  50498 + 466046 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors
