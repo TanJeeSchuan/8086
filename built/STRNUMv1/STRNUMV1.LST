@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-1
 
 
@@ -56,7 +56,7 @@
       52				 
       53 0012  8D 16 0009 R		lea         dx,strNum2 
       54 0016  E8 01EB R		call        PRINT_STR 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-2
 
 
@@ -114,7 +114,7 @@
 					ORMALISE_STR 
       92				                        ; pop         s
 					i 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-3
 
 
@@ -172,7 +172,7 @@
      121 0059  02 C3			                                    add
 					         al,bl       ;add carry 
      122 005B  02 C4			                                    add
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-4
 
 
@@ -230,7 +230,7 @@
      151				 
      152 007D  E2 D1			                                    loo
 					p        add_loop 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-5
 
 
@@ -288,7 +288,7 @@
      184				 
      185 00A2  2A C3			                                    sub
 					         al,bl 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-6
 
 
@@ -346,7 +346,7 @@
      214				 
      215 00CA  E2 CD			                                    loo
 					p        sub_loop  
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-7
 
 
@@ -404,7 +404,7 @@
      245 00F1  8A 0E 0014 R		                                    mov
 					         cl,[j] 
      246 00F5  57			                                    pus
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-8
 
 
@@ -462,7 +462,7 @@ ASMFiles\A\STRNUMv1.asm(250): warning A4031: Operand types must match
      271 0123  8A 0E 0013 R		                                       
 					         mov         cl,[i] 
      272 0127  02 0E 0014 R		                                       
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-9
 
 
@@ -520,7 +520,7 @@ ASMFiles\A\STRNUMv1.asm(280): warning A4031: Operand types must match
      297 0147  03 06 0015 R		                                       
 					         add         ax,[w]      ;t += 
 					w[i+j] 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-10
 
 
@@ -578,7 +578,7 @@ ASMFiles\A\STRNUMv1.asm(301): warning A4031: Operand types must match
      324 0182  80 F9 FF			                                       
 					         cmp         cl,-1 
      325 0185  7F B1			                                       
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-11
 
 
@@ -636,7 +636,7 @@ ASMFiles\A\STRNUMv1.asm(324): warning A4031: Operand types must match
      352 01B9  C3			                        ret 
      353 01BA				MUL_STRNUM      ENDP 
      354				 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-12
 
 
@@ -694,7 +694,7 @@ ASMFiles\A\STRNUMv1.asm(324): warning A4031: Operand types must match
 					     al,"." 
      388 01DA  74 03			                                    je 
 					     normRemoveDec   ;if is decimal poi
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-13
 
 
@@ -752,7 +752,7 @@ ASMFiles\A\STRNUMv1.asm(324): warning A4031: Operand types must match
      422 01F9  B9 0000			                        mov     cx,0000
 					h 
      423 01FC				            Divloop: 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-14
 
 
@@ -810,7 +810,7 @@ ASMFiles\A\STRNUMv1.asm(324): warning A4031: Operand types must match
      461 0223  E8 0228 R		                            call PRINT_
 					CHAR 
      462 0226  5A			                            pop     dx 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-15
 
 
@@ -868,7 +868,7 @@ ASMFiles\A\STRNUMv1.asm(324): warning A4031: Operand types must match
      496 0248  E8 0220 R		                            call       
 					 NEWLINE 
      497 024B  B2 54			                            mov        
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Page     1-16
 
 
@@ -884,7 +884,7 @@ ASMFiles\A\STRNUMv1.asm(324): warning A4031: Operand types must match
      503 0255				DEBUG_CHAR      ENDP 
      504				 
      505 0255				END MAIN 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Symbols-1
 
 
@@ -942,7 +942,7 @@ NORMREMOVEDEC  . . . . . . . . .  	L NEAR	01DF	_TEXT
 NORMREMOVEDECEND . . . . . . . .  	L NEAR	01E2	_TEXT
 
 PRINT_CHAR . . . . . . . . . . .  	N PROC	0228	_TEXT	Length = 0007
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:51
+Microsoft (R) Macro Assembler Version 5.00                  9/11/23 11:25:46
                                                              Symbols-2
 
 

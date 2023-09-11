@@ -1,0 +1,295 @@
+Microsoft (R) Macro Assembler Version 5.00                  9/9/23 08:27:40
+                                                             Page     1-1
+
+
+       1				.MODEL SMALL 
+       2 0064				.STACK 100 
+       3 0000				.DATA 
+       4				 
+       5 0000  24 24 24			bcdInputBuffer  DB  "$$$" 
+       6				 
+       7 0000				.CODE 
+       8 0000				MAIN            PROC 
+       9 0000  B8 ---- R		                mov ax, @data 
+      10 0003  8E D8			                mov ds, ax 
+      11 0005  33 C0			                xor ax, ax 
+      12				 
+      13 0007  B9 0003			                Mov	cx,	3 
+      14 000A  BB 0003			                Mov	bx,	3 
+      15				 
+      16 000D  B2 31			                Mov	dl,	"1" 
+      17 000F				                L1: 
+      18 000F  51			                        Push	cx 
+      19				 
+      20 0010				                        L2: 
+      21 0010  B4 02			                            Mov	ah, 02h
+					 
+      22 0012  CD 21			                            INT	21h 
+      23 0014  42			                            inc     dx 
+      24 0015  E2 F9			                            Loop
+						L2 
+      25				 
+      26 0017  52			                        push    dx 
+      27 0018  B2 0A			                        Mov	dl,
+						10d 
+      28 001A  CD 21			                        Int	21h 
+      29 001C  5A			                        pop     dx 
+      30				 
+      31				 
+      32 001D  59			                        Pop	cx 
+      33 001E  49			                        Dec	cx 
+      34				 
+      35 001F  4B			                        Dec	bx 
+      36 0020  83 FB 00			                        Cmp	bx,
+						0 
+      37 0023  77 EA			                        Ja	L1 
+      38				 
+      39 0025  B4 4C			                mov ah, 4ch 
+      40 0027  CD 21			                int 21h 
+      41 0029				MAIN ENDP 
+      42				 
+      43 0029				BCD_INPUT       PROC                   
+					 ;output to al 
+      44 0029  56			                push        si 
+      45				 
+      46 002A  8D 36 0000 R		                lea         si, bcdInpu
+					tBuffer 
+      47				 
+      48 002E  B9 0003			                mov         cx, 3d     
+Microsoft (R) Macro Assembler Version 5.00                  9/9/23 08:27:40
+                                                             Page     1-2
+
+
+					 ;max number of times to loop 
+      49 0031  33 D2			                xor         dx, dx     
+					 ;dl as temp value counter 
+      50				 
+      51				                ;;get bcd input 
+      52 0033				                BCD_INPUT_LOOP: 
+      53 0033  B4 01			                            mov        
+					 ah, 1h 
+      54 0035  CD 21			                            int        
+					 21h 
+      55				 
+      56 0037  3C 0D			                            cmp        
+					 al, 13d 
+      57 0039  74 07			                            je         
+					 BCD_INPUT_LOOP_END 
+      58				                             
+      59 003B  2C 30			                            sub        
+					 al, 48d 
+      60 003D  88 04			                            mov        
+					 [si],al 
+      61				 
+      62 003F  46			                            inc        
+					 si 
+      63 0040  E2 F1			                            loop       
+					 BCD_INPUT_LOOP   
+      64 0042				                BCD_INPUT_LOOP_END: 
+      65				 
+      66 0042  B8 0001			                mov         ax, 1      
+					             ;ax tracks 位数 of numbe
+					r, eg first number * 1, second number *
+					 10, third numb
+      67 0045  8D 36 0002 R		                lea         si, bcdInpu
+					tBuffer+2 
+      68 0049  B9 0003			                mov         cx, 3d     
+					             ;number of times to loop 
+      69 004C				                BCD_INPUT_CAL: 
+      70 004C  33 DB			                            xor        
+					 bx, bx 
+      71				 
+      72 004E  8A 1C			                            mov        
+					 bl, [si] 
+      73 0050  80 FB 24			                            cmp        
+					 bl, "$"     ;if is not digit 
+      74 0053  74 0F			                            je         
+					 BCD_INPUT_CAL_NOT_DIGIT 
+      75				 
+      76 0055  50			                            push       
+					 ax               
+      77				 
+      78 0056  52			                            push       
+					 dx                  ;mul will effect d
+					x 
+      79 0057  F7 E3			                            mul        
+					 bx 
+Microsoft (R) Macro Assembler Version 5.00                  9/9/23 08:27:40
+                                                             Page     1-3
+
+
+      80 0059  5A			                            pop        
+					 dx 
+      81				 
+      82 005A  03 D0			                            add        
+					 dx, ax 
+      83 005C  58			                            pop        
+					 ax 
+      84				 
+      85 005D  52			                            push       
+					 dx                  ;mul will effect d
+					x 
+      86 005E  BB 000A			                            mov        
+					 bx, 10d 
+      87 0061  F7 E3			                            mul        
+					 bx 
+      88 0063  5A			                            pop        
+					 dx 
+      89				 
+      90 0064				                            BCD_INPUT_C
+					AL_NOT_DIGIT: 
+      91 0064  4E			                            dec        
+					 si 
+      92 0065  E2 E5			                            loop       
+					 BCD_INPUT_CAL 
+      93				 
+      94 0067  B9 0003			                mov         cx, 3d 
+      95 006A  8D 36 0000 R		                lea         si, bcdInpu
+					tBuffer 
+      96 006E				                BCD_INPUT_CLEAR_STR: 
+      97 006E  C6 06 0000 R 24		                            mov        
+					 [bcdInputBuffer],   "$"  
+      98 0073  E2 F9			                            loop       
+					 BCD_INPUT_CLEAR_STR 
+      99 0075  8B C2			                mov         ax, dx 
+     100 0077  5E			                pop         si 
+     101 0078  C3			                ret 
+     102 0079				BCD_INPUT       ENDP 
+     103				 
+     104 0079				PRINT_STR       PROC 
+     105 0079  50			                            push       
+					 ax 
+     106 007A  B4 09			                            mov        
+					 ah,09d 
+     107 007C  CD 21			                            int        
+					 21h 
+     108 007E  58			                            pop        
+					 ax 
+     109 007F  C3			                            ret 
+     110 0080				PRINT_STR       ENDP 
+     111				 
+     112 0080				PRINT_NUM       PROC                   
+					                     ;print from ax    
+					          这个没有用到 
+     113 0080  50			                        push    ax     
+Microsoft (R) Macro Assembler Version 5.00                  9/9/23 08:27:40
+                                                             Page     1-4
+
+
+					                     ;preserves origina
+					l register values 
+     114 0081  53			                        push    bx 
+     115 0082  51			                        push    cx 
+     116 0083  52			                        push    dx 
+     117 0084  BB 000A			                        mov     bx,000A
+					h         
+     118 0087  B9 0000			                        mov     cx,0000
+					h 
+     119 008A				            Divloop: 
+     120 008A  BA 0000			                        mov     dx,0000
+					h 
+     121 008D  F7 F3			                        div     bx 
+     122 008F  52			                        push    dx 
+     123 0090  41			                        inc     cx 
+     124 0091  85 C0			                        test    ax,ax 
+     125 0093  75 F5			                        jnz     Divloop
+					 
+     126				 
+     127 0095  B4 02			                        mov ah,02h     
+					                     ;setup for print 
+     128				 
+     129 0097				            IntPrint:    
+     130 0097  5A			                        pop     dx 
+     131 0098  83 C2 30			                        add     dx,48d 
+     132 009B  CD 21			                        int     21h 
+     133 009D  E2 F8			                        loop    IntPrin
+					t 
+     134				 
+     135 009F  5A			                        pop dx         
+					                     ;restore original 
+					ax value 
+     136 00A0  59			                        pop cx 
+     137 00A1  5B			                        pop bx 
+     138 00A2  58			                        pop ax 
+     139 00A3  C3			                        ret 
+     140 00A4				PRINT_NUM       ENDP 
+     141				 
+     142 00A4				PRINT_CHAR      PROC                   
+					                     ;print from dl 
+     143 00A4  50			                        push ax        
+					                      
+     144 00A5  B4 02			                        mov ah,02h 
+     145 00A7  CD 21			                        int 21h 
+     146 00A9  58			                        pop ax 
+     147 00AA  C3			                        ret 
+     148 00AB				PRINT_CHAR      ENDP 
+     149				 
+     150 00AB				NEWLINE         PROC 
+     151 00AB  52			                            push    dx 
+     152 00AC  B2 0A			                            mov     dl,
+					0Ah 
+     153 00AE  E8 00A4 R		                            call PRINT_
+					CHAR 
+Microsoft (R) Macro Assembler Version 5.00                  9/9/23 08:27:40
+                                                             Page     1-5
+
+
+     154 00B1  5A			                            pop     dx 
+     155 00B2  C3			                            ret 
+     156 00B3				NEWLINE         ENDP 
+     157				 
+     158 00B3				end main 
+Microsoft (R) Macro Assembler Version 5.00                  9/9/23 08:27:40
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	0003	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	00B3	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+BCDINPUTBUFFER . . . . . . . . .  	L BYTE	0000	_DATA
+BCD_INPUT  . . . . . . . . . . .  	N PROC	0029	_TEXT	Length = 0050
+BCD_INPUT_CAL  . . . . . . . . .  	L NEAR	004C	_TEXT
+BCD_INPUT_CAL_NOT_DIGIT  . . . .  	L NEAR	0064	_TEXT
+BCD_INPUT_CLEAR_STR  . . . . . .  	L NEAR	006E	_TEXT
+BCD_INPUT_LOOP . . . . . . . . .  	L NEAR	0033	_TEXT
+BCD_INPUT_LOOP_END . . . . . . .  	L NEAR	0042	_TEXT
+
+DIVLOOP  . . . . . . . . . . . .  	L NEAR	008A	_TEXT
+
+INTPRINT . . . . . . . . . . . .  	L NEAR	0097	_TEXT
+
+L1 . . . . . . . . . . . . . . .  	L NEAR	000F	_TEXT
+L2 . . . . . . . . . . . . . . .  	L NEAR	0010	_TEXT
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 0029
+
+NEWLINE  . . . . . . . . . . . .  	N PROC	00AB	_TEXT	Length = 0008
+
+PRINT_CHAR . . . . . . . . . . .  	N PROC	00A4	_TEXT	Length = 0007
+PRINT_NUM  . . . . . . . . . . .  	N PROC	0080	_TEXT	Length = 0024
+PRINT_STR  . . . . . . . . . . .  	N PROC	0079	_TEXT	Length = 0007
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  bcdInput		
+
+
+    158 Source  Lines
+    158 Total   Lines
+     30 Symbols
+
+  50406 + 449754 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

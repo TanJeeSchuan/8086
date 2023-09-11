@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 17:11:46
+Microsoft (R) Macro Assembler Version 5.00                  9/7/23 10:17:08
                                                              Page     1-1
 
 
@@ -56,7 +56,7 @@
       47				; call dec_add              ;add functi
 					on 
       48				; call dec_sub              ;sub functi
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 17:11:46
+Microsoft (R) Macro Assembler Version 5.00                  9/7/23 10:17:08
                                                              Page     1-2
 
 
@@ -114,7 +114,7 @@
       84				 
       85 005F				        no_mantissa_OF: 
       86 005F  C3			                        ret 
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 17:11:46
+Microsoft (R) Macro Assembler Version 5.00                  9/7/23 10:17:08
                                                              Page     1-3
 
 
@@ -172,7 +172,7 @@
 					                     ;get w1 
      120 008A  03 C1			                        add     ax,cx  
 					                     ;w1 + ax*bx + carr
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 17:11:46
+Microsoft (R) Macro Assembler Version 5.00                  9/7/23 10:17:08
                                                              Page     1-4
 
 
@@ -230,7 +230,7 @@
      153 00BD  E8 014C R		                        call    print_n
 					 
      154				 
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 17:11:46
+Microsoft (R) Macro Assembler Version 5.00                  9/7/23 10:17:08
                                                              Page     1-5
 
 
@@ -288,7 +288,7 @@
      183				 
      184				                        ;load whole num
 					ber 
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 17:11:46
+Microsoft (R) Macro Assembler Version 5.00                  9/7/23 10:17:08
                                                              Page     1-6
 
 
@@ -346,7 +346,7 @@
 					                     ;load mantisssa re
 					sult in ax to si mantissa part 
      212				 
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 17:11:46
+Microsoft (R) Macro Assembler Version 5.00                  9/7/23 10:17:08
                                                              Page     1-7
 
 
@@ -404,7 +404,7 @@
      241 0124  52			                        push    dx 
      242 0125  BB 000A			                        mov     bx,000A
 					h         
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 17:11:46
+Microsoft (R) Macro Assembler Version 5.00                  9/7/23 10:17:08
                                                              Page     1-8
 
 
@@ -462,7 +462,7 @@
      282				 
      283 0154				PRINT_NUM_LEADING_ZERO PROC            
 					                     ;print from ax wit
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 17:11:46
+Microsoft (R) Macro Assembler Version 5.00                  9/7/23 10:17:08
                                                              Page     1-9
 
 
@@ -520,7 +520,7 @@
      309 0178  5A			            pop dx                     
 					                     ;restore original 
 					register value 
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 17:11:46
+Microsoft (R) Macro Assembler Version 5.00                  9/7/23 10:17:08
                                                              Page     1-10
 
 
@@ -578,7 +578,7 @@
 					48d 
      345				 
      346 01A4				                    endAdd:         
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 17:11:46
+Microsoft (R) Macro Assembler Version 5.00                  9/7/23 10:17:08
                                                              Page     1-11
 
 
@@ -636,7 +636,7 @@
      381 01CF  2B D9			            sub bx,cx                  
 					         ;number of leading zeros = max
 					 digits - number of chars to print 
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 17:11:46
+Microsoft (R) Macro Assembler Version 5.00                  9/7/23 10:17:08
                                                              Page     1-12
 
 
@@ -681,7 +681,7 @@
      411				 
      412 01EF				main endp 
      413 01EF				end main 
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 17:11:46
+Microsoft (R) Macro Assembler Version 5.00                  9/7/23 10:17:08
                                                              Symbols-1
 
 
@@ -739,7 +739,7 @@ PRINT_N  . . . . . . . . . . . .  	N PROC	014C	_TEXT	Length = 0008
 PRINT_NUM  . . . . . . . . . . .  	N PROC	0121	_TEXT	Length = 0024
 PRINT_NUM_LEADING_ZERO . . . . .  	N PROC	0154	_TEXT	Length = 0030
 PUSH_ZERO_LEADING_ZERO . . . . .  	L NEAR	017D	_TEXT
-Microsoft (R) Macro Assembler Version 5.00                  8/13/23 17:11:46
+Microsoft (R) Macro Assembler Version 5.00                  9/7/23 10:17:08
                                                              Symbols-2
 
 

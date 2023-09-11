@@ -6,6 +6,13 @@ mkdir %2
 cd %2
 
 break>"dosboxConfig.bat"
+echo [cpu]>>"dosboxConfig.bat"
+echo core=auto>>"dosboxConfig.bat"
+echo cputype=auto>>"dosboxConfig.bat"
+echo cycles=max>>"dosboxConfig.bat"
+echo cycleup=10>>"dosboxConfig.bat"
+echo cycledown=20>>"dosboxConfig.bat"
+
 echo [autoexec]>>"dosboxConfig.bat"
 echo MOUNT C C:\8086>>"dosboxConfig.bat"
 echo C:>>"dosboxConfig.bat"
@@ -20,3 +27,4 @@ echo exit>>"dosboxConfig.bat"
 
 
 %1 -conf dosboxConfig.bat
+

@@ -209,6 +209,10 @@ int 21h
 
 MAIN ENDP
 
+LOGIN           PROC
+                        
+LOGIN           ENDP
+
 STRLEN          PROC                                        ;output length of si in ax
                         push        si
                         xor         dx,dx
@@ -350,23 +354,5 @@ PRINT_CHAR      PROC                                        ;print cjaracter of 
                             pop     ax
                             ret
 PRINT_CHAR      ENDP
-
-; PRINT_TABS      PROC                                        ;print number of spaces in cx
-;                             push    ax
-;                             push    cx
-;                             push    dx
-
-;                             PRINT_SPACES_LOOP:
-;                                     mov     dl,09d
-;                                     mov     ah,02h
-;                                     int     21h
-;                                     loop    PRINT_SPACES_LOOP
-
-;                             pop     dx
-;                             pop     cx
-;                             pop     ax
-;                             ret
-; PRINT_TABS      ENDP
-
 
 END MAIN

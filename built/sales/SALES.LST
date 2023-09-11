@@ -1,0 +1,1861 @@
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-1
+
+
+       1				.MODEL      SMALL 
+       2 0064				.STACK      100 
+       3 0000				.DATA 
+       4				 
+       5 0000  20			buffer          DB 32 
+       6 0001  ??			                DB ? 
+       7 0002  0020[			                DB 32 DUP(0) 
+       8	   00			
+       9			 ]	
+      10				
+      11 0022  24			                DB "$" 
+      12				 
+      13 0023  50 72 65 73 73 20 61	anyKeyToCont    DB  "Press any key to c
+					ontinue!$" 
+      14       6E 79 20 6B 65 79 20	
+      15       74 6F 20 63 6F 6E 74	
+      16       69 6E 75 65 21 24	
+      17				 
+      18 003E  24 24 24			bcdInputBuffer  DB  "$$$" 
+      19				 
+      20				;++++++++++++++++++++++++++++++++++++++
+					++++++++SALES SECTION++++++++++++++++++
+					++++++++++++++++++++++++++++++++++ 
+      21 0041  01			itemSelectionChoice DB  1 
+      22				 
+      23 0042  08			numberOfItems   DB  8 
+      24				                       ;1        0     
+					    01           qty 
+      25 0043  01 4C 65 6D 6F 6E 73	items           DB  1, "Lemons$$$$$$$$$
+					$$$$$1.20$$$$", 16 
+      26       24 24 24 24 24 24 24	
+      27       24 24 24 24 24 24 24	
+      28       31 2E 32 30 24 24 24	
+      29       24 10			
+      30 0061  02 42 6C 75 65 62 65	                DB  2, "Blueberries$$$$
+					$$$$$4.99$$$$", 78 
+      31       72 72 69 65 73 24 24	
+      32       24 24 24 24 24 24 24	
+      33       34 2E 39 39 24 24 24	
+      34       24 4E			
+      35 007F  03 54 65 61 24 24 24	                DB  3, "Tea$$$$$$$$$$$$
+					$$$$$14.99$$$", 45 
+      36       24 24 24 24 24 24 24	
+      37       24 24 24 24 24 24 24	
+      38       31 34 2E 39 39 24 24	
+      39       24 2D			
+      40 009D  04 42 72 61 6E 64 79	                DB  4, "Brandy Apricot$
+					$$$$$17.37$$$", 79 
+      41       20 41 70 72 69 63 6F	
+      42       74 24 24 24 24 24 24	
+      43       31 37 2E 33 37 24 24	
+      44       24 4F			
+      45 00BB  05 54 6F 6D 61 74 6F	                DB  5, "Tomato Ravioli 
+					Soup$3.99$$$$" ,27 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-2
+
+
+      46       20 52 61 76 69 6F 6C	
+      47       69 20 53 6F 75 70 24	
+      48       33 2E 39 39 24 24 24	
+      49       24 1B			
+      50 00D9  06 57 61 73 61 62 69	                DB  6, "Wasabi Paste$$$
+					$$$$$18.21$$$", 63 
+      51       20 50 61 73 74 65 24	
+      52       24 24 24 24 24 24 24	
+      53       31 38 2E 32 31 24 24	
+      54       24 3F			
+      55 00F7  07 43 68 65 65 73 65	                DB  7, "Cheese$$$$$$$$$
+					$$$$$15.67$$$", 7 
+      56       24 24 24 24 24 24 24	
+      57       24 24 24 24 24 24 24	
+      58       31 35 2E 36 37 24 24	
+      59       24 07			
+      60 0115  08 47 61 72 6C 69 63	                DB  8, "Garlic$$$$$$$$$
+					$$$$$3.08$$$$", 13 
+      61       24 24 24 24 24 24 24	
+      62       24 24 24 24 24 24 24	
+      63       33 2E 30 38 24 24 24	
+      64       24 0D			
+      65 0133  00			                DB  0 
+      66				 
+      67				;ITEM SELECTION 
+      68				 
+      69 0134  C9			itemSelHeader   DB  201d, 32 DUP (205d)
+					, "ITEM SELECTION", 32 DUP (205d), 187d
+					 
+      70       0020[			
+      71	   CD			
+      72			 ]	
+      73       49 54 45 4D 20 53 45	
+      74       4C 45 43 54 49 4F 4E	
+      75       0020[			
+      76	   CD			
+      77			 ]	
+      78       BB			
+      79 0184  0014[			                DB  20  DUP(186d, 78 DU
+					P(" "), 186d) 
+      80	   BA			
+      81	004E[			
+      82	    20			
+      83			]	
+      84	   BA			
+      85			 ]	
+      86				
+      87 07C4  C8			                DB  200d, 78 DUP (205d)
+					, 188d 
+      88       004E[			
+      89	   CD			
+      90			 ]	
+      91       BC			
+      92 0814  24			                DB  "$" 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-3
+
+
+      93				 
+      94 0815  49 44			itemHeader      DB  "ID", 10 DUP(" "), 
+					"Item Name", 15 DUP(" "), "Price", 8 DU
+					P(" "), "Qty" 
+      95       000A[			
+      96	   20			
+      97			 ]	
+      98       49 74 65 6D 20 4E 61	
+      99       6D 65			
+     100       000F[			
+     101	   20			
+     102			 ]	
+     103       50 72 69 63 65		
+     104       0008[			
+     105	   20			
+     106			 ]	
+     107       51 74 79			
+     108 0849  24			                DB  "$" 
+     109				 
+     110 084A  C0			itemSelBorder   DB  192d ,52 DUP(196d),
+					 217d 
+     111       0034[			
+     112	   C4			
+     113			 ]	
+     114       D9			
+     115 0880  24			                DB  "$" 
+     116				 
+     117 0881  0008[			itemSaleRecord  DB  8 DUP(0) 
+     118	   00			
+     119			 ]	
+     120				
+     121				 
+     122 0889  30 20 20 20 20 20 20	itemExitString  DB  "0           FINISH
+					 SALE$" 
+     123       20 20 20 20 20 46 49	
+     124       4E 49 53 48 20 53 41	
+     125       4C 45 24			
+     126				 
+     127				;QTY SECTION 
+     128 08A1  5F			qtyDisplayBox   DB  01011111b 
+     129 08A2  05 14			                DB   5, 20             
+					;row,column 
+     130 08A4  08 29			                DB  8, 41 
+     131				 
+     132 08A6  C9			qtyBorder1      DB  201d, 1 DUP (205d),
+					 "QTY (1-999)", 7 DUP (205d), 187d,10d 
+     133       0001[			
+     134	   CD			
+     135			 ]	
+     136       51 54 59 20 28 31 2D	
+     137       39 39 39 29		
+     138       0007[			
+     139	   CD			
+     140			 ]	
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-4
+
+
+     141       BB 0A			
+     142 08BC  24			                DB  "$" 
+     143 08BD  BA			qtyBorder2      DB  186d, 19 DUP (" "),
+					 186d,10d 
+     144       0013[			
+     145	   20			
+     146			 ]	
+     147       BA 0A			
+     148 08D3  24			                DB  "$" 
+     149 08D4  C8			qtyBorder3      DB  200d, 19 DUP (205d)
+					, 188d 
+     150       0013[			
+     151	   CD			
+     152			 ]	
+     153       BC			
+     154 08E9  24			                DB  "$" 
+     155				 
+     156 08EA  51 54 59 3A 20 24	qtyPrompt       DB  "QTY: $" 
+     157				 
+     158 08F0  49 6E 76 61 6C 69 64	qtyError        DB  "Invalid QTY$" 
+     159       20 51 54 59 24		
+     160				 
+     161 = 0000				itemID      EQU     0 
+     162 = 0001				itemName    EQU     1 
+     163 = 0015				itemPrice   EQU     21 
+     164 = 001D				itemQty     EQU     29 
+     165 = 001E				itemSize    EQU     30 
+     166				 
+     167 = 004E				selColour   EQU     01001110b 
+     168				 
+     169				CURSOR MACRO row,column 
+     170				                push    ax 
+     171				                push    bx 
+     172				                push    cx 
+     173				                push    dx 
+     174				 
+     175				                ;set cursor 
+     176				                mov dh, row        ;row
+					 
+     177				                mov dl, column       ;c
+					olumn 
+     178				                mov bh, 0         ; 
+     179				                mov ah, 02h       ;  
+     180				                int 10h 
+     181				 
+     182				                pop    dx 
+     183				                pop    cx 
+     184				                pop    bx 
+     185				                pop    ax 
+     186				ENDM 
+     187				 
+     188				COLOUR_CHAR MACRO character, colour, pr
+					intNum 
+     189				                push    ax 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-5
+
+
+     190				                push    bx 
+     191				                push    cx 
+     192				                push    dx 
+     193				 
+     194				                xor     bx,bx 
+     195				 
+     196				                mov cx, printNum       
+					   
+     197				                mov al, character      
+					   
+     198				                mov bl, colour        
+     199				                mov ah, 09h        
+     200				                int 10h 
+     201				 
+     202				                pop    dx 
+     203				                pop    cx 
+     204				                pop    bx 
+     205				                pop    ax 
+     206				ENDM 
+     207				 
+     208				BG_16_COLOUR    MACRO 
+     209				                push    ax 
+     210				                push    bx 
+     211				                push    cx 
+     212				                push    dx 
+     213				 
+     214				                xor     ax,ax 
+     215				                xor     bx,bx 
+     216				                xor     cx,cx 
+     217				                xor     dx,dx 
+     218				 
+     219				                mov         ax, 1003h 
+     220				                mov         bl, 0      
+					 ;enable 16 colours for background, dis
+					able text blink 
+     221				                int         10h 
+     222				 
+     223				                pop    dx 
+     224				                pop    cx 
+     225				                pop    bx 
+     226				                pop    ax 
+     227				ENDM 
+     228				 
+     229				BG_8_COLOUR     MACRO 
+     230				                push    ax 
+     231				                push    bx 
+     232				                push    cx 
+     233				                push    dx 
+     234				 
+     235				                xor     ax,ax 
+     236				                xor     bx,bx 
+     237				                xor     cx,cx 
+     238				                xor     dx,dx 
+     239				 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-6
+
+
+     240				                mov         ax, 1003h 
+     241				                mov         bl, 1      
+					 ;enable 8 colours for background, enab
+					le text blink 
+     242				                int         10h 
+     243				 
+     244				                pop    dx 
+     245				                pop    cx 
+     246				                pop    bx 
+     247				                pop    ax 
+     248				ENDM 
+     249 0000				.CODE 
+     250				 
+     251 0000				MAIN            PROC 
+     252 0000  B8 ---- R		                mov         ax  ,@DATA 
+     253 0003  8E D8			                mov         ds  ,ax 
+     254 0005  33 C0			                xor         ax  ,ax 
+     255 0007  33 DB			                xor         bx  ,bx 
+     256 0009  33 C9			                xor         cx  ,cx 
+     257 000B  33 D2			                xor         dx  ,dx 
+     258				 
+     259 000D				    SALES_START: 
+     260 000D  33 DB			                xor         bx, bx 
+     261 000F  C6 06 0041 R 01		                mov         [itemSelect
+					ionChoice], 1        ;reset selection 
+     262				 
+     263 0014  E8 042B R		                call        cls 
+     264				                CURSOR      0,0  
+     265 0017  50                    1	                push    ax 
+     266 0018  53                    1	                push    bx 
+     267 0019  51                    1	                push    cx 
+     268 001A  52                    1	                push    dx 
+     269 001B  B6 00                 1	                mov dh, 0        ;row 
+     270 001D  B2 00                 1	                mov dl, 0       ;column
+					 
+     271 001F  B7 00                 1	                mov bh, 0         ; 
+     272 0021  B4 02                 1	                mov ah, 02h       ; 
+     273 0023  CD 10                 1	                int 10h 
+     274 0025  5A                    1	                pop    dx 
+     275 0026  59                    1	                pop    cx 
+     276 0027  5B                    1	                pop    bx 
+     277 0028  58                    1	                pop    ax 
+     278				 
+     279 0029  8D 16 0134 R		                lea         dx  ,itemSe
+					lHeader 
+     280 002D  E8 0424 R		                call        PRINT_STR 
+     281				 
+     282				                CURSOR      2  ,3 
+     283 0030  50                    1	                push    ax 
+     284 0031  53                    1	                push    bx 
+     285 0032  51                    1	                push    cx 
+     286 0033  52                    1	                push    dx 
+     287 0034  B6 02                 1	                mov dh, 2        ;row 
+     288 0036  B2 03                 1	                mov dl, 3       ;column
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-7
+
+
+					 
+     289 0038  B7 00                 1	                mov bh, 0         ; 
+     290 003A  B4 02                 1	                mov ah, 02h       ; 
+     291 003C  CD 10                 1	                int 10h 
+     292 003E  5A                    1	                pop    dx 
+     293 003F  59                    1	                pop    cx 
+     294 0040  5B                    1	                pop    bx 
+     295 0041  58                    1	                pop    ax 
+     296				                COLOUR_CHAR 0, 00011110
+					b, 52d 
+     297 0042  50                    1	                push    ax 
+     298 0043  53                    1	                push    bx 
+     299 0044  51                    1	                push    cx 
+     300 0045  52                    1	                push    dx 
+     301 0046  33 DB                 1	                xor     bx,bx 
+     302 0048  B9 0034               1	                mov cx, 52d 
+     303 004B  B0 00                 1	                mov al, 0 
+     304 004D  B3 1E                 1	                mov bl, 00011110b 
+     305 004F  B4 09                 1	                mov ah, 09h 
+     306 0051  CD 10                 1	                int 10h 
+     307 0053  5A                    1	                pop    dx 
+     308 0054  59                    1	                pop    cx 
+     309 0055  5B                    1	                pop    bx 
+     310 0056  58                    1	                pop    ax 
+     311 0057  8D 16 0815 R		                lea         dx  ,itemHe
+					ader 
+     312 005B  E8 0424 R		                call        PRINT_STR 
+     313				                 
+     314 005E  EB 03 90			                jmp         SALES_START
+					_BREAK 
+     315 0061				                SALES_START_CP: 
+     316 0061  EB AA			                            jmp        
+					 SALES_START 
+     317 0063				                SALES_START_BREAK: 
+     318				 
+     319				                CURSOR      3  ,2 
+     320 0063  50                    1	                push    ax 
+     321 0064  53                    1	                push    bx 
+     322 0065  51                    1	                push    cx 
+     323 0066  52                    1	                push    dx 
+     324 0067  B6 03                 1	                mov dh, 3        ;row 
+     325 0069  B2 02                 1	                mov dl, 2       ;column
+					 
+     326 006B  B7 00                 1	                mov bh, 0         ; 
+     327 006D  B4 02                 1	                mov ah, 02h       ; 
+     328 006F  CD 10                 1	                int 10h 
+     329 0071  5A                    1	                pop    dx 
+     330 0072  59                    1	                pop    cx 
+     331 0073  5B                    1	                pop    bx 
+     332 0074  58                    1	                pop    ax 
+     333 0075  8D 16 084A R		                lea         dx  ,itemSe
+					lBorder 
+     334 0079  E8 0424 R		                call        PRINT_STR 
+     335				 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-8
+
+
+     336 007C  E8 028C R		                call        PRINT_ALL_I
+					TEMS 
+     337				                 
+     338 007F  E8 01A7 R		                call        ITEM_SELECT
+					ION          ;modify itemSelectionChoic
+					e 
+     339 0082  80 3E 0041 R 09		                            cmp        
+					 [itemSelectionChoice], 9        ;exit 
+					if 9(exit selection) 
+     340 0087  74 53			                            je         
+					 ITEM_SELECTION_EXIT 
+     341				 
+     342 0089  E8 013E R		                            call       
+					 DISPLAY_QTY_BOX 
+     343				 
+     344				                            ;;move qty 
+					input cursor 
+     345 008C  E8 011B R		                            call       
+					 MOVE_CURSOR_QTY 
+     346				 
+     347				                            ;item choic
+					e to al 
+     348 008F  33 C0			                            xor        
+					 ax, ax 
+     349 0091  A0 0041 R		                            mov        
+					 al, [itemSelectionChoice]   ;item choi
+					ce to al 
+     350 0094  FE C8			                            dec        
+					 al                       
+     351				 
+     352				                            ;change di 
+					into the address of the sale record of 
+					the selected item 
+     353 0096  8D 3E 0881 R		                            lea        
+					 di, itemSaleRecord          ;change ad
+					dress to the selected item 
+     354 009A  03 F8			                            add        
+					 di, ax 
+     355				                            ;change si 
+					to the address of the selected item 
+     356 009C  33 DB			                            xor        
+					 bx, bx 
+     357 009E  B3 1E			                            mov        
+					 bl, itemSize 
+     358 00A0  F7 E3			                            mul        
+					 bx                          ;item choi
+					ce number * itemSize to get offset of t
+					he selected ite
+     359 00A2  8D 36 0043 R		                            lea        
+					 si, items                    
+     360 00A6  03 F0			                            add        
+					 si, ax                      ;item + of
+					fset 
+     361				 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-9
+
+
+     362 00A8				                            QTY_CHECK: 
+     363 00A8  33 DB			                                       
+					 xor         bx, bx 
+     364 00AA  E8 0371 R		                                       
+					 call        BCD_INPUT                 
+					  ;store input into ax 
+     365 00AD  8A 5C 1D			                                       
+					 mov         bl, [si + itemQty]        
+					  ;quantity of selected item 
+     366				 
+     367 00B0  E8 011B R		                                       
+					 call        MOVE_CURSOR_QTY 
+     368				 
+     369 00B3  3B C3			                                       
+					 cmp         ax, bx                    
+					  ;if input is larger than qty of item 
+     370 00B5  77 03			                                       
+					 ja          QTY_CHECK_ERROR 
+     371 00B7  EB 0A 90			                                       
+					 jmp         QTY_CHECK_END 
+     372 00BA				                                       
+					 QTY_CHECK_ERROR: 
+     373 00BA  8D 16 08F0 R		                                       
+					             lea         dx, qtyError 
+     374 00BE  E8 0424 R		                                       
+					             call        PRINT_STR 
+     375 00C1  EB 9E			                                       
+					             jmp         SALES_START_CP
+					 
+     376 00C3				                            QTY_CHECK_E
+					ND: 
+     377				 
+     378				                            ;;write sol
+					d qty to sales record 
+     379 00C3  88 05			                            mov        
+					 [di],   al 
+     380				 
+     381				                            CURSOR     
+					 22,0 
+     382 00C5  50                    1	                push    ax 
+     383 00C6  53                    1	                push    bx 
+     384 00C7  51                    1	                push    cx 
+     385 00C8  52                    1	                push    dx 
+     386 00C9  B6 16                 1	                mov dh, 22        ;row 
+     387 00CB  B2 00                 1	                mov dl, 0       ;column
+					 
+     388 00CD  B7 00                 1	                mov bh, 0         ; 
+     389 00CF  B4 02                 1	                mov ah, 02h       ; 
+     390 00D1  CD 10                 1	                int 10h 
+     391 00D3  5A                    1	                pop    dx 
+     392 00D4  59                    1	                pop    cx 
+     393 00D5  5B                    1	                pop    bx 
+     394 00D6  58                    1	                pop    ax 
+     395 00D7  E8 048F R		                            call       
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-10
+
+
+					 ANYPAUSE 
+     396				 
+     397 00DA  EB 85			                            jmp        
+					 SALES_START_CP 
+     398 00DC				                ITEM_SELECTION_EXIT: 
+     399				                 
+     400 00DC  E8 042B R		                call        cls 
+     401				                CURSOR      0,0 
+     402 00DF  50                    1	                push    ax 
+     403 00E0  53                    1	                push    bx 
+     404 00E1  51                    1	                push    cx 
+     405 00E2  52                    1	                push    dx 
+     406 00E3  B6 00                 1	                mov dh, 0        ;row 
+     407 00E5  B2 00                 1	                mov dl, 0       ;column
+					 
+     408 00E7  B7 00                 1	                mov bh, 0         ; 
+     409 00E9  B4 02                 1	                mov ah, 02h       ; 
+     410 00EB  CD 10                 1	                int 10h 
+     411 00ED  5A                    1	                pop    dx 
+     412 00EE  59                    1	                pop    cx 
+     413 00EF  5B                    1	                pop    bx 
+     414 00F0  58                    1	                pop    ax 
+     415 00F1  8D 36 0881 R		                lea         si, itemSal
+					eRecord 
+     416 00F5  B9 0008			                mov         cx, 8d 
+     417 00F8				                L1: 
+     418 00F8  33 C0			                            xor        
+					 ax,ax 
+     419 00FA  8A 04			                            mov        
+					 al,[si] 
+     420 00FC  E8 034E R		                            call       
+					 PRINT_NUM 
+     421 00FF  E8 0487 R		                            call       
+					 NEWLINE 
+     422 0102  46			                            inc        
+					 si 
+     423 0103  E2 F3			                            loop       
+					 L1 
+     424				 
+     425				                CURSOR      21,0 
+     426 0105  50                    1	                push    ax 
+     427 0106  53                    1	                push    bx 
+     428 0107  51                    1	                push    cx 
+     429 0108  52                    1	                push    dx 
+     430 0109  B6 15                 1	                mov dh, 21        ;row 
+     431 010B  B2 00                 1	                mov dl, 0       ;column
+					 
+     432 010D  B7 00                 1	                mov bh, 0         ; 
+     433 010F  B4 02                 1	                mov ah, 02h       ; 
+     434 0111  CD 10                 1	                int 10h 
+     435 0113  5A                    1	                pop    dx 
+     436 0114  59                    1	                pop    cx 
+     437 0115  5B                    1	                pop    bx 
+     438 0116  58                    1	                pop    ax 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-11
+
+
+     439 0117  B4 4C			                mov         ah  ,4ch 
+     440 0119  CD 21			                int         21h 
+     441 011B				MAIN            ENDP 
+     442				 
+     443 011B				MOVE_CURSOR_QTY PROC 
+     444 011B  53			                            push       
+					 bx 
+     445				 
+     446 011C  8A 1E 08A2 R		                            mov        
+					 bl, [qtyDisplayBox+1]   ;use bl to sto
+					re row number 
+     447 0120  8A 3E 08A3 R		                            mov        
+					 bh, [qtyDisplayBox+2]   ;use bh to sto
+					re column number 
+     448 0124  80 C3 01			                            add        
+					 bl, 1 
+     449 0127  80 C7 02			                            add        
+					 bh, 2 
+     450				                            CURSOR     
+					 bl, bh 
+     451 012A  50                    1	                push    ax 
+     452 012B  53                    1	                push    bx 
+     453 012C  51                    1	                push    cx 
+     454 012D  52                    1	                push    dx 
+     455 012E  8A F3                 1	                mov dh, bl        ;row 
+     456 0130  8A D7                 1	                mov dl, bh       ;colum
+					n 
+     457 0132  B7 00                 1	                mov bh, 0         ; 
+     458 0134  B4 02                 1	                mov ah, 02h       ; 
+     459 0136  CD 10                 1	                int 10h 
+     460 0138  5A                    1	                pop    dx 
+     461 0139  59                    1	                pop    cx 
+     462 013A  5B                    1	                pop    bx 
+     463 013B  58                    1	                pop    ax 
+     464				 
+     465 013C  5B			                            pop        
+					 bx 
+     466 013D  C3			                            ret 
+     467 013E				MOVE_CURSOR_QTY ENDP 
+     468				 
+     469 013E				DISPLAY_QTY_BOX PROC 
+     470 013E  50			                            push       
+					 ax 
+     471 013F  53			                            push       
+					 bx 
+     472 0140  51			                            push       
+					 cx 
+     473 0141  52			                            push       
+					 dx 
+     474				 
+     475 0142  8D 36 08A1 R		                            lea        
+					 si, qtyDisplayBox   
+     476 0146  E8 03C1 R		                            call       
+					 DISPLAY_BOX 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-12
+
+
+     477				 
+     478 0149  8A 1E 08A2 R		                            mov        
+					 bl, [qtyDisplayBox+1]   ;use bl to sto
+					re row number 
+     479				                            CURSOR     
+					 bl, [qtyDisplayBox+2] 
+     480 014D  50                    1	                push    ax 
+     481 014E  53                    1	                push    bx 
+     482 014F  51                    1	                push    cx 
+     483 0150  52                    1	                push    dx 
+     484 0151  8A F3                 1	                mov dh, bl        ;row 
+     485 0153  8A 16 08A3 R          1	                mov dl, [qtyDisplayBox+
+					2]       ;column 
+     486 0157  B7 00                 1	                mov bh, 0         ; 
+     487 0159  B4 02                 1	                mov ah, 02h       ; 
+     488 015B  CD 10                 1	                int 10h 
+     489 015D  5A                    1	                pop    dx 
+     490 015E  59                    1	                pop    cx 
+     491 015F  5B                    1	                pop    bx 
+     492 0160  58                    1	                pop    ax 
+     493 0161  8D 16 08A6 R		                            lea        
+					 dx, qtyBorder1 
+     494 0165  E8 0424 R		                            call       
+					 PRINT_STR 
+     495				 
+     496 0168  FE C3			                            inc        
+					 bl                      ;next row 
+     497				                            CURSOR     
+					 bl, [qtyDisplayBox+2] 
+     498 016A  50                    1	                push    ax 
+     499 016B  53                    1	                push    bx 
+     500 016C  51                    1	                push    cx 
+     501 016D  52                    1	                push    dx 
+     502 016E  8A F3                 1	                mov dh, bl        ;row 
+     503 0170  8A 16 08A3 R          1	                mov dl, [qtyDisplayBox+
+					2]       ;column 
+     504 0174  B7 00                 1	                mov bh, 0         ; 
+     505 0176  B4 02                 1	                mov ah, 02h       ; 
+     506 0178  CD 10                 1	                int 10h 
+     507 017A  5A                    1	                pop    dx 
+     508 017B  59                    1	                pop    cx 
+     509 017C  5B                    1	                pop    bx 
+     510 017D  58                    1	                pop    ax 
+     511 017E  8D 16 08BD R		                            lea        
+					 dx, qtyBorder2 
+     512 0182  E8 0424 R		                            call       
+					 PRINT_STR 
+     513				 
+     514 0185  FE C3			                            inc        
+					 bl                      ;next row 
+     515				                            CURSOR     
+					 bl, [qtyDisplayBox+2] 
+     516 0187  50                    1	                push    ax 
+     517 0188  53                    1	                push    bx 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-13
+
+
+     518 0189  51                    1	                push    cx 
+     519 018A  52                    1	                push    dx 
+     520 018B  8A F3                 1	                mov dh, bl        ;row 
+     521 018D  8A 16 08A3 R          1	                mov dl, [qtyDisplayBox+
+					2]       ;column 
+     522 0191  B7 00                 1	                mov bh, 0         ; 
+     523 0193  B4 02                 1	                mov ah, 02h       ; 
+     524 0195  CD 10                 1	                int 10h 
+     525 0197  5A                    1	                pop    dx 
+     526 0198  59                    1	                pop    cx 
+     527 0199  5B                    1	                pop    bx 
+     528 019A  58                    1	                pop    ax 
+     529 019B  8D 16 08D4 R		                            lea        
+					 dx, qtyBorder3 
+     530 019F  E8 0424 R		                            call       
+					 PRINT_STR 
+     531				 
+     532 01A2  5A			                            pop        
+					 dx 
+     533 01A3  59			                            pop        
+					 cx 
+     534 01A4  5B			                            pop        
+					 bx 
+     535 01A5  58			                            pop        
+					 ax 
+     536 01A6  C3			                            ret 
+     537 01A7				DISPLAY_QTY_BOX ENDP 
+     538				 
+     539 01A7				ITEM_SELECTION  PROC                   
+					                                     ;m
+					odify itemSelectionChoice 
+     540 01A7  B3 04			                            mov        
+					 bl  ,4 
+     541				                            CURSOR     
+					 bl  ,3 
+     542 01A9  50                    1	                push    ax 
+     543 01AA  53                    1	                push    bx 
+     544 01AB  51                    1	                push    cx 
+     545 01AC  52                    1	                push    dx 
+     546 01AD  8A F3                 1	                mov dh, bl        ;row 
+     547 01AF  B2 03                 1	                mov dl, 3       ;column
+					 
+     548 01B1  B7 00                 1	                mov bh, 0         ; 
+     549 01B3  B4 02                 1	                mov ah, 02h       ; 
+     550 01B5  CD 10                 1	                int 10h 
+     551 01B7  5A                    1	                pop    dx 
+     552 01B8  59                    1	                pop    cx 
+     553 01B9  5B                    1	                pop    bx 
+     554 01BA  58                    1	                pop    ax 
+     555				                            COLOUR_CHAR
+					 0, 01001110b, 51d 
+     556 01BB  50                    1	                push    ax 
+     557 01BC  53                    1	                push    bx 
+     558 01BD  51                    1	                push    cx 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-14
+
+
+     559 01BE  52                    1	                push    dx 
+     560 01BF  33 DB                 1	                xor     bx,bx 
+     561 01C1  B9 0033               1	                mov cx, 51d 
+     562 01C4  B0 00                 1	                mov al, 0 
+     563 01C6  B3 4E                 1	                mov bl, 01001110b 
+     564 01C8  B4 09                 1	                mov ah, 09h 
+     565 01CA  CD 10                 1	                int 10h 
+     566 01CC  5A                    1	                pop    dx 
+     567 01CD  59                    1	                pop    cx 
+     568 01CE  5B                    1	                pop    bx 
+     569 01CF  58                    1	                pop    ax 
+     570				 
+     571 01D0				                            itemSelecti
+					onLoop: 
+     572 01D0  E8 028C R		                                    cal
+					l        PRINT_ALL_ITEMS 
+     573				 
+     574 01D3  8A 16 0041 R		                                    mov
+					         dl, [itemSelectionChoice] 
+     575				 
+     576 01D7  B4 07			                                    mov
+					         ah, 07h 
+     577 01D9  CD 21			                                    int
+					         21h 
+     578				 
+     579 01DB  3C 77			                                    cmp
+					         al, "w" 
+     580 01DD  74 0C			                                    je 
+					         itemSelectionUp 
+     581				                                     
+     582 01DF  3C 73			                                    cmp
+					         al, "s" 
+     583 01E1  74 59			                                    je 
+					         itemSelectionDown 
+     584				 
+     585 01E3  3C 0D			                                    cmp
+					         al, 13d 
+     586 01E5  74 52			                                    je 
+					         itemSelectionConfirm_CP 
+     587 01E7  EB E7			                                    jmp
+					         itemSelectionLoop 
+     588				 
+     589 01E9				                                    ite
+					mSelectionLoop_CP: 
+     590 01E9  EB E5			                                       
+					         jmp         itemSelectionLoop 
+     591				 
+     592 01EB				                                    ite
+					mSelectionUp: 
+     593 01EB  80 3E 0041 R 01		                                       
+					         cmp         [itemSelectionChoi
+					ce],  1 
+     594 01F0  76 DE			                                       
+					         jbe         itemSelectionLoop 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-15
+
+
+     595				 
+     596				                                       
+					         COLOUR_CHAR 0, 00001111b, 51d 
+     597 01F2  50                    1	                push    ax 
+     598 01F3  53                    1	                push    bx 
+     599 01F4  51                    1	                push    cx 
+     600 01F5  52                    1	                push    dx 
+     601 01F6  33 DB                 1	                xor     bx,bx 
+     602 01F8  B9 0033               1	                mov cx, 51d 
+     603 01FB  B0 00                 1	                mov al, 0 
+     604 01FD  B3 0F                 1	                mov bl, 00001111b 
+     605 01FF  B4 09                 1	                mov ah, 09h 
+     606 0201  CD 10                 1	                int 10h 
+     607 0203  5A                    1	                pop    dx 
+     608 0204  59                    1	                pop    cx 
+     609 0205  5B                    1	                pop    bx 
+     610 0206  58                    1	                pop    ax 
+     611				 
+     612 0207  FE CA			                                       
+					         dec         dl 
+     613 0209  88 16 0041 R		                                       
+					         mov         [itemSelectionChoi
+					ce],  dl 
+     614				 
+     615 020D  80 EB 02			                                       
+					         sub         bl  ,2 
+     616				                                       
+					         CURSOR      bl  ,3 
+     617 0210  50                    1	                push    ax 
+     618 0211  53                    1	                push    bx 
+     619 0212  51                    1	                push    cx 
+     620 0213  52                    1	                push    dx 
+     621 0214  8A F3                 1	                mov dh, bl        ;row 
+     622 0216  B2 03                 1	                mov dl, 3       ;column
+					 
+     623 0218  B7 00                 1	                mov bh, 0         ; 
+     624 021A  B4 02                 1	                mov ah, 02h       ; 
+     625 021C  CD 10                 1	                int 10h 
+     626 021E  5A                    1	                pop    dx 
+     627 021F  59                    1	                pop    cx 
+     628 0220  5B                    1	                pop    bx 
+     629 0221  58                    1	                pop    ax 
+     630				 
+     631				                                       
+					         COLOUR_CHAR 0, selColour, 51d 
+     632 0222  50                    1	                push    ax 
+     633 0223  53                    1	                push    bx 
+     634 0224  51                    1	                push    cx 
+     635 0225  52                    1	                push    dx 
+     636 0226  33 DB                 1	                xor     bx,bx 
+     637 0228  B9 0033               1	                mov cx, 51d 
+     638 022B  B0 00                 1	                mov al, 0 
+     639 022D  B3 4E                 1	                mov bl, selColour 
+     640 022F  B4 09                 1	                mov ah, 09h 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-16
+
+
+     641 0231  CD 10                 1	                int 10h 
+     642 0233  5A                    1	                pop    dx 
+     643 0234  59                    1	                pop    cx 
+     644 0235  5B                    1	                pop    bx 
+     645 0236  58                    1	                pop    ax 
+     646 0237  EB 97			                                       
+					         jmp         itemSelectionLoop 
+     647				 
+     648 0239				                                    ite
+					mSelectionConfirm_CP: 
+     649 0239  EB 50 90			                                       
+					         jmp         itemSelectionConfi
+					rm 
+     650				 
+     651 023C				                                    ite
+					mSelectionDown:    
+     652 023C  80 3E 0041 R 09		                                       
+					         cmp         [itemSelectionChoi
+					ce],  9 
+     653 0241  73 A6			                                       
+					         jae         itemSelectionLoop_
+					CP 
+     654				 
+     655				                                       
+					         COLOUR_CHAR 0, 00001111b, 51d 
+     656 0243  50                    1	                push    ax 
+     657 0244  53                    1	                push    bx 
+     658 0245  51                    1	                push    cx 
+     659 0246  52                    1	                push    dx 
+     660 0247  33 DB                 1	                xor     bx,bx 
+     661 0249  B9 0033               1	                mov cx, 51d 
+     662 024C  B0 00                 1	                mov al, 0 
+     663 024E  B3 0F                 1	                mov bl, 00001111b 
+     664 0250  B4 09                 1	                mov ah, 09h 
+     665 0252  CD 10                 1	                int 10h 
+     666 0254  5A                    1	                pop    dx 
+     667 0255  59                    1	                pop    cx 
+     668 0256  5B                    1	                pop    bx 
+     669 0257  58                    1	                pop    ax 
+     670				 
+     671 0258  FE C2			                                       
+					         inc         dl 
+     672 025A  88 16 0041 R		                                       
+					         mov         [itemSelectionChoi
+					ce],  dl 
+     673				 
+     674 025E  80 C3 02			                                       
+					         add         bl  ,2 
+     675				                                       
+					         CURSOR      bl  ,3 
+     676 0261  50                    1	                push    ax 
+     677 0262  53                    1	                push    bx 
+     678 0263  51                    1	                push    cx 
+     679 0264  52                    1	                push    dx 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-17
+
+
+     680 0265  8A F3                 1	                mov dh, bl        ;row 
+     681 0267  B2 03                 1	                mov dl, 3       ;column
+					 
+     682 0269  B7 00                 1	                mov bh, 0         ; 
+     683 026B  B4 02                 1	                mov ah, 02h       ; 
+     684 026D  CD 10                 1	                int 10h 
+     685 026F  5A                    1	                pop    dx 
+     686 0270  59                    1	                pop    cx 
+     687 0271  5B                    1	                pop    bx 
+     688 0272  58                    1	                pop    ax 
+     689				 
+     690				                                       
+					         COLOUR_CHAR 0, selColour, 51d 
+     691 0273  50                    1	                push    ax 
+     692 0274  53                    1	                push    bx 
+     693 0275  51                    1	                push    cx 
+     694 0276  52                    1	                push    dx 
+     695 0277  33 DB                 1	                xor     bx,bx 
+     696 0279  B9 0033               1	                mov cx, 51d 
+     697 027C  B0 00                 1	                mov al, 0 
+     698 027E  B3 4E                 1	                mov bl, selColour 
+     699 0280  B4 09                 1	                mov ah, 09h 
+     700 0282  CD 10                 1	                int 10h 
+     701 0284  5A                    1	                pop    dx 
+     702 0285  59                    1	                pop    cx 
+     703 0286  5B                    1	                pop    bx 
+     704 0287  58                    1	                pop    ax 
+     705 0288  E9 01E9 R		                                       
+					         jmp         itemSelectionLoop_
+					CP 
+     706				 
+     707 028B				                            itemSelecti
+					onConfirm: 
+     708				 
+     709 028B  C3			                            ret 
+     710 028C				ITEM_SELECTION  ENDP 
+     711				 
+     712 028C				PRINT_ALL_ITEMS PROC 
+     713 028C  50			                            push       
+					 ax 
+     714 028D  53			                            push       
+					 bx 
+     715 028E  51			                            push       
+					 cx 
+     716 028F  52			                            push       
+					 dx 
+     717				 
+     718				                            ;;GET CURRE
+					NT CURSOR POS 
+     719 0290  B4 03			                            mov        
+					 ah, 03h 
+     720 0292  B3 00			                            mov        
+					 bl, 00h 
+     721 0294  CD 10			                            int        
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-18
+
+
+					 10h                 ;cursor pos will b
+					e stored in dh dl 
+     722 0296  52			                            push       
+					 dx 
+     723				 
+     724 0297  33 C9			                            xor        
+					 cx  ,cx 
+     725 0299  8A 0E 0042 R		                            mov        
+					 cl  ,[numberOfItems] 
+     726 029D  B3 02			                            mov        
+					 bl  ,2 
+     727 029F  8D 36 0043 R		                            lea        
+					 si  ,items 
+     728 02A3				                            print_item_
+					loop: 
+     729 02A3  80 C3 02			                                       
+					 add         bl  ,2 
+     730				                                       
+					 CURSOR      bl  ,3 
+     731 02A6  50                    1	                push    ax 
+     732 02A7  53                    1	                push    bx 
+     733 02A8  51                    1	                push    cx 
+     734 02A9  52                    1	                push    dx 
+     735 02AA  8A F3                 1	                mov dh, bl        ;row 
+     736 02AC  B2 03                 1	                mov dl, 3       ;column
+					 
+     737 02AE  B7 00                 1	                mov bh, 0         ; 
+     738 02B0  B4 02                 1	                mov ah, 02h       ; 
+     739 02B2  CD 10                 1	                int 10h 
+     740 02B4  5A                    1	                pop    dx 
+     741 02B5  59                    1	                pop    cx 
+     742 02B6  5B                    1	                pop    bx 
+     743 02B7  58                    1	                pop    ax 
+     744				 
+     745 02B8  E8 02F4 R		                                       
+					 call        PRINT_ITEM 
+     746 02BB  83 C6 1E			                                       
+					 add         si  ,itemSize 
+     747				 
+     748 02BE  E2 E3			                                       
+					 loop        print_item_loop 
+     749				 
+     750 02C0  80 C3 02			                            add        
+					 bl  ,2 
+     751				                            CURSOR     
+					 bl  ,3 
+     752 02C3  50                    1	                push    ax 
+     753 02C4  53                    1	                push    bx 
+     754 02C5  51                    1	                push    cx 
+     755 02C6  52                    1	                push    dx 
+     756 02C7  8A F3                 1	                mov dh, bl        ;row 
+     757 02C9  B2 03                 1	                mov dl, 3       ;column
+					 
+     758 02CB  B7 00                 1	                mov bh, 0         ; 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-19
+
+
+     759 02CD  B4 02                 1	                mov ah, 02h       ; 
+     760 02CF  CD 10                 1	                int 10h 
+     761 02D1  5A                    1	                pop    dx 
+     762 02D2  59                    1	                pop    cx 
+     763 02D3  5B                    1	                pop    bx 
+     764 02D4  58                    1	                pop    ax 
+     765 02D5  8D 16 0889 R		                            lea        
+					 dx  ,itemExitString 
+     766 02D9  E8 0424 R		                            call       
+					 PRINT_STR 
+     767				 
+     768 02DC  5A			                            pop        
+					 dx 
+     769				                            CURSOR     
+					 dh,dl       ;set cursor back to origin
+					al position 
+     770 02DD  50                    1	                push    ax 
+     771 02DE  53                    1	                push    bx 
+     772 02DF  51                    1	                push    cx 
+     773 02E0  52                    1	                push    dx 
+     774 02E1  8A F6                 1	                mov dh, dh        ;row 
+     775 02E3  8A D2                 1	                mov dl, dl       ;colum
+					n 
+     776 02E5  B7 00                 1	                mov bh, 0         ; 
+     777 02E7  B4 02                 1	                mov ah, 02h       ; 
+     778 02E9  CD 10                 1	                int 10h 
+     779 02EB  5A                    1	                pop    dx 
+     780 02EC  59                    1	                pop    cx 
+     781 02ED  5B                    1	                pop    bx 
+     782 02EE  58                    1	                pop    ax 
+     783				 
+     784 02EF  5A			                            pop        
+					 dx 
+     785 02F0  59			                            pop        
+					 cx 
+     786 02F1  5B			                            pop        
+					 bx 
+     787 02F2  58			                            pop        
+					 ax 
+     788 02F3  C3			                            ret 
+     789 02F4				PRINT_ALL_ITEMS ENDP 
+     790				 
+     791 02F4				PRINT_ITEM      PROC                   
+					                                     ;p
+					rint to row value in bl 
+     792 02F4  50			                            push    ax 
+     793 02F5  53			                            push    bx 
+     794 02F6  51			                            push    cx 
+     795 02F7  52			                            push    dx 
+     796 02F8  56			                            push    si 
+     797				 
+     798 02F9  33 C0			                            xor        
+					 ax, ax 
+     799 02FB  8A 04			                            mov        
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-20
+
+
+					 al, [si] 
+     800 02FD  E8 034E R		                            call       
+					 PRINT_NUM 
+     801				 
+     802				                            CURSOR     
+					 bl, 15 
+     803 0300  50                    1	                push    ax 
+     804 0301  53                    1	                push    bx 
+     805 0302  51                    1	                push    cx 
+     806 0303  52                    1	                push    dx 
+     807 0304  8A F3                 1	                mov dh, bl        ;row 
+     808 0306  B2 0F                 1	                mov dl, 15       ;colum
+					n 
+     809 0308  B7 00                 1	                mov bh, 0         ; 
+     810 030A  B4 02                 1	                mov ah, 02h       ; 
+     811 030C  CD 10                 1	                int 10h 
+     812 030E  5A                    1	                pop    dx 
+     813 030F  59                    1	                pop    cx 
+     814 0310  5B                    1	                pop    bx 
+     815 0311  58                    1	                pop    ax 
+     816 0312  8D 54 01			                            lea        
+					 dx, [si + itemName] 
+     817 0315  E8 0424 R		                            call       
+					 PRINT_STR 
+     818				 
+     819				                            CURSOR     
+					 bl, 39 
+     820 0318  50                    1	                push    ax 
+     821 0319  53                    1	                push    bx 
+     822 031A  51                    1	                push    cx 
+     823 031B  52                    1	                push    dx 
+     824 031C  8A F3                 1	                mov dh, bl        ;row 
+     825 031E  B2 27                 1	                mov dl, 39       ;colum
+					n 
+     826 0320  B7 00                 1	                mov bh, 0         ; 
+     827 0322  B4 02                 1	                mov ah, 02h       ; 
+     828 0324  CD 10                 1	                int 10h 
+     829 0326  5A                    1	                pop    dx 
+     830 0327  59                    1	                pop    cx 
+     831 0328  5B                    1	                pop    bx 
+     832 0329  58                    1	                pop    ax 
+     833 032A  8D 54 15			                            lea        
+					 dx, [si + itemPrice] 
+     834 032D  E8 0424 R		                            call       
+					 PRINT_STR 
+     835				 
+     836				                            CURSOR     
+					 bl, 52 
+     837 0330  50                    1	                push    ax 
+     838 0331  53                    1	                push    bx 
+     839 0332  51                    1	                push    cx 
+     840 0333  52                    1	                push    dx 
+     841 0334  8A F3                 1	                mov dh, bl        ;row 
+     842 0336  B2 34                 1	                mov dl, 52       ;colum
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-21
+
+
+					n 
+     843 0338  B7 00                 1	                mov bh, 0         ; 
+     844 033A  B4 02                 1	                mov ah, 02h       ; 
+     845 033C  CD 10                 1	                int 10h 
+     846 033E  5A                    1	                pop    dx 
+     847 033F  59                    1	                pop    cx 
+     848 0340  5B                    1	                pop    bx 
+     849 0341  58                    1	                pop    ax 
+     850 0342  8A 44 1D			                            mov        
+					 al, [si + itemQty] 
+     851 0345  E8 034E R		                            call       
+					 print_Num 
+     852				 
+     853				                             
+     854				 
+     855 0348  5E			                            pop     si 
+     856 0349  5A			                            pop     dx 
+     857 034A  59			                            pop     cx 
+     858 034B  5B			                            pop     bx 
+     859 034C  58			                            pop     ax 
+     860 034D  C3			                            ret 
+     861 034E				PRINT_ITEM      ENDP 
+     862				 
+     863 034E				PRINT_NUM       PROC                   
+					     ;print ax 
+     864 034E  50			                            push    ax 
+     865 034F  53			                            push    bx 
+     866 0350  51			                            push    cx 
+     867 0351  52			                            push    dx 
+     868				 
+     869 0352  BB 000A			                            mov     bx,
+					0Ah      ;initalise divisor 
+     870 0355  B9 0000			                            mov     cx,
+					0h 
+     871				                             
+     872 0358				                            divLoop:   
+					  
+     873 0358  33 D2			                                       
+					 xor     dx,dx       ;clear remainder 
+     874 035A  F7 F3			                                       
+					 div     bx 
+     875 035C  52			                                       
+					 push    dx          ;save remainder 
+     876 035D  41			                                       
+					 inc     cx          ;count looped numb
+					er 
+     877 035E  85 C0			                                       
+					 test    ax,ax       ;if ax != 0, conti
+					nue 
+     878 0360  75 F6			                                       
+					 jnz     divLoop 
+     879				 
+     880 0362  B4 02			                            mov     ah,
+					02h 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-22
+
+
+     881				 
+     882 0364				                            printLoop: 
+					  
+     883 0364  5A			                                       
+					 pop     dx          ;get remainder 
+     884 0365  80 C2 30			                                       
+					 add     dl,"0" 
+     885 0368  CD 21			                                       
+					 int     21h         ;print 
+     886 036A  E2 F8			                                       
+					 loop    printLoop   ;loop until cx is 
+					zero (the number of times divLoop) 
+     887				 
+     888 036C  5A			                            pop    dx 
+     889 036D  59			                            pop    cx 
+     890 036E  5B			                            pop    bx 
+     891 036F  58			                            pop    ax 
+     892				 
+     893 0370  C3			                            ret 
+     894 0371				PRINT_NUM       ENDP 
+     895				 
+     896 0371				BCD_INPUT       PROC                   
+					 ;output to al 
+     897 0371  56			                push        si 
+     898				 
+     899 0372  8D 36 003E R		                lea         si, bcdInpu
+					tBuffer 
+     900				 
+     901 0376  B9 0003			                mov         cx, 3d     
+					 ;max number of times to loop 
+     902 0379  33 D2			                xor         dx, dx     
+					 ;dl as temp value counter 
+     903				 
+     904				                ;;get bcd input 
+     905 037B				                BCD_INPUT_LOOP: 
+     906 037B  B4 01			                            mov        
+					 ah, 1h 
+     907 037D  CD 21			                            int        
+					 21h 
+     908				 
+     909 037F  3C 0D			                            cmp        
+					 al, 13d 
+     910 0381  74 07			                            je         
+					 BCD_INPUT_LOOP_END 
+     911				                             
+     912 0383  2C 30			                            sub        
+					 al, 48d 
+     913 0385  88 04			                            mov        
+					 [si],al 
+     914				 
+     915 0387  46			                            inc        
+					 si 
+     916 0388  E2 F1			                            loop       
+					 BCD_INPUT_LOOP   
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-23
+
+
+     917 038A				                BCD_INPUT_LOOP_END: 
+     918				 
+     919 038A  B8 0001			                mov         ax, 1      
+					             ;ax tracks 位数 of numbe
+					r, eg first number * 1, second number *
+					 10, third numb
+     920 038D  8D 36 0040 R		                lea         si, bcdInpu
+					tBuffer+2 
+     921 0391  B9 0003			                mov         cx, 3d     
+					             ;number of times to loop 
+     922 0394				                BCD_INPUT_CAL: 
+     923 0394  33 DB			                            xor        
+					 bx, bx 
+     924				 
+     925 0396  8A 1C			                            mov        
+					 bl, [si] 
+     926 0398  80 FB 24			                            cmp        
+					 bl, "$"     ;if is not digit 
+     927 039B  74 0F			                            je         
+					 BCD_INPUT_CAL_NOT_DIGIT 
+     928				 
+     929 039D  50			                            push       
+					 ax               
+     930				 
+     931 039E  52			                            push       
+					 dx                  ;mul will effect d
+					x 
+     932 039F  F7 E3			                            mul        
+					 bx 
+     933 03A1  5A			                            pop        
+					 dx 
+     934				 
+     935 03A2  03 D0			                            add        
+					 dx, ax 
+     936 03A4  58			                            pop        
+					 ax 
+     937				 
+     938 03A5  52			                            push       
+					 dx                  ;mul will effect d
+					x 
+     939 03A6  BB 000A			                            mov        
+					 bx, 10d 
+     940 03A9  F7 E3			                            mul        
+					 bx 
+     941 03AB  5A			                            pop        
+					 dx 
+     942				 
+     943 03AC				                            BCD_INPUT_C
+					AL_NOT_DIGIT: 
+     944 03AC  4E			                            dec        
+					 si 
+     945 03AD  E2 E5			                            loop       
+					 BCD_INPUT_CAL 
+     946				 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-24
+
+
+     947 03AF  B9 0003			                mov         cx, 3d 
+     948 03B2  8D 36 003E R		                lea         si, bcdInpu
+					tBuffer 
+     949 03B6				                BCD_INPUT_CLEAR_STR: 
+     950 03B6  C6 06 003E R 24		                            mov        
+					 [bcdInputBuffer],   "$"  
+     951 03BB  E2 F9			                            loop       
+					 BCD_INPUT_CLEAR_STR 
+     952 03BD  8B C2			                mov         ax, dx 
+     953 03BF  5E			                pop         si 
+     954 03C0  C3			                ret 
+     955 03C1				BCD_INPUT       ENDP 
+     956				 
+     957				;;DO NOT PUT NEW FUNCTIONS BELLOW THIS 
+					COMMENT 
+     958				 
+     959 03C1				DISPLAY_BOX     PROC 
+     960 03C1  50			                            push       
+					 ax 
+     961 03C2  53			                            push       
+					 bx 
+     962 03C3  51			                            push       
+					 cx 
+     963 03C4  52			                            push       
+					 dx 
+     964				 
+     965				                            ;;GET CURRE
+					NT CURSOR POS 
+     966 03C5  B4 03			                            mov        
+					 ah, 03h 
+     967 03C7  B3 00			                            mov        
+					 bl, 00h 
+     968 03C9  CD 10			                            int        
+					 10h                 ;cursor pos will b
+					e stored in dh dl 
+     969 03CB  52			                            push       
+					 dx 
+     970				 
+     971 03CC  8A 64 02			                            mov     ah,
+					 [si + 2] 
+     972 03CF  8A 44 04			                            mov     al,
+					 [si + 4] 
+     973 03D2  2A C4			                            sub     al,
+					 ah           ;calculate number of colu
+					mns to print 
+     974 03D4  32 E4			                            xor     ah,
+					 ah 
+     975				 
+     976 03D6  8A 6C 01			                            mov     ch,
+					 [si + 1] 
+     977 03D9  8A 4C 03			                            mov     cl,
+					 [si + 3] 
+     978 03DC  2A CD			                            sub     cl,
+					 ch 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-25
+
+
+     979 03DE  32 ED			                            xor     ch,
+					 ch 
+     980				 
+     981 03E0  8A 5C 01			                            mov     bl,
+					 [si + 1] 
+     982				 
+     983 03E3				                            DISPLAY_BOX
+					_LOOP: 
+     984				                                    CUR
+					SOR  bl,[si+2] 
+     985 03E3  50                    1	                push    ax 
+     986 03E4  53                    1	                push    bx 
+     987 03E5  51                    1	                push    cx 
+     988 03E6  52                    1	                push    dx 
+     989 03E7  8A F3                 1	                mov dh, bl        ;row 
+     990 03E9  8A 54 02              1	                mov dl, [si+2]       ;c
+					olumn 
+     991 03EC  B7 00                 1	                mov bh, 0         ; 
+     992 03EE  B4 02                 1	                mov ah, 02h       ; 
+     993 03F0  CD 10                 1	                int 10h 
+     994 03F2  5A                    1	                pop    dx 
+     995 03F3  59                    1	                pop    cx 
+     996 03F4  5B                    1	                pop    bx 
+     997 03F5  58                    1	                pop    ax 
+     998				 
+     999 03F6  50			                                    pus
+					h    ax 
+    1000 03F7  53			                                    pus
+					h    bx 
+    1001 03F8  51			                                    pus
+					h    cx 
+    1002 03F9  52			                                    pus
+					h    dx 
+    1003 03FA  8B C8			                                    mov
+					     cx, ax          ;number of chars t
+					o print 
+    1004 03FC  B0 20			                                    mov
+					     al, " "         ;char to print 
+    1005 03FE  8A 1C			                                    mov
+					     bl, [si]        ;colour 
+    1006 0400  B4 09			                                    mov
+					     ah, 09h         ;ah 09 int 10h 
+    1007 0402  CD 10			                                    int
+					     10h 
+    1008 0404  5A			                                    pop
+					     dx 
+    1009 0405  59			                                    pop
+					     cx 
+    1010 0406  5B			                                    pop
+					     bx 
+    1011 0407  58			                                    pop
+					     ax 
+    1012				                                     
+    1013 0408  FE C3			                                    inc
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-26
+
+
+					     bl 
+    1014 040A  E2 D7			                                    loo
+					p    DISPLAY_BOX_LOOP 
+    1015				 
+    1016 040C  5A			                            pop        
+					 dx 
+    1017				                            CURSOR     
+					 dh,dl       ;set cursor back to origin
+					al position 
+    1018 040D  50                    1	                push    ax 
+    1019 040E  53                    1	                push    bx 
+    1020 040F  51                    1	                push    cx 
+    1021 0410  52                    1	                push    dx 
+    1022 0411  8A F6                 1	                mov dh, dh        ;row 
+    1023 0413  8A D2                 1	                mov dl, dl       ;colum
+					n 
+    1024 0415  B7 00                 1	                mov bh, 0         ; 
+    1025 0417  B4 02                 1	                mov ah, 02h       ; 
+    1026 0419  CD 10                 1	                int 10h 
+    1027 041B  5A                    1	                pop    dx 
+    1028 041C  59                    1	                pop    cx 
+    1029 041D  5B                    1	                pop    bx 
+    1030 041E  58                    1	                pop    ax 
+    1031				 
+    1032 041F  5A			                            pop     dx 
+    1033 0420  59			                            pop     cx 
+    1034 0421  5B			                            pop     bx 
+    1035 0422  58			                            pop     ax 
+    1036				 
+    1037 0423  C3			                            ret 
+    1038 0424				DISPLAY_BOX     ENDP 
+    1039				 
+    1040 0424				PRINT_STR       PROC 
+    1041 0424  50			                            push       
+					 ax 
+    1042 0425  B4 09			                            mov        
+					 ah,09d 
+    1043 0427  CD 21			                            int        
+					 21h 
+    1044 0429  58			                            pop        
+					 ax 
+    1045 042A  C3			                            ret 
+    1046 042B				PRINT_STR       ENDP 
+    1047				 
+    1048 042B				CLS             PROC 
+    1049 042B  50			                            push    ax 
+    1050 042C  53			                            push    bx 
+    1051 042D  51			                            push    cx 
+    1052 042E  52			                            push    dx 
+    1053				 
+    1054 042F  B4 06			                            mov ah, 06h
+					       ; 
+    1055 0431  B0 00			                            mov al, 00h
+					       ; 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-27
+
+
+    1056 0433  B7 0F			                            mov bh, 0Fh
+					       ; 
+    1057 0435  B9 0000			                            mov cx, 0  
+					       ; Clear Screen 
+    1058 0438  B6 64			                            mov dh, 100
+					       ; 
+    1059 043A  B2 50			                            mov dl, 80 
+					       ; 
+    1060 043C  CD 10			                            int 10h    
+					       ; 
+    1061				 
+    1062 043E  BA 0000			                            mov dx, 0  
+					       ; 
+    1063 0441  B7 00			                            mov bh, 0  
+					       ; Set cursor to (0,0) 
+    1064 0443  B4 02			                            mov ah, 02h
+					       ;  
+    1065 0445  CD 10			                            int 10h  
+    1066				 
+    1067 0447  5A			                            pop     dx 
+    1068 0448  59			                            pop     cx 
+    1069 0449  5B			                            pop     bx 
+    1070 044A  58			                            pop     ax 
+    1071				 
+    1072 044B  C3			                            ret 
+    1073 044C				CLS             ENDP 
+    1074				 
+    1075 044C				INPUT_STR       PROC                   
+					                     ;read input and mo
+					ve to address in di 
+    1076 044C  50			                            push       
+					 ax 
+    1077 044D  52			                            push       
+					 dx 
+    1078 044E  57			                            push       
+					 di 
+    1079 044F  33 C0			                            xor        
+					 ax,ax 
+    1080 0451  33 C9			                            xor        
+					 cx,cx 
+    1081				 
+    1082 0453  BA 0000 R		                            mov        
+					 dx, offset buffer               ;input
+					 string 
+    1083 0456  B4 0A			                            mov        
+					 ah,0Ah 
+    1084 0458  CD 21			                            int        
+					 21h 
+    1085				 
+    1086 045A  33 C9			                            xor        
+					 cx,cx 
+    1087 045C  8A 0E 0001 R		                            mov        
+					 cl,[buffer+1]                   ;move 
+					length of input to cl 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-28
+
+
+    1088				 
+    1089 0460  B4 24			                            mov        
+					 ah, "$" 
+    1090 0462  8D 3E 0002 R		                            lea        
+					 di, buffer+2                     ;offs
+					et to start of string value 
+    1091 0466  03 F9			                            add        
+					 di, cx                           ;move
+					 to after last character 
+    1092 0468  88 25			                            mov        
+					 [di],ah                         ;move 
+					$ character to last place 
+    1093				 
+    1094 046A  5F			                            pop        
+					 di 
+    1095 046B  57			                            push       
+					 di 
+    1096				 
+    1097 046C  8D 36 0002 R		                            lea        
+					 si,buffer+2 
+    1098 0470  32 ED			                            xor        
+					 ch,ch 
+    1099 0472  FE C1			                            inc        
+					 cl 
+    1100 0474				                            input_str_c
+					py: 
+    1101 0474  8A 24			                                       
+					 mov         ah,[si] 
+    1102 0476  88 25			                                       
+					 mov         [di],ah 
+    1103				 
+    1104 0478  46			                                       
+					 inc         si 
+    1105 0479  47			                                       
+					 inc         di 
+    1106 047A  E2 F8			                                       
+					 loop        input_str_cpy 
+    1107				 
+    1108 047C  5F			                            pop        
+					 di 
+    1109 047D  5A			                            pop        
+					 dx 
+    1110 047E  58			                            pop        
+					 ax 
+    1111 047F  C3			                            ret 
+    1112 0480				INPUT_STR       ENDP 
+    1113				 
+    1114 0480				PRINT_CHAR      PROC                   
+					                     ;print cjaracter o
+					f value in dl 
+    1115 0480  50			                            push    ax 
+    1116 0481  B4 02			                            mov     ah,
+					02h 
+    1117 0483  CD 21			                            int     21h
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-29
+
+
+					 
+    1118 0485  58			                            pop     ax 
+    1119 0486  C3			                            ret 
+    1120 0487				PRINT_CHAR      ENDP 
+    1121				 
+    1122 0487				NEWLINE         PROC 
+    1123 0487  52			                            push    dx 
+    1124 0488  B2 0A			                            mov     dl,
+					0Ah 
+    1125 048A  E8 0480 R		                            call PRINT_
+					CHAR 
+    1126 048D  5A			                            pop     dx 
+    1127 048E  C3			                            ret 
+    1128 048F				NEWLINE         ENDP 
+    1129				 
+    1130 048F				ANYPAUSE        PROC 
+    1131 048F  50			                            push       
+					 ax 
+    1132 0490  52			                            push       
+					 dx 
+    1133				 
+    1134 0491  8D 16 0023 R		                            lea        
+					 dx, anyKeyToCont 
+    1135 0495  E8 0424 R		                            call       
+					 PRINT_STR 
+    1136 0498  B4 01			                            mov        
+					 ah, 01h 
+    1137 049A  CD 21			                            int        
+					 21h 
+    1138				 
+    1139 049C  5A			                            pop        
+					 dx 
+    1140 049D  58			                            pop        
+					 ax 
+    1141 049E  C3			                            ret 
+    1142 049F				ANYPAUSE        ENDP 
+    1143				 
+    1144 049F				STRCMP          PROC                   
+					                     ;compares string i
+					n si and di, if equal will return 0 in 
+					ax 
+    1145 049F  56			                            push       
+					 si 
+    1146 04A0  57			                            push       
+					 di 
+    1147				 
+    1148 04A1  33 C0			                            xor        
+					 ax,ax 
+    1149 04A3				                            STRCMP_LOOP
+					_START: 
+    1150 04A3  8A 04			                                       
+					 mov         al,[si] 
+    1151 04A5  8A 25			                                       
+					 mov         ah,[di] 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Page     1-30
+
+
+    1152				                                       
+					  
+    1153 04A7  46			                                       
+					 inc         si 
+    1154 04A8  47			                                       
+					 inc         di 
+    1155				 
+    1156 04A9  3C 24			                                       
+					 cmp         al,"$" 
+    1157 04AB  74 04			                                       
+					 je          STRCMP_LOOP_END 
+    1158				 
+    1159 04AD  3A C4			                                       
+					 cmp         al,ah 
+    1160 04AF  74 F2			                                       
+					 je          STRCMP_LOOP_START 
+    1161				 
+    1162 04B1				                            STRCMP_LOOP
+					_END: 
+    1163 04B1  2A C4			                            sub        
+					 al,ah               ;return sub of bot
+					h strings 
+    1164 04B3  32 E4			                            xor        
+					 ah,ah 
+    1165				 
+    1166 04B5  5F			                            pop        
+					 di 
+    1167 04B6  5E			                            pop        
+					 si 
+    1168 04B7  C3			                            ret 
+    1169 04B8				STRCMP          ENDP 
+    1170				 
+    1171 04B8				CHANGE_COLOUR   PROC 
+    1172 04B8  50			                            push       
+					 ax 
+    1173				 
+    1174 04B9  33 C0			                            xor        
+					 ax  ,ax 
+    1175 04BB  B4 09			                            mov        
+					 ah  ,09h 
+    1176 04BD  CD 10			                            int        
+					 10h 
+    1177				 
+    1178 04BF  58			                            pop        
+					 ax 
+    1179 04C0  C3			                            ret 
+    1180 04C1				CHANGE_COLOUR   ENDP 
+    1181				 
+    1182 04C1				END MAIN 
+
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Symbols-1
+
+
+Macros:
+
+		N a m e			Lines
+
+BG_16_COLOUR . . . . . . . . . .  	  15
+BG_8_COLOUR  . . . . . . . . . .  	  15
+COLOUR_CHAR  . . . . . . . . . .  	  14
+CURSOR . . . . . . . . . . . . .  	  14
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	08FC	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	04C1	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+ANYKEYTOCONT . . . . . . . . . .  	L BYTE	0023	_DATA
+ANYPAUSE . . . . . . . . . . . .  	N PROC	048F	_TEXT	Length = 0010
+
+BCDINPUTBUFFER . . . . . . . . .  	L BYTE	003E	_DATA
+BCD_INPUT  . . . . . . . . . . .  	N PROC	0371	_TEXT	Length = 0050
+BCD_INPUT_CAL  . . . . . . . . .  	L NEAR	0394	_TEXT
+BCD_INPUT_CAL_NOT_DIGIT  . . . .  	L NEAR	03AC	_TEXT
+BCD_INPUT_CLEAR_STR  . . . . . .  	L NEAR	03B6	_TEXT
+BCD_INPUT_LOOP . . . . . . . . .  	L NEAR	037B	_TEXT
+BCD_INPUT_LOOP_END . . . . . . .  	L NEAR	038A	_TEXT
+BUFFER . . . . . . . . . . . . .  	L BYTE	0000	_DATA
+
+CHANGE_COLOUR  . . . . . . . . .  	N PROC	04B8	_TEXT	Length = 0009
+CLS  . . . . . . . . . . . . . .  	N PROC	042B	_TEXT	Length = 0021
+
+DISPLAY_BOX  . . . . . . . . . .  	N PROC	03C1	_TEXT	Length = 0063
+DISPLAY_BOX_LOOP . . . . . . . .  	L NEAR	03E3	_TEXT
+DISPLAY_QTY_BOX  . . . . . . . .  	N PROC	013E	_TEXT	Length = 0069
+DIVLOOP  . . . . . . . . . . . .  	L NEAR	0358	_TEXT
+
+INPUT_STR  . . . . . . . . . . .  	N PROC	044C	_TEXT	Length = 0034
+INPUT_STR_CPY  . . . . . . . . .  	L NEAR	0474	_TEXT
+ITEMEXITSTRING . . . . . . . . .  	L BYTE	0889	_DATA
+ITEMHEADER . . . . . . . . . . .  	L BYTE	0815	_DATA
+ITEMID . . . . . . . . . . . . .  	NUMBER	0000	
+ITEMNAME . . . . . . . . . . . .  	NUMBER	0001	
+ITEMPRICE  . . . . . . . . . . .  	NUMBER	0015	
+ITEMQTY  . . . . . . . . . . . .  	NUMBER	001D	
+ITEMS  . . . . . . . . . . . . .  	L BYTE	0043	_DATA
+ITEMSALERECORD . . . . . . . . .  	L BYTE	0881	_DATA	Length = 0008
+ITEMSELBORDER  . . . . . . . . .  	L BYTE	084A	_DATA
+ITEMSELECTIONCHOICE  . . . . . .  	L BYTE	0041	_DATA
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Symbols-2
+
+
+ITEMSELECTIONCONFIRM . . . . . .  	L NEAR	028B	_TEXT
+ITEMSELECTIONCONFIRM_CP  . . . .  	L NEAR	0239	_TEXT
+ITEMSELECTIONDOWN  . . . . . . .  	L NEAR	023C	_TEXT
+ITEMSELECTIONLOOP  . . . . . . .  	L NEAR	01D0	_TEXT
+ITEMSELECTIONLOOP_CP . . . . . .  	L NEAR	01E9	_TEXT
+ITEMSELECTIONUP  . . . . . . . .  	L NEAR	01EB	_TEXT
+ITEMSELHEADER  . . . . . . . . .  	L BYTE	0134	_DATA
+ITEMSIZE . . . . . . . . . . . .  	NUMBER	001E	
+ITEM_SELECTION . . . . . . . . .  	N PROC	01A7	_TEXT	Length = 00E5
+ITEM_SELECTION_EXIT  . . . . . .  	L NEAR	00DC	_TEXT
+
+L1 . . . . . . . . . . . . . . .  	L NEAR	00F8	_TEXT
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 011B
+MOVE_CURSOR_QTY  . . . . . . . .  	N PROC	011B	_TEXT	Length = 0023
+
+NEWLINE  . . . . . . . . . . . .  	N PROC	0487	_TEXT	Length = 0008
+NUMBEROFITEMS  . . . . . . . . .  	L BYTE	0042	_DATA
+
+PRINTLOOP  . . . . . . . . . . .  	L NEAR	0364	_TEXT
+PRINT_ALL_ITEMS  . . . . . . . .  	N PROC	028C	_TEXT	Length = 0068
+PRINT_CHAR . . . . . . . . . . .  	N PROC	0480	_TEXT	Length = 0007
+PRINT_ITEM . . . . . . . . . . .  	N PROC	02F4	_TEXT	Length = 005A
+PRINT_ITEM_LOOP  . . . . . . . .  	L NEAR	02A3	_TEXT
+PRINT_NUM  . . . . . . . . . . .  	N PROC	034E	_TEXT	Length = 0023
+PRINT_STR  . . . . . . . . . . .  	N PROC	0424	_TEXT	Length = 0007
+
+QTYBORDER1 . . . . . . . . . . .  	L BYTE	08A6	_DATA
+QTYBORDER2 . . . . . . . . . . .  	L BYTE	08BD	_DATA
+QTYBORDER3 . . . . . . . . . . .  	L BYTE	08D4	_DATA
+QTYDISPLAYBOX  . . . . . . . . .  	L BYTE	08A1	_DATA
+QTYERROR . . . . . . . . . . . .  	L BYTE	08F0	_DATA
+QTYPROMPT  . . . . . . . . . . .  	L BYTE	08EA	_DATA
+QTY_CHECK  . . . . . . . . . . .  	L NEAR	00A8	_TEXT
+QTY_CHECK_END  . . . . . . . . .  	L NEAR	00C3	_TEXT
+QTY_CHECK_ERROR  . . . . . . . .  	L NEAR	00BA	_TEXT
+
+SALES_START  . . . . . . . . . .  	L NEAR	000D	_TEXT
+SALES_START_BREAK  . . . . . . .  	L NEAR	0063	_TEXT
+SALES_START_CP . . . . . . . . .  	L NEAR	0061	_TEXT
+SELCOLOUR  . . . . . . . . . . .  	NUMBER	004E	
+STRCMP . . . . . . . . . . . . .  	N PROC	049F	_TEXT	Length = 0019
+STRCMP_LOOP_END  . . . . . . . .  	L NEAR	04B1	_TEXT
+STRCMP_LOOP_START  . . . . . . .  	L NEAR	04A3	_TEXT
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  sales		
+
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 22:25:53
+                                                             Symbols-3
+
+
+
+    726 Source  Lines
+   1104 Total   Lines
+     84 Symbols
+
+  50366 + 417026 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

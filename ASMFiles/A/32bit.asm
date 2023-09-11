@@ -16,46 +16,69 @@ xor         ax, ax
 
 
 lea         si, long1
-
-add         si, 2
-
-xor         ax, ax
 mov         bx, 10d
-mov         cx, 2d      ;j = n - 1
-xor         dx, dx      ;r = 0
-lea         di, result + 2
-long_print_loop:
-            mov         ax, dx
-            mul         bx
-            mov         dx, ax
 
-            xor         ax,ax
+xor         cx, cx
+PRINT_LONG_LOOP:
+            call        DIV_LONG
+            ; inc         cx
 
-            mov         ax, [si]
-            add         ax, dx          ;remainder * base + u[j]
-            xor         dx, dx
-            div         bx              ;DONT TOUCH DX
+            ; add         dx, 48d
+            ; call        PRINT_CHAR
 
-            ; ;;print dx
-            ; push        ax
-            ; mov         ax,dx
-            ; call        print_num
-            ; pop         ax
-            ; call        newline
-            
-            mov         [di],ax
+            ; mov         ax, [si+2]
+            ; test        ax, ax
+            ; jnz         PRINT_LONG_LOOP
 
-            sub         si, 2
-            sub         di, 2
-            loop        long_print_loop
+            ; mov         ax, [si]
+            ; test        ax, ax
+            ; jnz         PRINT_LONG_LOOP
 
-mov         ax,[result+2]
-call        print_num
+xor         ax,ax
+call        NEWLINE
+mov         al, [long1+3]
+call        PRINT_NUM
 
 
 mov         ah, 4ch
 int         21h
 MAIN        ENDP
+
+DIV_LONG        PROC                                    ;si 的doubleword / bx， remainder 在 dx
+                            push    si
+                            push    ax
+                            push    bx
+                            push    cx
+
+                            mov     bx, 10d
+                            mov     cx, 4d
+                            xor     dx, dx
+
+                            DIV_LONG_LOOP:
+                                    push    bx
+                                    mov     bx, 100h
+                                    mov     ax, dx          
+                                    mul     bx              ;remainder (dx) * 100h
+                                    add     ax, [si]        ;+ divWord[i]
+                                    pop     bx
+
+                                    xor     dx, dx
+                                    div     bx
+
+                                    mov     [si],al
+                                    inc     si
+
+                                    call    NEWLINE
+                                    call    PRINT_NUM
+
+                                    loop    DIV_LONG_LOOP
+
+                            pop     cx
+                            pop     bx
+                            pop     ax
+                            pop     si
+                            ret
+DIV_LONG        ENDP
 
 PRINT_NUM       PROC                        ;print ax
                             push    ax

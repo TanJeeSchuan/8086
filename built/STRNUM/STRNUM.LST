@@ -1,1042 +1,1252 @@
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-1
 
 
-       1				.MODEL COMPACT 
-       2 0064				.STACK 100 
-       3 0000				.DATA 
-       4				 
-       5 0000  34 30 32 35 37 35 37	strNum1             DB  "40257576" 
-       6       36			
-       7 0008  24			                    DB  "$" 
-       8				 
-       9 0009  32 32 38 33 32 35 32	strNum2             DB  "22832525" 
-      10       35			
-      11 0011  24			                    DB  "$" 
-      12				 
-      13 0012  ??			maxStrLen           DB  ? 
-      14				 
-      15 0013  0032[			normal1             DB  50  DUP("$") 
-      16	   24			
-      17			 ]	
-      18				
-      19				 
-      20 0045  0032[			normal2             DB  50  DUP("$") 
-      21	   24			
-      22			 ]	
-      23				
-      24				 
-      25 0077  0032[			result              DB  50  DUP("$") 
-      26	   24			
-      27			 ]	
-      28				
-      29				 
-      30 0000				.CODE 
-      31 0000				MAIN            PROC 
-      32				 
-      33 0000  B8 ---- R		mov ax,@data 
-      34 0003  8E D8			mov ds,ax 
-      35 0005  B8 4C00			mov ax,4c00h 
-      36				 
-      37				; start 
-      38				 
-      39 0008  8D 16 0000 R		lea         dx,strNum1 
-      40 000C  E8 01CC R		call        PRINT_STR 
-      41 000F  E8 0201 R		call        NEWLINE 
-      42				 
-      43 0012  8D 16 0009 R		lea         dx,strNum2 
-      44 0016  E8 01CC R		call        PRINT_STR 
-      45 0019  E8 0201 R		call        NEWLINE 
-      46 001C  E8 0201 R		call        NEWLINE 
-      47				 
-      48				 
-      49				 
-      50 001F  8D 36 0000 R		lea         si,strNum1 
-      51 0023  8D 3E 0009 R		lea         di,strNum2 
-      52 0027  E8 00CD R		call        MUL_STRNUM 
-      53				 
-      54 002A  8D 16 0077 R		lea         dx,result 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+       1				.model medium 
+       2 0100				.stack 100h 
+       3				 
+       4				clears macro 
+       5				 
+       6				    MOV AH, 00H     ; Set video mode 
+       7				    MOV AL, 03H     ; Set text 80x25 fo
+					r comp,rgb,enh 
+       8				    INT 10H 
+       9				     
+      10				 
+      11					mov ax,0600h 
+      12					mov bh,07h 
+      13					mov cx,0000h 
+      14					mov dx,154fh 
+      15					int 10h 
+      16				endm 
+      17				 
+      18				setcur macro 
+      19					mov ah,02h 
+      20					mov dx,0c19h 
+      21					int 10h 
+      22				endm 
+      23				 
+      24 0000				.data 
+      25 0000  ??				temp 			db ? 
+      26 0001  73 64 66 73 64 66 24		arrowup			db "sdf
+					sdf$" 
+      27 0008  3C 2D 20 20 20 20 20		arrow 			db 60,4
+					5,"            ",186,'$' 
+      28       20 20 20 20 20 20 20	
+      29       BA 24			
+      30 0018  0D 0A				continue 		db 13,1
+					0,17 dup(" "),"Press any button to cont
+					inue..$" 
+      31       0011[			
+      32	   20			
+      33			 ]	
+      34       50 72 65 73 73 20 61	
+      35       6E 79 20 62 75 74 74	
+      36       6F 6E 20 74 6F 20 63	
+      37       6F 6E 74 69 6E 75 65	
+      38       2E 2E 24			
+      39 004A  0D 0A 24				newline   		db 13,1
+					0,"$" 
+      40					 
+      41 004D  0D 0A 0D 0A 0D 0A 0D		sixline			db 13,1
+					0,13,10,13,10,13,10,13,10,13,10,"$" 
+      42       0A 0D 0A 0D 0A 24	
+      43 005A  0D 0A				invalidinput 	db 13,10,17 dup
+					(" "),44 dup('*') 
+      44       0011[			
+      45	   20			
+      46			 ]	
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-2
 
 
-      55 002E  E8 01CC R		call        PRINT_STR 
-      56				 
-      57				;end 
-      58				 
-      59 0031  B4 4C			mov ah,4ch 
-      60 0033  CD 21			int 21h 
-      61				 
-      62 0035				MAIN            ENDP 
-      63				 
-      64 0035				ADD_STRNUM      PROC                   
-					                         ;output result
-					 to result 
-      65 0035  33 C0			                        xor         ax,
-					ax 
-      66				 
-      67				                        ; ;remove decim
-					als from si, di strings 
-      68				                        ; push        d
-					i                      ;normalise si st
-					ring 
-      69				                        ; lea         d
-					i,normal1 
-      70				                        ; call        N
-					ORMALISE_STR 
-      71				                        ; mov         s
-					i,di 
-      72				                        ; pop         d
-					i 
-      73				 
-      74				                        ; push        s
-					i                      ;normalise di st
-					ring 
-      75				                        ; mov         s
-					i,di 
-      76				                        ; lea         d
-					i,normal2 
-      77				                        ; call        N
-					ORMALISE_STR 
-      78				                        ; pop         s
-					i 
-      79				 
-      80				                        ;get the length
-					 of the longer string 
-      81 0037  E8 019B R		                        call        STR
-					LEN                  ;length of si 
-      82 003A  50			                        push        ax 
-					                   
-      83				 
-      84 003B  56			                        push        si 
-					          
-      85 003C  8B F7			                        mov         si,
-					di 
-      86 003E  E8 019B R		                        call        STR
-					LEN                  ;length of di 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+      47       002C[			
+      48	   2A			
+      49			 ]	
+      50				
+      51 0099  0D 0A							
+						db 13,10,17 dup(" "),"*        
+					      Invalid Input!              *" 
+      52       0011[			
+      53	   20			
+      54			 ]	
+      55       2A 20 20 20 20 20 20	
+      56       20 20 20 20 20 20 20	
+      57       20 49 6E 76 61 6C 69	
+      58       64 20 49 6E 70 75 74	
+      59       21 20 20 20 20 20 20	
+      60       20 20 20 20 20 20 20	
+      61       20 2A			
+      62 00D8  0D 0A							
+						db 13,10,17 dup(" "),44 dup('*'
+					),"$" 
+      63       0011[			
+      64	   20			
+      65			 ]	
+      66       002C[			
+      67	   2A			
+      68			 ]	
+      69       24			
+      70				;--------------------------------------
+					--------main menu----------------------
+					---------------------------------- 
+      71					 
+      72 0118  0D 0A				mainMenu 		DB 13,1
+					0,17 dup(" ")," USE ARROW KEY TO MOVE$
+						" 
+      73       0011[			
+      74	   20			
+      75			 ]	
+      76       20 55 53 45 20 41 52	
+      77       52 4F 57 20 4B 45 59	
+      78       20 54 4F 20 4D 4F 56	
+      79       45 24 09			
+      80 0143  0D 0A							
+						db 13,10,17 dup(" "),201,42 dup
+					(205),187 
+      81       0011[			
+      82	   20			
+      83			 ]	
+      84       C9			
+      85       002A[			
+      86	   CD			
+      87			 ]	
+      88       BB			
+      89 0182  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-3
 
 
-      87 0041  5E			                        pop         si 
-      88				 
-      89 0042  5B			                        pop         bx 
-      90 0043  E8 01F7 R		                        call        LAR
-					GER_NUM              ;larger number in 
-					ax,bx will be in ax 
-      91 0046  8B C8			                        mov         cx,
-					ax                   ;longest length of
-					 si and di will be in CX 
-      92				 
-      93				                        ;offset si,di 
-      94 0048  03 F1			                        add         si,
-					cx                   ;move to last char
-					acter 
-      95 004A  4E			                        dec         si 
-      96 004B  03 F9			                        add         di,
-					cx 
-      97 004D  4F			                        dec         di 
-      98				                         
-      99 004E  33 DB			                        xor         bx,
-					bx                   ;prepare bx for us
-					e as carry register 
-     100 0050				                        add_loop: 
-     101 0050  8A 04			                                    mov
-					         al,[si]     ;get int value of 
-					strin             ; *POINTER      lea o
-					ffset &inte 
-     102 0052  2C 30			                                    sub
-					         al,48d 
-     103				                                       
-					  
-     104 0054  8A 25			                                    mov
-					         ah,[di]     ;get int value of 
-					string 
-     105 0056  80 EC 30			                                    sub
-					         ah,48d 
-     106				 
-     107 0059  02 C3			                                    add
-					         al,bl       ;add carry 
-     108 005B  02 C4			                                    add
-					         al,ah 
-     109				 
-     110 005D  32 DB			                                    xor
-					         bl,bl       ;reset carry flag 
-     111				 
-     112 005F  3C 09			                                    cmp
-					         al,9d       ;if al larger than
-					 9, overflow, carry register bl set 
-     113 0061  77 03			                                    ja 
-					         add_overflow 
-     114 0063  EB 05 90			                                    jmp
-					         add_no_overflow 
-     115				 
-     116 0066				                                    add
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+					                                     ",
+					186 
+      90       0011[			
+      91	   20			
+      92			 ]	
+      93       BA 20 20 20 20 20 20	
+      94       20 20 20 20 20 20 20	
+      95       20 20 20 20 20 20 20	
+      96       20 20 20 20 20 20 20	
+      97       20 20 20 20 20 20 20	
+      98       20 20 20 20 20 20 20	
+      99       20 BA			
+     100 01C1  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+					            Main Menu                ",
+					186 
+     101       0011[			
+     102	   20			
+     103			 ]	
+     104       BA 20 20 20 20 20 20	
+     105       20 20 20 20 20 20 20	
+     106       20 20 20 20 4D 61 69	
+     107       6E 20 4D 65 6E 75 20	
+     108       20 20 20 20 20 20 20	
+     109       20 20 20 20 20 20 20	
+     110       20 BA			
+     111 0200  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+					                                     ",
+					186 
+     112       0011[			
+     113	   20			
+     114			 ]	
+     115       BA 20 20 20 20 20 20	
+     116       20 20 20 20 20 20 20	
+     117       20 20 20 20 20 20 20	
+     118       20 20 20 20 20 20 20	
+     119       20 20 20 20 20 20 20	
+     120       20 20 20 20 20 20 20	
+     121       20 BA			
+     122 023F  0D 0A							
+						db 13,10,17 dup(" "),204,42 dup
+					(205),185 
+     123       0011[			
+     124	   20			
+     125			 ]	
+     126       CC			
+     127       002A[			
+     128	   CD			
+     129			 ]	
+     130       B9			
+     131 027E  0D 0A							
+						db 13,10,17 dup(" "),186,"  1  
+					",177,"  Product Menu         $	      "
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-4
 
 
-					_overflow: 
-     117 0066  2C 0A			                                       
-					         sub         al,10d 
-     118 0068  B3 01			                                       
-					         mov         bl,1d       ;set c
-					arry register 
-     119				                                     
-     120 006A				                                    add
-					_no_overflow: 
-     121 006A  B4 00			                                    mov
-					         ah,0 
-     122 006C  04 30			                                    add
-					         al, 48d 
-     123				 
-     124 006E  88 04			                                    mov
-					         [si],al 
-     125				 
-     126 0070  4E			                                    dec
-					         si 
-     127 0071  4F			                                    dec
-					         di 
-     128				 
-     129 0072  57			                                    pus
-					h        di          ;load into result 
-     130				 
-     131 0073  8D 3E 0077 R		                                    lea
-					         di,result   ;di is address of 
-					result 
-     132 0077  03 F9			                                    add
-					         di,cx       ;offset to cx + 1 
-     133 0079  4F			                                    dec
-					         di 
-     134 007A  88 05			                                    mov
-					         [di],al     ;insert in di 
-     135				 
-     136 007C  5F			                                    pop
-					         di 
-     137				 
-     138 007D  E2 D1			                                    loo
-					p        add_loop 
-     139 007F  C3			                        ret 
-     140 0080				ADD_STRNUM      ENDP 
-     141				 
-     142 0080				SUB_STRNUM      PROC                   
-					                         ;output result
-					 to result 
-     143				                        ;get the length
-					 of the longer string 
-     144 0080  E8 019B R		                        call        STR
-					LEN                  ;length of si 
-     145 0083  50			                        push        ax 
-					                   
-     146				 
-     147 0084  56			                        push        si 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+					 
+     132       0011[			
+     133	   20			
+     134			 ]	
+     135       BA 20 20 31 20 20 B1	
+     136       20 20 50 72 6F 64 75	
+     137       63 74 20 4D 65 6E 75	
+     138       20 20 20 20 20 20 20	
+     139       20 20 24 09 20 20 20	
+     140       20 20 20			
+     141 02B7  BA							
+						DB 186 
+     142 02B8  0D 0A							
+						db 13,10,17 dup(" "),186,"  2  
+					",177,"  Order Module        $         
+					    ",186 
+     143       0011[			
+     144	   20			
+     145			 ]	
+     146       BA 20 20 32 20 20 B1	
+     147       20 20 4F 72 64 65 72	
+     148       20 4D 6F 64 75 6C 65	
+     149       20 20 20 20 20 20 20	
+     150       20 24 20 20 20 20 20	
+     151       20 20 20 20 20 20 20	
+     152       20 BA			
+     153 02F7  0D 0A							
+						db 13,10,17 dup(" "),186,"  3  
+					",177,"  Summary Report      $         
+					      ",186 
+     154       0011[			
+     155	   20			
+     156			 ]	
+     157       BA 20 20 33 20 20 B1	
+     158       20 20 53 75 6D 6D 61	
+     159       72 79 20 52 65 70 6F	
+     160       72 74 20 20 20 20 20	
+     161       20 24 20 20 20 20 20	
+     162       20 20 20 20 20 20 20	
+     163       20 20 20 BA		
+     164 0338  0D 0A							
+						db 13,10,17 dup(" "),186,"  4  
+					",177,"  Exit                $         
+					     ",186 
+     165       0011[			
+     166	   20			
+     167			 ]	
+     168       BA 20 20 34 20 20 B1	
+     169       20 20 45 78 69 74 20	
+     170       20 20 20 20 20 20 20	
+     171       20 20 20 20 20 20 20	
+     172       20 24 20 20 20 20 20	
+     173       20 20 20 20 20 20 20	
+     174       20 20 BA			
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-5
 
 
-					          
-     148 0085  8B F7			                        mov         si,
-					di 
-     149 0087  E8 019B R		                        call        STR
-					LEN                  ;length of di 
-     150 008A  5E			                        pop         si 
-     151				 
-     152 008B  5B			                        pop         bx 
-     153 008C  E8 01F7 R		                        call        LAR
-					GER_NUM              ;larger number in 
-					ax,bx will be in ax 
-     154 008F  8B C8			                        mov         cx,
-					ax                   ;longest length of
-					 si and di will be in CX 
-     155				 
-     156				                        ;offset si,di 
-     157 0091  03 F1			                        add         si,
-					cx                   ;move to last char
-					acter 
-     158 0093  4E			                        dec         si 
-     159 0094  03 F9			                        add         di,
-					cx 
-     160 0096  4F			                        dec         di 
-     161				 
-     162 0097  33 DB			                        xor         bx,
-					bx 
-     163				 
-     164 0099				                        sub_loop: 
-     165 0099  8A 04			                                    mov
-					         al,[si] 
-     166 009B  2C 30			                                    sub
-					         al,48d 
-     167				 
-     168 009D  8A 25			                                    mov
-					         ah,[di] 
-     169 009F  80 EC 30			                                    sub
-					         ah,48d 
-     170				 
-     171 00A2  2A C3			                                    sub
-					         al,bl 
-     172 00A4  32 DB			                                    xor
-					         bl,bl 
-     173 00A6  2A C4			                                    sub
-					         al,ah 
-     174 00A8  78 03			                                    js 
-					         sub_underflow   ;if underflow 
-     175 00AA  EB 0B 90			                                    jmp
-					         sub_no_underflow 
-     176				 
-     177 00AD				                                    sub
-					_underflow: 
-     178 00AD  F6 D8			                                       
-					         neg         al 
-     179 00AF  B4 0A			                                       
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+     175 0378  0D 0A							
+						db 13,10,17 dup(" "),200,42 dup
+					(205),188,'$','$' 
+     176       0011[			
+     177	   20			
+     178			 ]	
+     179       C8			
+     180       002A[			
+     181	   CD			
+     182			 ]	
+     183       BC 24 24			
+     184								
+						 
+     185								
+						 
+     186 03B9  0D 0A				mainMenuf 		db 13,1
+					0,17 dup(" "),201,42 dup(205),187 
+     187       0011[			
+     188	   20			
+     189			 ]	
+     190       C9			
+     191       002A[			
+     192	   CD			
+     193			 ]	
+     194       BB			
+     195 03F8  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+					                                     ",
+					186 
+     196       0011[			
+     197	   20			
+     198			 ]	
+     199       BA 20 20 20 20 20 20	
+     200       20 20 20 20 20 20 20	
+     201       20 20 20 20 20 20 20	
+     202       20 20 20 20 20 20 20	
+     203       20 20 20 20 20 20 20	
+     204       20 20 20 20 20 20 20	
+     205       20 BA			
+     206 0437  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+					            Main Menu                ",
+					186 
+     207       0011[			
+     208	   20			
+     209			 ]	
+     210       BA 20 20 20 20 20 20	
+     211       20 20 20 20 20 20 20	
+     212       20 20 20 20 4D 61 69	
+     213       6E 20 4D 65 6E 75 20	
+     214       20 20 20 20 20 20 20	
+     215       20 20 20 20 20 20 20	
+     216       20 BA			
+     217 0476  0D 0A							
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-6
 
 
-					         mov         ah,10d 
-     180 00B1  2A E0			                                       
-					         sub         ah,al 
-     181 00B3  8A C4			                                       
-					         mov         al,ah 
-     182 00B5  B3 01			                                       
-					         mov         bl,1          
-     183 00B7				                        sub_no_underflo
-					w: 
-     184 00B7  B4 00			                                    mov
-					         ah,0 
-     185 00B9  04 30			                                    add
-					         al, 48d 
-     186				 
-     187 00BB  88 04			                                    mov
-					         [si],al 
-     188				 
-     189 00BD  4E			                                    dec
-					         si 
-     190 00BE  4F			                                    dec
-					         di 
-     191				 
-     192 00BF  57			                                    pus
-					h        di          ;load into result 
-     193				 
-     194 00C0  8D 3E 0077 R		                                    lea
-					         di,result   ;di is address of 
-					result 
-     195 00C4  03 F9			                                    add
-					         di,cx       ;offset to cx + 1 
-     196 00C6  4F			                                    dec
-					         di 
-     197 00C7  88 05			                                    mov
-					         [di],al     ;insert in di 
-     198				 
-     199 00C9  5F			                                    pop
-					         di 
-     200				 
-     201 00CA  E2 CD			                                    loo
-					p        sub_loop  
-     202 00CC  C3			                        ret 
-     203 00CD				SUB_STRNUM      ENDP 
-     204				 
-     205 00CD				MUL_STRNUM      PROC 
-     206				                        ;get the length
-					 of the longer string 
-     207 00CD  E8 019B R		                        call        STR
-					LEN                  ;length of si 
-     208 00D0  50			                        push        ax 
-					                   
-     209				 
-     210 00D1  56			                        push        si 
-					          
-     211 00D2  8B F7			                        mov         si,
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+						db 13,10,17 dup(" "),186,"     
+					                                     ",
+					186 
+     218       0011[			
+     219	   20			
+     220			 ]	
+     221       BA 20 20 20 20 20 20	
+     222       20 20 20 20 20 20 20	
+     223       20 20 20 20 20 20 20	
+     224       20 20 20 20 20 20 20	
+     225       20 20 20 20 20 20 20	
+     226       20 20 20 20 20 20 20	
+     227       20 BA			
+     228 04B5  0D 0A							
+						db 13,10,17 dup(" "),204,42 dup
+					(205),185 
+     229       0011[			
+     230	   20			
+     231			 ]	
+     232       CC			
+     233       002A[			
+     234	   CD			
+     235			 ]	
+     236       B9			
+     237 04F4  0D 0A							
+						db 13,10,17 dup(" "),186,"  1  
+					",177,"  Product Menu                  
+					    ",186 
+     238       0011[			
+     239	   20			
+     240			 ]	
+     241       BA 20 20 31 20 20 B1	
+     242       20 20 50 72 6F 64 75	
+     243       63 74 20 4D 65 6E 75	
+     244       20 20 20 20 20 20 20	
+     245       20 20 20 20 20 20 20	
+     246       20 20 20 20 20 20 20	
+     247       20 BA			
+     248 0533  0D 0A							
+						db 13,10,17 dup(" "),186,"  2  
+					",177,"  Order Module                  
+					    ",186 
+     249       0011[			
+     250	   20			
+     251			 ]	
+     252       BA 20 20 32 20 20 B1	
+     253       20 20 4F 72 64 65 72	
+     254       20 4D 6F 64 75 6C 65	
+     255       20 20 20 20 20 20 20	
+     256       20 20 20 20 20 20 20	
+     257       20 20 20 20 20 20 20	
+     258       20 BA			
+     259 0572  0D 0A							
+						db 13,10,17 dup(" "),186,"  3  
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-7
 
 
-					di 
-     212 00D4  E8 019B R		                        call        STR
-					LEN                  ;length of di 
-     213 00D7  5E			                        pop         si 
-     214				 
-     215 00D8  5B			                        pop         bx 
-     216 00D9  E8 01F7 R		                        call        LAR
-					GER_NUM              ;larger number in 
-					ax,bx will be in ax 
-     217 00DC  8B C8			                        mov         cx,
-					ax                   ;longest length of
-					 si and di will be in CX 
-     218				 
-     219				                        ; ;offset si,di
-					 
-     220				                        ; add         s
-					i,cx                   ;move to last ch
-					aracter 
-     221 00DE  4E			                        dec         si 
-     222				                        ; add         d
-					i,cx 
-     223 00DF  4F			                        dec         di 
-     224				 
-     225 00E0  8B D9			                        mov         bx,
-					cx                   ;cx as i, bx as j,
-					 both begins at end of number 
-     226 00E2  88 0E 0012 R		                        mov         [ma
-					xStrLen],cl 
-     227 00E6  33 C0			                        xor         ax,
-					ax 
-     228 00E8				                        mul_loop_j:    
-					                     ;multiply numbers 
-					for j = n; j > 0; j--;; i = n; i > 0; i
-					-- 
-     229				                                       
-					                     ;anchor al 
-     230 00E8  57			                                    pus
-					h        di 
-     231 00E9  03 FB			                                    add
-					         di,bx       ;di[bx] 
-     232 00EB  8A 05			                                    mov
-					         al,[di]     ;load number from 
-					second number to al 
-     233 00ED  2C 30			                                    sub
-					         al,48d 
-     234 00EF  5F			                                    pop
-					         di 
-     235				 
-     236 00F0  51			                                    pus
-					h        cx 
-     237				 
-     238 00F1  33 D2			                                    xor
-					         dx,dx 
-     239 00F3				                                    mul
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+					",177,"  Summary Report                
+					    ",186 
+     260       0011[			
+     261	   20			
+     262			 ]	
+     263       BA 20 20 33 20 20 B1	
+     264       20 20 53 75 6D 6D 61	
+     265       72 79 20 52 65 70 6F	
+     266       72 74 20 20 20 20 20	
+     267       20 20 20 20 20 20 20	
+     268       20 20 20 20 20 20 20	
+     269       20 BA			
+     270 05B1  0D 0A							
+						db 13,10,17 dup(" "),186,"  4  
+					",177,"  Exit                          
+					    ",186 
+     271       0011[			
+     272	   20			
+     273			 ]	
+     274       BA 20 20 34 20 20 B1	
+     275       20 20 45 78 69 74 20	
+     276       20 20 20 20 20 20 20	
+     277       20 20 20 20 20 20 20	
+     278       20 20 20 20 20 20 20	
+     279       20 20 20 20 20 20 20	
+     280       20 BA			
+     281 05F0  0D 0A							
+						db 13,10,17 dup(" "),200,42 dup
+					(205),188,'$'			
+						 
+     282       0011[			
+     283	   20			
+     284			 ]	
+     285       C8			
+     286       002A[			
+     287	   CD			
+     288			 ]	
+     289       BC 24			
+     290					 
+     291 0630  ??				mmchoice   		db ? 
+     292				 
+     293					 
+     294				;--------------------------------------
+					------product menu---------------------
+					---------------------------------- 
+     295 0631  0D 0A				productMenu		db 13,1
+					0,17 dup(" "),201,42 dup(205),187 
+     296       0011[			
+     297	   20			
+     298			 ]	
+     299       C9			
+     300       002A[			
+     301	   CD			
+     302			 ]	
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-8
 
 
-					_loop_i: 
-     240 00F3  56			                                       
-					         push        si 
-     241 00F4  03 F1			                                       
-					         add         si,cx             
-					  ;si[cx] 
-     242 00F6  8A 24			                                       
-					         mov         ah,[si]           
-					  ;load first number from si to ah 
-     243 00F8  80 EC 30			                                       
-					         sub         ah,48d 
-     244 00FB  5E			                                       
-					         pop         si 
-     245				 
-     246 00FC  50			                                       
-					         push        ax 
-     247 00FD  F6 E4			                                       
-					         mul         ah                
-					  ;al x ah result will be in ax 
-     248 00FF  03 C2			                                       
-					         add         ax,dx             
-					  ;add carry to multiplication result 
-     249 0101  33 D2			                                       
-					         xor         dx,dx 
-     250				 
-     251				                                       
-					         ; push        ax 
-     252				                                       
-					         ; mov         ah,0 
-     253				                                       
-					         ; call        PRINT_NUM 
-     254				                                       
-					         ; call        NEWLINE 
-     255				                                       
-					         ; pop         ax 
-     256				 
-     257 0103  3D 0009			                                       
-					         cmp         ax,9d             
-					  ;if ax is more than 9, overflow 
-     258 0106  77 03			                                       
-					         ja          mul_overflow      
-					   
-     259 0108  EB 0C 90			                                       
-					         jmp         mul_no_overflow 
-     260				 
-     261 010B				                                       
-					         mul_overflow: 
-     262 010B  53			                                       
-					                     push        bx 
-     263 010C  BB 000A			                                       
-					                     mov         bx,10d
-					  ;divide ax by 10 
-     264				 
-     265 010F  F7 F3			                                       
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+     303       BB			
+     304 0670  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+					                                     ",
+					186 
+     305       0011[			
+     306	   20			
+     307			 ]	
+     308       BA 20 20 20 20 20 20	
+     309       20 20 20 20 20 20 20	
+     310       20 20 20 20 20 20 20	
+     311       20 20 20 20 20 20 20	
+     312       20 20 20 20 20 20 20	
+     313       20 20 20 20 20 20 20	
+     314       20 BA			
+     315 06AF  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+					          Product Menu               ",
+					186 
+     316       0011[			
+     317	   20			
+     318			 ]	
+     319       BA 20 20 20 20 20 20	
+     320       20 20 20 20 20 20 20	
+     321       20 20 50 72 6F 64 75	
+     322       63 74 20 4D 65 6E 75	
+     323       20 20 20 20 20 20 20	
+     324       20 20 20 20 20 20 20	
+     325       20 BA			
+     326 06EE  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+					                                     ",
+					186 
+     327       0011[			
+     328	   20			
+     329			 ]	
+     330       BA 20 20 20 20 20 20	
+     331       20 20 20 20 20 20 20	
+     332       20 20 20 20 20 20 20	
+     333       20 20 20 20 20 20 20	
+     334       20 20 20 20 20 20 20	
+     335       20 20 20 20 20 20 20	
+     336       20 BA			
+     337 072D  0D 0A							
+						db 13,10,17 dup(" "),204,42 dup
+					(205),185 
+     338       0011[			
+     339	   20			
+     340			 ]	
+     341       CC			
+     342       002A[			
+     343	   CD			
+     344			 ]	
+     345       B9			
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-9
 
 
-					                     div         bx    
-					  ;quotient ax will be the carry, remai
-					nder will be th
-     266				 
-     267 0111  5B			                                       
-					                     pop         bx 
-     268 0112  52			                                       
-					                     push        dx    
-					  ;exchange value of ax,dx 
-     269 0113  8B D0			                                       
-					                     mov         dx,ax 
-					   
-     270 0115  58			                                       
-					                     pop         ax    
-					  ;resulting value will be in lower reg
-					ister 
-     271				 
-     272 0116				                                       
-					         mul_no_overflow: 
-     273				                                       
-					         ;store output in result 
-     274 0116  57			                                       
-					         push        di 
-     275 0117  8D 3E 0077 R		                                       
-					         lea         di,result 
-     276				 
-     277 011B  51			                                       
-					         push        cx                
-					  ;set offset max-i + max-j to result a
-					ddress 
-     278 011C  53			                                       
-					         push        bx 
-     279 011D  33 DB			                                       
-					         xor         bx,bx 
-     280 011F  8A 1E 0012 R		                                       
-					         mov         bl,[maxStrLen] 
-     281 0123  2A D9			                                       
-					         sub         bl,cl 
-     282 0125  03 FB			                                       
-					         add         di,bx 
-     283 0127  5B			                                       
-					         pop         bx 
-     284 0128  59			                                       
-					         pop         cx 
-     285				 
-     286 0129  51			                                       
-					         push        cx                
-					   
-     287 012A  53			                                       
-					         push        bx 
-     288 012B  33 C9			                                       
-					         xor         cx,cx 
-     289 012D  8A 0E 0012 R		                                       
-					         mov         cl,[maxStrLen]    
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+     346 076C  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+					",177,"                       ",177,"  
+					          ",186 
+     347       0011[			
+     348	   20			
+     349			 ]	
+     350       BA 20 20 20 20 20 B1	
+     351       20 20 20 20 20 20 20	
+     352       20 20 20 20 20 20 20	
+     353       20 20 20 20 20 20 20	
+     354       20 20 B1 20 20 20 20	
+     355       20 20 20 20 20 20 20	
+     356       20 BA			
+     357 07AB  0D 0A							
+						db 13,10,17 dup(" "),186," NO. 
+					",177,"        Product        ",177," U
+					nit Price ",186 
+     358       0011[			
+     359	   20			
+     360			 ]	
+     361       BA 20 4E 4F 2E 20 B1	
+     362       20 20 20 20 20 20 20	
+     363       20 50 72 6F 64 75 63	
+     364       74 20 20 20 20 20 20	
+     365       20 20 B1 20 55 6E 69	
+     366       74 20 50 72 69 63 65	
+     367       20 BA			
+     368 07EA  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+					",177,"                       ",177,"  
+					          ",186 
+     369       0011[			
+     370	   20			
+     371			 ]	
+     372       BA 20 20 20 20 20 B1	
+     373       20 20 20 20 20 20 20	
+     374       20 20 20 20 20 20 20	
+     375       20 20 20 20 20 20 20	
+     376       20 20 B1 20 20 20 20	
+     377       20 20 20 20 20 20 20	
+     378       20 BA			
+     379 0829  0D 0A							
+						db 13,10,17 dup(" "),204,42 dup
+					(205),185 
+     380       0011[			
+     381	   20			
+     382			 ]	
+     383       CC			
+     384       002A[			
+     385	   CD			
+     386			 ]	
+     387       B9			
+     388								
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-10
 
 
-					   
-     290 0131  2A CB			                                       
-					         sub         cl,bl 
-     291 0133  03 F9			                                       
-					         add         di,cl 
-ASMFiles\A\STRNUM.asm(280): warning A4031: Operand types must match
-     292 0135  5B			                                       
-					         pop         bx 
-     293 0136  59			                                       
-					         pop         cx 
-     294				 
-     295 0137  8A 25			                                       
-					         mov         ah,[di] 
-     296 0139  80 FC 24			                                       
-					         cmp         ah,"$"          ;i
-					f character is $ set it to zero 
-     297 013C  74 03			                                       
-					         je          mul_set_zero 
-     298 013E  EB 03 90			                                       
-					         jmp         mul_no_set_zero 
-     299				 
-     300 0141				                                       
-					         mul_set_zero: 
-     301 0141  B4 30			                                       
-					                     mov         ah  ,"
-					0" 
-     302				 
-     303 0143				                                       
-					         mul_no_set_zero: 
-     304 0143  80 EC 30			                                       
-					         sub         ah,48d 
-     305 0146  02 C4			                                       
-					         add         al,ah           ;a
-					dd to previous value in value of result
-					[i+j] 
-     306				 
-     307 0148  3C 09			                                       
-					         cmp         al,9d             
-					  ;if al is more than 9, overflow 
-     308 014A  77 07			                                       
-					         ja          mul_overflow2 
-     309 014C  EB 2A 90			                                       
-					         jmp         mul_no_overflow2 
-     310				 
-     311				                                       
-					         ;i loop checkpoint 
-     312 014F				                                       
-					         mul_loop_i_checkpoint: 
-     313 014F  EB A2			                                       
-					         jmp         mul_loop_i 
-     314				 
-     315				                                       
-					         ;j loop checkpoint 
-     316 0151				                                       
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+						 
+     389 0868  0D 0A							
+						db 13,10,17 dup(" "),186,"  1  
+					",177," Brown Sugar Milk Tea  ",177,"  
+					 RM5.00   ",186 
+     390       0011[			
+     391	   20			
+     392			 ]	
+     393       BA 20 20 31 20 20 B1	
+     394       20 42 72 6F 77 6E 20	
+     395       53 75 67 61 72 20 4D	
+     396       69 6C 6B 20 54 65 61	
+     397       20 20 B1 20 20 20 52	
+     398       4D 35 2E 30 30 20 20	
+     399       20 BA			
+     400 08A7  0D 0A							
+						db 13,10,17 dup(" "),186,"  2  
+					",177," Mixue Ice Cream       ",177,"  
+					 RM3.00   ",186 
+     401       0011[			
+     402	   20			
+     403			 ]	
+     404       BA 20 20 32 20 20 B1	
+     405       20 4D 69 78 75 65 20	
+     406       49 63 65 20 43 72 65	
+     407       61 6D 20 20 20 20 20	
+     408       20 20 B1 20 20 20 52	
+     409       4D 33 2E 30 30 20 20	
+     410       20 BA			
+     411 08E6  0D 0A							
+						db 13,10,17 dup(" "),186,"  3  
+					",177," Boba Mi-Shake         ",177,"  
+					 RM9.00   ",186 
+     412       0011[			
+     413	   20			
+     414			 ]	
+     415       BA 20 20 33 20 20 B1	
+     416       20 42 6F 62 61 20 4D	
+     417       69 2D 53 68 61 6B 65	
+     418       20 20 20 20 20 20 20	
+     419       20 20 B1 20 20 20 52	
+     420       4D 39 2E 30 30 20 20	
+     421       20 BA			
+     422 0925  0D 0A							
+						db 13,10,17 dup(" "),186,"  4  
+					",177," Ice Cream Jasmine Tea ",177,"  
+					 RM6.00   ",186 
+     423       0011[			
+     424	   20			
+     425			 ]	
+     426       BA 20 20 34 20 20 B1	
+     427       20 49 63 65 20 43 72	
+     428       65 61 6D 20 4A 61 73	
+     429       6D 69 6E 65 20 54 65	
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-11
 
 
-					         mul_loop_j_checkpoint: 
-     317 0151  EB 95			                                       
-					         jmp         mul_loop_j 
-     318				 
-     319 0153				                                       
-					         mul_overflow2: 
-     320 0153  2C 0A			                                       
-					                     sub         al,10d
-					 
-     321				 
-     322 0155  47			                                       
-					                     inc         di 
-     323 0156  50			                                       
-					                     push        ax 
-     324				 
-     325 0157  8A 25			                                       
-					                     mov         ah,[di
-					] 
-     326 0159  80 FC 24			                                       
-					                     cmp         ah,"$"
-					      ;if new digit does not exist yet 
-     327 015C  74 03			                                       
-					                     je          mul_ov
-					erflow2_new 
-     328 015E  EB 0E 90			                                       
-					                     jmp         mul_ov
-					erflow2_no_new 
-     329				 
-     330 0161				                                       
-					                     mul_overflow2_new:
-					 
-     331 0161  B4 31			                                       
-					                                 mov   
-					  ah,"1" 
-     332 0163  88 25			                                       
-					                                 mov   
-					  [di],ah     ;move to next digit, dont
-					 add 
-     333				 
-     334 0165  E8 0210 R		                                       
-					                     call        PRINT_
-					RESULT 
-     335 0168  E8 0201 R		                                       
-					                     call        NEWLIN
-					E 
-     336				 
-     337 016B  EB 09 90			                                       
-					                                 jmp   
-					  mul_overflow2_new_end 
-     338				 
-     339 016E				                                       
-					                     mul_overflow2_no_n
-					ew: 
-     340 016E  80 C4 01			                                       
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+     430       61 20 B1 20 20 20 52	
+     431       4D 36 2E 30 30 20 20	
+     432       20 BA			
+     433 0964  0D 0A							
+						db 13,10,17 dup(" "),200,42 dup
+					(205),188 
+     434       0011[			
+     435	   20			
+     436			 ]	
+     437       C8			
+     438       002A[			
+     439	   CD			
+     440			 ]	
+     441       BC			
+     442 09A3  0D 0A 24							
+						db 13,10,"$" 
+     443					 
+     444				;--------------------------------------
+					------Order Module---------------------
+					----------------------------------
+							 
+     445					;product price per unit 
+     446 09A6  05				PBSMT 			db 5 
+     447 09A7  03				PMIC			db 3 
+     448 09A8  09				PBMS			db 9 
+     449 09A9  06				PICJT			db 6 
+     450					 
+     451					;product quantity	 
+     452 09AA  00				QBSMT			db 0 
+     453 09AB  00				QMIC			db 0 
+     454 09AC  00				QBMS			db 0 
+     455 09AD  00				QICJT			db 0 
+     456					 
+     457					;Ordermenu 
+     458 09AE  0D 0A				OrderMenu		db 13,1
+					0,17 dup(" "),201,42 dup(205),187 
+     459       0011[			
+     460	   20			
+     461			 ]	
+     462       C9			
+     463       002A[			
+     464	   CD			
+     465			 ]	
+     466       BB			
+     467 09ED  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+					                                     ",
+					186 
+     468       0011[			
+     469	   20			
+     470			 ]	
+     471       BA 20 20 20 20 20 20	
+     472       20 20 20 20 20 20 20	
+     473       20 20 20 20 20 20 20	
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-12
 
 
-					                                 add   
-					  ah,1 
-     341 0171  88 25			                                       
-					                                 mov   
-					  [di],ah 
-     342 0173  EB 01 90			                                       
-					                                 jmp   
-					  mul_overflow2_new_end 
-     343				 
-     344 0176				                                       
-					                     mul_overflow2_new_
-					end: 
-     345				 
-     346 0176  4F			                                       
-					                     dec         di 
-     347 0177  58			                                       
-					                     pop         ax 
-     348				 
-     349 0178				                                       
-					         mul_no_overflow2: 
-     350 0178  04 30			                                       
-					         add         al,48d 
-     351 017A  88 05			                                       
-					         mov         [di],al 
-     352				 
-     353 017C  32 E4			                                       
-					         xor         ah,ah 
-     354				 
-     355 017E  83 F9 01			                                       
-					         cmp         cx,1 
-     356 0181  74 03			                                       
-					         je          last_loop 
-     357 0183  EB 0B 90			                                       
-					         jmp         not_last_loop 
-     358				                                       
-					          
-     359 0186				                                       
-					         last_loop: 
-     360 0186  47			                                       
-					                     inc         di 
-     361 0187  80 C2 30			                                       
-					                     add         dl,48d
-					 
-     362 018A  88 15			                                       
-					                     mov         [di],d
-					l         ;move last remainder to large
-					st place  
-     363 018C  80 EA 30			                                       
-					                     sub         dl,48d
-					 
-     364 018F  4F			                                       
-					                     dec         di 
-     365				 
-     366 0190				                                       
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+     474       20 20 20 20 20 20 20	
+     475       20 20 20 20 20 20 20	
+     476       20 20 20 20 20 20 20	
+     477       20 BA			
+     478 0A2C  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+					           Order Menu                ",
+					186 
+     479       0011[			
+     480	   20			
+     481			 ]	
+     482       BA 20 20 20 20 20 20	
+     483       20 20 20 20 20 20 20	
+     484       20 20 20 4F 72 64 65	
+     485       72 20 4D 65 6E 75 20	
+     486       20 20 20 20 20 20 20	
+     487       20 20 20 20 20 20 20	
+     488       20 BA			
+     489 0A6B  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+					                                     ",
+					186 
+     490       0011[			
+     491	   20			
+     492			 ]	
+     493       BA 20 20 20 20 20 20	
+     494       20 20 20 20 20 20 20	
+     495       20 20 20 20 20 20 20	
+     496       20 20 20 20 20 20 20	
+     497       20 20 20 20 20 20 20	
+     498       20 20 20 20 20 20 20	
+     499       20 BA			
+     500 0AAA  0D 0A							
+						db 13,10,17 dup(" "),204,42 dup
+					(205),185 
+     501       0011[			
+     502	   20			
+     503			 ]	
+     504       CC			
+     505       002A[			
+     506	   CD			
+     507			 ]	
+     508       B9			
+     509 0AE9  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+					",177,"                       ",177,"  
+					          ",186 
+     510       0011[			
+     511	   20			
+     512			 ]	
+     513       BA 20 20 20 20 20 B1	
+     514       20 20 20 20 20 20 20	
+     515       20 20 20 20 20 20 20	
+     516       20 20 20 20 20 20 20	
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-13
 
 
-					         not_last_loop: 
-     367				 
-     368 0190  5F			                                       
-					         pop         di 
-     369 0191  58			                                       
-					         pop         ax 
-     370 0192  E2 BB			                                       
-					         loop        mul_loop_i_checkpo
-					int                  ;use cx(i) to loop
-					 
-     371				 
-     372 0194  59			                                    pop
-					         cx 
-     373				 
-     374 0195  4B			                                    dec
-					         bx 
-     375 0196  83 FB 00			                                    cmp
-					         bx,0 
-     376 0199  77 B6			                                    ja 
-					         mul_loop_j_checkpoint 
-     377 019B				MUL_STRNUM      ENDP 
-     378				 
-     379 019B				STRLEN          PROC                   
-					                     ;output length of 
-					si in ax 
-     380 019B  56			                        push        si 
-     381 019C  33 D2			                        xor         dx,
-					dx 
-     382 019E  33 DB			                        xor         bx,
-					bx 
-     383 01A0  33 C0			                        xor         ax,
-					ax 
-     384				 
-     385 01A2				                        strlenLoop: 
-     386 01A2  8A 1C			                                    mov
-					     bl,[si] 
-     387 01A4  80 FB 24			                                    cmp
-					     bl,"$" 
-     388 01A7  74 04			                                    je 
-					     strlenLoopEnd 
-     389				 
-     390 01A9  46			                                    inc
-					     si 
-     391 01AA  40			                                    inc
-					     ax 
-     392				 
-     393 01AB  EB F5			                                    jmp
-					     strlenLoop 
-     394				 
-     395 01AD				                        strlenLoopEnd: 
-     396				 
-     397 01AD  5E			                        pop         si 
-     398 01AE  C3			                        ret 
-     399 01AF				STRLEN          ENDP 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+     517       20 20 B1 20 20 20 20	
+     518       20 20 20 20 20 20 20	
+     519       20 BA			
+     520 0B28  0D 0A							
+						db 13,10,17 dup(" "),186," NO. 
+					",177,"        Product        ",177," U
+					nit Price ",186 
+     521       0011[			
+     522	   20			
+     523			 ]	
+     524       BA 20 4E 4F 2E 20 B1	
+     525       20 20 20 20 20 20 20	
+     526       20 50 72 6F 64 75 63	
+     527       74 20 20 20 20 20 20	
+     528       20 20 B1 20 55 6E 69	
+     529       74 20 50 72 69 63 65	
+     530       20 BA			
+     531 0B67  0D 0A							
+						db 13,10,17 dup(" "),186,"     
+					",177,"                       ",177,"  
+					          ",186 
+     532       0011[			
+     533	   20			
+     534			 ]	
+     535       BA 20 20 20 20 20 B1	
+     536       20 20 20 20 20 20 20	
+     537       20 20 20 20 20 20 20	
+     538       20 20 20 20 20 20 20	
+     539       20 20 B1 20 20 20 20	
+     540       20 20 20 20 20 20 20	
+     541       20 BA			
+     542 0BA6  0D 0A							
+						db 13,10,17 dup(" "),204,42 dup
+					(205),185 
+     543       0011[			
+     544	   20			
+     545			 ]	
+     546       CC			
+     547       002A[			
+     548	   CD			
+     549			 ]	
+     550       B9			
+     551								
+						 
+     552 0BE5  0D 0A							
+						db 13,10,17 dup(" "),186,"  1  
+					",177," Brown Sugar Milk Tea  ",177,"  
+					 RM5.00   ",186 
+     553       0011[			
+     554	   20			
+     555			 ]	
+     556       BA 20 20 31 20 20 B1	
+     557       20 42 72 6F 77 6E 20	
+     558       53 75 67 61 72 20 4D	
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-14
 
 
-     400				 
-     401 01AF				NORMALISE_STR   PROC                   
-					                     ;output string num
-					ber without decimal point from si to di
-					 
-     402 01AF  56			                        push        si 
-     403 01B0  57			                        push        di 
-     404 01B1  33 C0			                        xor         ax,
-					ax       ;al contains character 
-     405 01B3				                        normLoop: 
-     406 01B3  8A 04			                                    mov
-					     al  ,[si] 
-     407				                                     
-     408 01B5  3C 24			                                    cmp
-					     al,"$"          ;if is string end 
-     409 01B7  74 10			                                    je 
-					     normLoopEnd 
-     410				 
-     411 01B9  3C 2E			                                    cmp
-					     al,"." 
-     412 01BB  74 03			                                    je 
-					     normRemoveDec   ;if is decimal poi
-					nt 
-     413 01BD  EB 04 90			                                    jmp
-					     normRemoveDecEnd 
-     414				 
-     415 01C0				                                    nor
-					mRemoveDec: 
-     416 01C0  46			                                       
-					     inc         si 
-     417 01C1  8A 04			                                       
-					     mov         al,[si] 
-     418 01C3				                                    nor
-					mRemoveDecEnd: 
-     419				 
-     420 01C3  88 05			                                    mov
-					     [di],al 
-     421				 
-     422 01C5  46			                                    inc
-					     si 
-     423 01C6  47			                                    inc
-					     di 
-     424				                                     
-     425 01C7  EB EA			                                    jmp
-					      normLoop 
-     426 01C9				                        normLoopEnd: 
-     427 01C9  5F			                        pop         di 
-     428 01CA  5E			                        pop         si 
-     429 01CB  C3			                        ret 
-     430 01CC				NORMALISE_STR   ENDP 
-     431				 
-     432 01CC				PRINT_STR       PROC                   
-					                     ;print value from 
-					address in dx 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+     559       69 6C 6B 20 54 65 61	
+     560       20 20 B1 20 20 20 52	
+     561       4D 35 2E 30 30 20 20	
+     562       20 BA			
+     563 0C24  0D 0A							
+						db 13,10,17 dup(" "),186,"  2  
+					",177," Mixue Ice Cream       ",177,"  
+					 RM3.00   ",186 
+     564       0011[			
+     565	   20			
+     566			 ]	
+     567       BA 20 20 32 20 20 B1	
+     568       20 4D 69 78 75 65 20	
+     569       49 63 65 20 43 72 65	
+     570       61 6D 20 20 20 20 20	
+     571       20 20 B1 20 20 20 52	
+     572       4D 33 2E 30 30 20 20	
+     573       20 BA			
+     574 0C63  0D 0A							
+						db 13,10,17 dup(" "),186,"  3  
+					",177," Boba Mi-Shake         ",177,"  
+					 RM9.00   ",186 
+     575       0011[			
+     576	   20			
+     577			 ]	
+     578       BA 20 20 33 20 20 B1	
+     579       20 42 6F 62 61 20 4D	
+     580       69 2D 53 68 61 6B 65	
+     581       20 20 20 20 20 20 20	
+     582       20 20 B1 20 20 20 52	
+     583       4D 39 2E 30 30 20 20	
+     584       20 BA			
+     585 0CA2  0D 0A							
+						db 13,10,17 dup(" "),186,"  4  
+					",177," Ice Cream Jasmine Tea ",177,"  
+					 RM6.00   ",186 
+     586       0011[			
+     587	   20			
+     588			 ]	
+     589       BA 20 20 34 20 20 B1	
+     590       20 49 63 65 20 43 72	
+     591       65 61 6D 20 4A 61 73	
+     592       6D 69 6E 65 20 54 65	
+     593       61 20 B1 20 20 20 52	
+     594       4D 36 2E 30 30 20 20	
+     595       20 BA			
+     596 0CE1  0D 0A							
+						db 13,10,17 dup(" "),200,42 dup
+					(205),188 
+     597       0011[			
+     598	   20			
+     599			 ]	
+     600       C8			
+     601       002A[			
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-15
 
 
-     433 01CC  50			                        push        ax 
-     434 01CD  B4 09			                        mov         ah,
-					09h       
-     435 01CF  CD 21			                        int 21h 
-     436 01D1  58			                        pop         ax 
-     437 01D2  C3			                        ret 
-     438 01D3				PRINT_STR       ENDP 
-     439				 
-     440 01D3				PRINT_NUM       PROC                   
-					                     ;print from ax    
-					           
-     441 01D3  50			                        push    ax     
-					                     ;preserves origina
-					l register values 
-     442 01D4  53			                        push    bx 
-     443 01D5  51			                        push    cx 
-     444 01D6  52			                        push    dx 
-     445 01D7  BB 000A			                        mov     bx,000A
-					h         
-     446 01DA  B9 0000			                        mov     cx,0000
-					h 
-     447 01DD				            Divloop: 
-     448 01DD  BA 0000			                        mov     dx,0000
-					h 
-     449 01E0  F7 F3			                        div     bx 
-     450 01E2  52			                        push    dx 
-     451 01E3  41			                        inc     cx 
-     452 01E4  85 C0			                        test    ax,ax 
-     453 01E6  75 F5			                        jnz     Divloop
-					 
-     454				 
-     455 01E8  B4 02			                        mov ah,02h     
-					                     ;setup for print 
-     456				 
-     457 01EA				            IntPrint:    
-     458 01EA  5A			                        pop     dx 
-     459 01EB  83 C2 30			                        add     dx,48d 
-     460 01EE  CD 21			                        int     21h 
-     461 01F0  E2 F8			                        loop    IntPrin
-					t 
-     462				 
-     463 01F2  5A			                        pop dx         
-					                     ;restore original 
-					ax value 
-     464 01F3  59			                        pop cx 
-     465 01F4  5B			                        pop bx 
-     466 01F5  58			                        pop ax 
-     467 01F6  C3			                        ret 
-     468 01F7				PRINT_NUM       ENDP 
-     469				 
-     470 01F7				LARGER_NUM      PROC                   
-					                     ;compare ax,bx, la
-					rge number will be AX 
-     471 01F7  3B C3			                        cmp     ax,bx 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+     602	   CD			
+     603			 ]	
+     604       BC			
+     605 0D20  0D 0A 24							
+						db 13,10,"$" 
+     606								
+						 
+     607					;select product 
+     608 0D23  0D 0A 0D 0A			msgselect       db 13,10,13,10,
+					17 dup(" "),"Select the product (1~4): 
+					$" 
+     609       0011[			
+     610	   20			
+     611			 ]	
+     612       53 65 6C 65 63 74 20	
+     613       74 68 65 20 70 72 6F	
+     614       64 75 63 74 20 28 31	
+     615       7E 34 29 3A 20 24	
+     616 0D53  ??				productopt		db ? 
+     617					 
+     618					;product quantity 
+     619 0D54  0D 0A				msgqty 			db 13,1
+					0,17 dup(" "),"Enter product quantity (
+					1~20): $" 
+     620       0011[			
+     621	   20			
+     622			 ]	
+     623       45 6E 74 65 72 20 70	
+     624       72 6F 64 75 63 74 20	
+     625       71 75 61 6E 74 69 74	
+     626       79 20 28 31 7E 32 30	
+     627       29 3A 20 24		
+     628 0D87  ??				productqty		db ? 
+     629					 
+     630					;addmore 
+     631 0D88  0D 0A				msgadd 			db 13,1
+					0,17 dup(" "),"Add more product? (Y = Y
+					ES / N = No) : $" 
+     632       0011[			
+     633	   20			
+     634			 ]	
+     635       41 64 64 20 6D 6F 72	
+     636       65 20 70 72 6F 64 75	
+     637       63 74 3F 20 28 59 20	
+     638       3D 20 59 45 53 20 2F	
+     639       20 4E 20 3D 20 4E 6F	
+     640       29 20 3A 20 24		
+     641 0DC3  ??				addselect		db ? 
+     642					 
+     643 0DC4  00				count db 0 
+     644 0DC5  ??				numl	db ? 
+     645 0000				.code 
+     646				 
+     647 0000				do_menu proc 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-16
 
 
-     472 01F9  72 03			                        jb      AX_SMAL
-					LER                   ;if ax is smaller
-					 than bx 
-     473 01FB  EB 03 90			                        jmp     AX_SMAL
-					LER_END                
-     474				 
-     475 01FE				                        AX_SMALLER: 
-     476 01FE  8B C3			                                    mov
-					     ax,bx 
-     477				 
-     478 0200				                        AX_SMALLER_END:
-					 
-     479 0200  C3			                        ret 
-     480 0201				LARGER_NUM      ENDP 
-     481				 
-     482 0201				NEWLINE         PROC 
-     483 0201  52			                            push    dx 
-     484 0202  B2 0A			                            mov     dl,
-					0Ah 
-     485 0204  E8 0209 R		                            call PRINT_
-					CHAR 
-     486 0207  5A			                            pop     dx 
-     487 0208  C3			                            ret 
-     488 0209				NEWLINE         ENDP 
-     489				 
-     490 0209				PRINT_CHAR      PROC                   
-					                     ;print cjaracter o
-					f value in dl 
-     491 0209  50			                            push    ax 
-     492 020A  B4 02			                            mov     ah,
-					02h 
-     493 020C  CD 21			                            int     21h
-					 
-     494 020E  58			                            pop     ax 
-     495 020F  C3			                            ret 
-     496 0210				PRINT_CHAR      ENDP 
-     497				 
-     498 0210				PRINT_RESULT    PROC 
-     499 0210  51			                            push       
-					 cx 
-     500 0211  52			                            push       
-					 dx 
-     501 0212  57			                            push       
-					 di 
-     502 0213  B9 0014			                            mov        
-					 cx,20d 
-     503 0216  8D 3E 0077 R		                            lea        
-					 di,result 
-     504 021A				                            loopF: 
-     505 021A  33 D2			                                       
-					 xor dx,dx 
-     506 021C  8A 15			                                       
-					 mov dl,[di] 
-     507 021E  E8 0209 R		                                       
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+     648				 
+     649					clears 
+     650 0000  B4 00                 1	    MOV AH, 00H     ; Set video mode 
+     651 0002  B0 03                 1	    MOV AL, 03H     ; Set text 80x25 fo
+					r comp,rgb,enh 
+     652 0004  CD 10                 1	    INT 10H 
+     653 0006  B8 0600               1		mov ax,0600h 
+     654 0009  B7 07                 1		mov bh,07h 
+     655 000B  B9 0000               1		mov cx,0000h 
+     656 000E  BA 154F               1		mov dx,154fh 
+     657 0011  CD 10                 1		int 10h 
+     658 0013  33 C0				xor ax,ax 
+     659 0015  B4 09				mov ah,09h 
+     660 0017  8D 16 0118 R			lea dx,mainMenu		
+						;print product list 
+     661 001B  CD 21				int 21h 
+     662					 
+     663 001D  B0 05				mov al,5 
+     664 001F  2A 06 0DC4 R			sub al,count 
+     665 0023  A2 0DC5 R			mov numl,al 
+     666 0026  B4 02				 mov ah,02h 
+     667 0028  8A 16 0DC5 R			mov dl,numl  
+     668 002C  80 C2 30				add dl,30h 
+     669 002F  CD 21				int 21h 
+     670					 
+     671					 
+     672 0031  B4 02				 mov ah,02h 
+     673 0033  8A 16 0DC4 R			mov dl,count  
+     674 0037  80 C2 30				add dl,30h 
+     675 003A  CD 21				int 21h 
+     676					 
+     677 003C  8D 36 0118 R			LEA SI,mainMenu 
+     678 0040  33 C9				xor cx,cx 
+     679 0042  8A 0E 0DC4 R			mov cl,count 
+     680 0046				    LOOP1: 
+     681				 
+     682 0046				    FIND_STR: 
+     683 0046  8A 04			        MOV AL,[SI] 
+     684 0048  3C 24			        CMP AL,'$'   
+     685 004A  74 03			        JE STR_FOUND 
+     686 004C  46			        INC SI 
+     687 004D  EB F7			        JMP FIND_STR 
+     688						 
+     689 004F					STR_FOUND: 
+     690 004F  46			        INC SI 
+     691 0050  B4 09					mov ah,09h 
+     692 0052  8B D6					mov dx,si	
+							;print product list 
+     693 0054  CD 21					int 21h 
+     694 0056  E2 EE			        LOOP LOOP1 
+     695						 
+     696 0058  B4 09					mov ah,09h 
+     697 005A  8D 16 0008 R				lea dx,arrow	
+							;print product list 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Page     1-17
 
 
-					 call    PRINT_CHAR 
-     508 0221  47			                                       
-					 inc di 
-     509 0222  E2 F6			                                       
-					 loop loopF 
-     510 0224  5F			                            pop        
-					 di 
-     511 0225  5A			                            pop        
-					 dx 
-     512 0226  59			                            pop        
-					 cx 
-     513				 
-     514 0227  C3			                            ret 
-     515 0228				PRINT_RESULT    ENDP 
-     516				 
-     517 0228				END MAIN 
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+     698 005E  CD 21					int 21h 
+     699						 
+     700					 
+     701					 
+     702 0060  33 C9					xor cx,cx 
+     703 0062  8A 0E 0DC5 R				mov cl,numl 
+     704						 
+     705 0066					 FIND_STR2: 
+     706 0066  8A 04			        MOV AL,[SI] 
+     707 0068  3C 24			        CMP AL,'$'   
+     708 006A  74 03			        JE STR_FOUND2 
+     709 006C  46			        INC SI 
+     710 006D  EB F7			        JMP FIND_STR2 
+     711						 
+     712 006F					STR_FOUND2: 
+     713 006F  46			        INC SI 
+     714 0070  B4 09					mov ah,09h 
+     715 0072  8B D6					mov dx,si	
+							;print product list 
+     716 0074  CD 21					int 21h 
+     717 0076  E2 EE			        LOOP FIND_STR2 
+     718				 
+     719						 
+     720				 
+     721				 
+     722 0078  CB				ret  
+     723 0079				do_menu endp 
+     724				 
+     725				 
+     726 0079				main_menu_ proc 
+     727					; mov cx,10 
+     728					clears 
+     729 0079  B4 00                 1	    MOV AH, 00H     ; Set video mode 
+     730 007B  B0 03                 1	    MOV AL, 03H     ; Set text 80x25 fo
+					r comp,rgb,enh 
+     731 007D  CD 10                 1	    INT 10H 
+     732 007F  B8 0600               1		mov ax,0600h 
+     733 0082  B7 07                 1		mov bh,07h 
+     734 0084  B9 0000               1		mov cx,0000h 
+     735 0087  BA 154F               1		mov dx,154fh 
+     736 008A  CD 10                 1		int 10h 
+     737 008C  33 C0				 xor ax,ax 
+     738 008E  A2 0DC4 R			 mov count,al 
+     739					  
+     740 0091  B4 09				 mov ah,09h 
+     741 0093  8D 16 03B9 R			 lea dx,mainMenuf	
+							;print product list 
+     742 0097  CD 21				 int 21h	 
+     743				 
+     744 0099  FE 06 0DC4 R			inc count 
+     745					 
+     746					 
+     747 009D				test23:	 
+     748				 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
+                                                             Page     1-18
+
+
+     749 009D  B4 00				MOV AH,00h 
+     750 009F  CD 16				INT 16h 
+     751 00A1  88 26 0000 R			mov temp,ah 
+     752					 
+     753 00A5  8A 26 0000 R			mov ah,temp 
+     754					 
+     755 00A9  80 FC 48				cmp ah,'H' 
+     756 00AC  74 0D				je count_sub1 
+     757					 
+     758 00AE  80 FC 50				cmp ah,'P' 
+     759 00B1  74 17				je count_add2 
+     760					 
+     761 00B3  80 FC 1C				cmp ah,1CH 
+     762 00B6  74 33				je enterkey 
+     763					 
+     764 00B8  EB 1F 90				jmp INPUTPASS_DONE 
+     765					 
+     766 00BB				count_sub1: 
+     767 00BB  B0 01				mov al,1 
+     768 00BD  38 06 0DC4 R			cmp count,al 
+     769 00C1  7E 16				jng INPUTPASS_DONE 
+     770				 
+     771 00C3				sub_: 
+     772 00C3  FE 0E 0DC4 R			dec count 
+     773 00C7  EB 10 90				jmp INPUTPASS_DONE 
+     774					 
+     775					 
+     776 00CA				count_add2: 
+     777 00CA  B0 04				mov al,4 
+     778 00CC  38 06 0DC4 R			cmp count,al 
+     779 00D0  7D 07				jge INPUTPASS_DONE 
+     780				 
+     781 00D2				add_: 
+     782 00D2  FE 06 0DC4 R			inc count 
+     783 00D6  EB 01 90				jmp INPUTPASS_DONE	 
+     784					 
+     785 00D9					INPUTPASS_DONE: 
+     786 00D9  B4 02				mov ah,02h 
+     787 00DB  8A 16 0DC4 R			mov dl,count  
+     788 00DF  80 C2 30				add dl,30h 
+     789 00E2  CD 21				int 21h 
+     790					; MOV AH,09H 
+     791					; LEA DX,INPUT_EN 
+     792					; INT 21H 
+     793 00E4  9A 0000 ---- R			call do_menu 		; 
+     794					 
+     795 00E9  EB B2				jmp test23 
+     796					 
+     797 00EB				enterkey:	 
+     798					; cmp each condition  
+     799 00EB  CB				RET 
+     800				 
+     801					 
+     802 00EC				main_menu_ endp 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
+                                                             Page     1-19
+
+
+     803				 
+     804				 
+     805				; up down settle  
+     806 00EC				ARROW_KEY_SD PROC  
+     807				 
+     808					; mov cx,0010 
+     809					; xor al,al 
+     810					; mov count,al 
+     811					; inc count 
+     812					 
+     813					 
+     814				; test23:	 
+     815				 
+     816					; MOV AH,00h 
+     817					; INT 16h 
+     818					; mov temp,ah 
+     819					 
+     820					; mov ah,02h 
+     821					; mov dl,temp  
+     822					; int 21h 
+     823					 
+     824					; mov ah,temp 
+     825					 
+     826					; cmp ah,'H' 
+     827					; je count_sub1 
+     828					 
+     829					; cmp ah,'P' 
+     830					; je count_add2 
+     831					 
+     832					; cmp ah,1CH 
+     833					; je enterkey 
+     834					 
+     835					; jmp INPUTPASS_DONE 
+     836					 
+     837				; count_sub1: 
+     838					; mov al,1 
+     839					; cmp count,al 
+     840					; jng INPUTPASS_DONE 
+     841				 
+     842				; sub_: 
+     843					; dec count 
+     844					; jmp INPUTPASS_DONE 
+     845					 
+     846					 
+     847				; count_add2: 
+     848					; mov al,4 
+     849					; cmp count,al 
+     850					; jge INPUTPASS_DONE 
+     851				 
+     852				; add_: 
+     853					; inc count 
+     854					; jmp INPUTPASS_DONE	 
+     855				 
+     856					 
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
+                                                             Page     1-20
+
+
+     857					;CMP AL, 13		
+								;If enter key 
+     858					;JE	INPUTPASS_DONE 
+     859					 
+     860					 
+     861					 
+     862				; INPUTPASS_DONE: 
+     863					; mov ah,02h 
+     864					; mov dl,count  
+     865					; add dl,30h 
+     866					; int 21h 
+     867					; ; MOV AH,09H 
+     868					; ; LEA DX,INPUT_EN 
+     869					; ; INT 21H 
+     870					; loop test23 
+     871					 
+     872				; enterkey:	 
+     873					; RET 
+     874 00EC				ARROW_KEY_SD ENDP 
+     875				 
+     876				 
+     877 00EC				main proc 
+     878					; set up data segment 
+     879 00EC  B8 ---- R			mov ax,@data 
+     880 00EF  8E D8				mov ds,ax 
+     881					 
+     882 00F1  9A 0079 ---- R			call main_menu_ 
+     883					 
+     884					 
+     885					;CALL ARROW_KEY_SD 
+     886					 
+     887					;exitprogram 
+     888 00F6					exitp:	 		
+									 
+     889 00F6  B4 4C					mov ah,4ch	
+									
+							 
+     890 00F8  CD 21					int 21h        
+     891				 
+     892					 
+     893				 
+     894 00FA				main endp 
+     895				 
+     896 00FA				end main 
+
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Symbols-1
 
+
+Macros:
+
+		N a m e			Lines
+
+CLEARS . . . . . . . . . . . . .  	   8
+SETCUR . . . . . . . . . . . . .  	   3
 
 Segments and Groups:
 
                 N a m e         	Length	 Align	Combine Class
 
 DGROUP . . . . . . . . . . . . .  	GROUP
-  _DATA  . . . . . . . . . . . .  	00A9	WORD	PUBLIC	'DATA'
-  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
-_TEXT  . . . . . . . . . . . . .  	0228	WORD	PUBLIC	'CODE'
+  _DATA  . . . . . . . . . . . .  	0DC6	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0100	PARA	STACK	'STACK'
+STRNUM_TEXT  . . . . . . . . . .  	00FA	WORD	PUBLIC	'CODE'
 
 Symbols:            
 
                 N a m e         	Type	 Value	 Attr
 
-ADD_LOOP . . . . . . . . . . . .  	L NEAR	0050	_TEXT
-ADD_NO_OVERFLOW  . . . . . . . .  	L NEAR	006A	_TEXT
-ADD_OVERFLOW . . . . . . . . . .  	L NEAR	0066	_TEXT
-ADD_STRNUM . . . . . . . . . . .  	N PROC	0035	_TEXT	Length = 004B
-AX_SMALLER . . . . . . . . . . .  	L NEAR	01FE	_TEXT
-AX_SMALLER_END . . . . . . . . .  	L NEAR	0200	_TEXT
+ADDSELECT  . . . . . . . . . . .  	L BYTE	0DC3	_DATA
+ADD_ . . . . . . . . . . . . . .  	L NEAR	00D2	STRNUM_TEXT
+ARROW  . . . . . . . . . . . . .  	L BYTE	0008	_DATA
+ARROWUP  . . . . . . . . . . . .  	L BYTE	0001	_DATA
+ARROW_KEY_SD . . . . . . . . . .  	F PROC	00EC	STRNUM_TEXT	Length = 0000
 
-DIVLOOP  . . . . . . . . . . . .  	L NEAR	01DD	_TEXT
+CONTINUE . . . . . . . . . . . .  	L BYTE	0018	_DATA
+COUNT  . . . . . . . . . . . . .  	L BYTE	0DC4	_DATA
+COUNT_ADD2 . . . . . . . . . . .  	L NEAR	00CA	STRNUM_TEXT
+COUNT_SUB1 . . . . . . . . . . .  	L NEAR	00BB	STRNUM_TEXT
 
-INTPRINT . . . . . . . . . . . .  	L NEAR	01EA	_TEXT
+DO_MENU  . . . . . . . . . . . .  	F PROC	0000	STRNUM_TEXT	Length = 0079
 
-LARGER_NUM . . . . . . . . . . .  	N PROC	01F7	_TEXT	Length = 000A
-LAST_LOOP  . . . . . . . . . . .  	L NEAR	0186	_TEXT
-LOOPF  . . . . . . . . . . . . .  	L NEAR	021A	_TEXT
+ENTERKEY . . . . . . . . . . . .  	L NEAR	00EB	STRNUM_TEXT
+EXITP  . . . . . . . . . . . . .  	L NEAR	00F6	STRNUM_TEXT
 
-MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 0035
-MAXSTRLEN  . . . . . . . . . . .  	L BYTE	0012	_DATA
-MUL_LOOP_I . . . . . . . . . . .  	L NEAR	00F3	_TEXT
-MUL_LOOP_I_CHECKPOINT  . . . . .  	L NEAR	014F	_TEXT
-MUL_LOOP_J . . . . . . . . . . .  	L NEAR	00E8	_TEXT
-MUL_LOOP_J_CHECKPOINT  . . . . .  	L NEAR	0151	_TEXT
-MUL_NO_OVERFLOW  . . . . . . . .  	L NEAR	0116	_TEXT
-MUL_NO_OVERFLOW2 . . . . . . . .  	L NEAR	0178	_TEXT
-MUL_NO_SET_ZERO  . . . . . . . .  	L NEAR	0143	_TEXT
-MUL_OVERFLOW . . . . . . . . . .  	L NEAR	010B	_TEXT
-MUL_OVERFLOW2  . . . . . . . . .  	L NEAR	0153	_TEXT
-MUL_OVERFLOW2_NEW  . . . . . . .  	L NEAR	0161	_TEXT
-MUL_OVERFLOW2_NEW_END  . . . . .  	L NEAR	0176	_TEXT
-MUL_OVERFLOW2_NO_NEW . . . . . .  	L NEAR	016E	_TEXT
-MUL_SET_ZERO . . . . . . . . . .  	L NEAR	0141	_TEXT
-MUL_STRNUM . . . . . . . . . . .  	N PROC	00CD	_TEXT	Length = 00CE
+FIND_STR . . . . . . . . . . . .  	L NEAR	0046	STRNUM_TEXT
+FIND_STR2  . . . . . . . . . . .  	L NEAR	0066	STRNUM_TEXT
 
-NEWLINE  . . . . . . . . . . . .  	N PROC	0201	_TEXT	Length = 0008
-NORMAL1  . . . . . . . . . . . .  	L BYTE	0013	_DATA	Length = 0032
-NORMAL2  . . . . . . . . . . . .  	L BYTE	0045	_DATA	Length = 0032
-NORMALISE_STR  . . . . . . . . .  	N PROC	01AF	_TEXT	Length = 001D
-NORMLOOP . . . . . . . . . . . .  	L NEAR	01B3	_TEXT
-NORMLOOPEND  . . . . . . . . . .  	L NEAR	01C9	_TEXT
-NORMREMOVEDEC  . . . . . . . . .  	L NEAR	01C0	_TEXT
-NORMREMOVEDECEND . . . . . . . .  	L NEAR	01C3	_TEXT
-NOT_LAST_LOOP  . . . . . . . . .  	L NEAR	0190	_TEXT
-Microsoft (R) Macro Assembler Version 5.00                  9/2/23 13:23:24
+INPUTPASS_DONE . . . . . . . . .  	L NEAR	00D9	STRNUM_TEXT
+INVALIDINPUT . . . . . . . . . .  	L BYTE	005A	_DATA
+
+LOOP1  . . . . . . . . . . . . .  	L NEAR	0046	STRNUM_TEXT
+
+MAIN . . . . . . . . . . . . . .  	F PROC	00EC	STRNUM_TEXT	Length = 000E
+MAINMENU . . . . . . . . . . . .  	L BYTE	0118	_DATA
+MAINMENUF  . . . . . . . . . . .  	L BYTE	03B9	_DATA
+MAIN_MENU_ . . . . . . . . . . .  	F PROC	0079	STRNUM_TEXT	Length = 0073
+MMCHOICE . . . . . . . . . . . .  	L BYTE	0630	_DATA
+MSGADD . . . . . . . . . . . . .  	L BYTE	0D88	_DATA
+MSGQTY . . . . . . . . . . . . .  	L BYTE	0D54	_DATA
+MSGSELECT  . . . . . . . . . . .  	L BYTE	0D23	_DATA
+
+NEWLINE  . . . . . . . . . . . .  	L BYTE	004A	_DATA
+Microsoft (R) Macro Assembler Version 5.00                  9/8/23 10:23:35
                                                              Symbols-2
 
 
+NUML . . . . . . . . . . . . . .  	L BYTE	0DC5	_DATA
 
-PRINT_CHAR . . . . . . . . . . .  	N PROC	0209	_TEXT	Length = 0007
-PRINT_NUM  . . . . . . . . . . .  	N PROC	01D3	_TEXT	Length = 0024
-PRINT_RESULT . . . . . . . . . .  	N PROC	0210	_TEXT	Length = 0018
-PRINT_STR  . . . . . . . . . . .  	N PROC	01CC	_TEXT	Length = 0007
+ORDERMENU  . . . . . . . . . . .  	L BYTE	09AE	_DATA
 
-RESULT . . . . . . . . . . . . .  	L BYTE	0077	_DATA	Length = 0032
+PBMS . . . . . . . . . . . . . .  	L BYTE	09A8	_DATA
+PBSMT  . . . . . . . . . . . . .  	L BYTE	09A6	_DATA
+PICJT  . . . . . . . . . . . . .  	L BYTE	09A9	_DATA
+PMIC . . . . . . . . . . . . . .  	L BYTE	09A7	_DATA
+PRODUCTMENU  . . . . . . . . . .  	L BYTE	0631	_DATA
+PRODUCTOPT . . . . . . . . . . .  	L BYTE	0D53	_DATA
+PRODUCTQTY . . . . . . . . . . .  	L BYTE	0D87	_DATA
 
-STRLEN . . . . . . . . . . . . .  	N PROC	019B	_TEXT	Length = 0014
-STRLENLOOP . . . . . . . . . . .  	L NEAR	01A2	_TEXT
-STRLENLOOPEND  . . . . . . . . .  	L NEAR	01AD	_TEXT
-STRNUM1  . . . . . . . . . . . .  	L BYTE	0000	_DATA
-STRNUM2  . . . . . . . . . . . .  	L BYTE	0009	_DATA
-SUB_LOOP . . . . . . . . . . . .  	L NEAR	0099	_TEXT
-SUB_NO_UNDERFLOW . . . . . . . .  	L NEAR	00B7	_TEXT
-SUB_STRNUM . . . . . . . . . . .  	N PROC	0080	_TEXT	Length = 004D
-SUB_UNDERFLOW  . . . . . . . . .  	L NEAR	00AD	_TEXT
+QBMS . . . . . . . . . . . . . .  	L BYTE	09AC	_DATA
+QBSMT  . . . . . . . . . . . . .  	L BYTE	09AA	_DATA
+QICJT  . . . . . . . . . . . . .  	L BYTE	09AD	_DATA
+QMIC . . . . . . . . . . . . . .  	L BYTE	09AB	_DATA
 
-@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
-@CODESIZE  . . . . . . . . . . .  	TEXT  0		
-@DATASIZE  . . . . . . . . . . .  	TEXT  1		
+SIXLINE  . . . . . . . . . . . .  	L BYTE	004D	_DATA
+STR_FOUND  . . . . . . . . . . .  	L NEAR	004F	STRNUM_TEXT
+STR_FOUND2 . . . . . . . . . . .  	L NEAR	006F	STRNUM_TEXT
+SUB_ . . . . . . . . . . . . . .  	L NEAR	00C3	STRNUM_TEXT
+
+TEMP . . . . . . . . . . . . . .  	L BYTE	0000	_DATA
+TEST23 . . . . . . . . . . . . .  	L NEAR	009D	STRNUM_TEXT
+
+@CODE  . . . . . . . . . . . . .  	TEXT  STRNUM_TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  1		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
 @FILENAME  . . . . . . . . . . .  	TEXT  STRNUM		
 
 
-    506 Source  Lines
-    506 Total   Lines
-     64 Symbols
+    363 Source  Lines
+    379 Total   Lines
+     61 Symbols
 
-  50434 + 416958 Bytes symbol space free
+  50426 + 449734 Bytes symbol space free
 
-      1 Warning Errors
+      0 Warning Errors
       0 Severe  Errors

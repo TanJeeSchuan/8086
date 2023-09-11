@@ -1,0 +1,1116 @@
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-1
+
+
+       1				.model small 
+       2 0064				.stack 100 
+       3 0000				.data 
+       4				      
+       5 0000  0A 0D 24			     NL          db 10d, 13d, "$" 
+       6				      
+       7				      
+       8				       
+       9				      
+      10				     ;---------------------------------
+					---------------------------------------
+					--------------------------------- 
+      11				     ;                                 
+					          Menu & Function Design 
+      12				     ;---------------------------------
+					---------------------------------------
+					---------------------------------  
+      13				                                  
+      14 0003  20 20 20 20 20 20 20	     menu_title    db "            **  
+					    ******      ******",  10d, 13d 
+      15       20 20 20 20 20 2A 2A	
+      16       20 20 20 20 20 20 2A	
+      17       2A 2A 2A 2A 2A 20 20	
+      18       20 20 20 20 2A 2A 2A	
+      19       2A 2A 2A 0A 0D		
+      20 002B  20 20 20 20 20 20 20	                   db "           **** 
+					   /*////**    **////**", 10d, 13d 
+      21       20 20 20 20 2A 2A 2A	
+      22       2A 20 20 20 20 2F 2A	
+      23       2F 2F 2F 2F 2A 2A 20	
+      24       20 20 20 2A 2A 2F 2F	
+      25       2F 2F 2A 2A 0A 0D	
+      26 0054  20 20 20 20 20 20 20	                   db "          **//**
+					   /*   /**   **    // ", 10d, 13d 
+      27       20 20 20 2A 2A 2F 2F	
+      28       2A 2A 20 20 20 2F 2A	
+      29       20 20 20 2F 2A 2A 20	
+      30       20 20 2A 2A 20 20 20	
+      31       20 2F 2F 20 0A 0D	
+      32 007D  20 20 20 20 20 20 20	                   db "         **  //*
+					*  /******   /**       ", 10d, 13d 
+      33       20 20 2A 2A 20 20 2F	
+      34       2F 2A 2A 20 20 2F 2A	
+      35       2A 2A 2A 2A 2A 20 20	
+      36       20 2F 2A 2A 20 20 20	
+      37       20 20 20 20 0A 0D	
+      38 00A6  20 20 20 20 20 20 20	                   db "        ********
+					** /*//// ** /**       ", 10d, 13d 
+      39       20 2A 2A 2A 2A 2A 2A	
+      40       2A 2A 2A 2A 20 2F 2A	
+      41       2F 2F 2F 2F 20 2A 2A	
+      42       20 2F 2A 2A 20 20 20	
+      43       20 20 20 20 0A 0D	
+      44 00CF  20 20 20 20 20 20 20	                   db "       /**//////
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-2
+
+
+					** /*    /** //**    **", 10d, 13d 
+      45       2F 2A 2A 2F 2F 2F 2F	
+      46       2F 2F 2A 2A 20 2F 2A	
+      47       20 20 20 20 2F 2A 2A	
+      48       20 2F 2F 2A 2A 20 20	
+      49       20 20 2A 2A 0A 0D	
+      50 00F8  20 20 20 20 20 20 20	                   db "       /**     /
+					** /*******   //****** ", 10d, 13d 
+      51       2F 2A 2A 20 20 20 20	
+      52       20 2F 2A 2A 20 2F 2A	
+      53       2A 2A 2A 2A 2A 2A 20	
+      54       20 20 2F 2F 2A 2A 2A	
+      55       2A 2A 2A 20 0A 0D	
+      56 0121  20 20 20 20 20 20 20	                   db "       //      /
+					/  ///////     //////  $" 
+      57       2F 2F 20 20 20 20 20	
+      58       20 2F 2F 20 20 2F 2F	
+      59       2F 2F 2F 2F 2F 20 20	
+      60       20 20 20 2F 2F 2F 2F	
+      61       2F 2F 20 20 24		
+      62				      
+      63 0149  DA			     first_line    db 218d, 38 DUP(196d
+					) , 191d, 13d, 10d, "$"  
+      64       0026[			
+      65	   C4			
+      66			 ]	
+      67       BF 0D 0A 24		
+      68 0174  B3 20 20 20 41 42 43	     topic_design  db 179d, "   ABC Cus
+					tomer Management Function   ", 179d, 13
+					d, 10d, "$" 
+      69       20 43 75 73 74 6F 6D	
+      70       65 72 20 4D 61 6E 61	
+      71       67 65 6D 65 6E 74 20	
+      72       46 75 6E 63 74 69 6F	
+      73       6E 20 20 20 B3 0D 0A	
+      74       24			
+      75 019F  B3			     menu          db 179d, 38 DUP(196d
+					), 179d, 13d, 10d, "$" 
+      76       0026[			
+      77	   C4			
+      78			 ]	
+      79       B3 0D 0A 24		
+      80 01CA  B3 2A 2A 20 20 20 20	     menu1         db 179d, "**       |
+					Functions Available|      **", 179d, 13
+					d, 10d, "$" 
+      81       20 20 20 7C 46 75 6E	
+      82       63 74 69 6F 6E 73 20	
+      83       41 76 61 69 6C 61 62	
+      84       6C 65 7C 20 20 20 20	
+      85       20 20 2A 2A B3 0D 0A	
+      86       24			
+      87 01F5  B3 2A 2A 20 20 20 20	     menu2         db 179d, "**       |
+					===================|      **", 179d, 13
+					d, 10d, "$" 
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-3
+
+
+      88       20 20 20 7C 3D 3D 3D	
+      89       3D 3D 3D 3D 3D 3D 3D	
+      90       3D 3D 3D 3D 3D 3D 3D	
+      91       3D 3D 7C 20 20 20 20	
+      92       20 20 2A 2A B3 0D 0A	
+      93       24			
+      94 0220  B3			     menu3         db 179d, 38 DUP(196d
+					), 179d, 13d, 10d, "$" 
+      95       0026[			
+      96	   C4			
+      97			 ]	
+      98       B3 0D 0A 24		
+      99 024B  B3 20 20 20 20 20 20	     menu4         db 179d, "        ^|
+					  1. Add Customer  |^       ", 179d, 13
+					d, 10d, "$" 
+     100       20 20 5E 7C 20 20 31	
+     101       2E 20 41 64 64 20 43	
+     102       75 73 74 6F 6D 65 72	
+     103       20 20 7C 5E 20 20 20	
+     104       20 20 20 20 B3 0D 0A	
+     105       24			
+     106 0276  B3 20 20 20 20 20 20	     menu5         db 179d, "        ^|
+					  2. Exit to Main  |^       ", 179d, 13
+					d, 10d, "$" 
+     107       20 20 5E 7C 20 20 32	
+     108       2E 20 45 78 69 74 20	
+     109       74 6F 20 4D 61 69 6E	
+     110       20 20 7C 5E 20 20 20	
+     111       20 20 20 20 B3 0D 0A	
+     112       24			
+     113 02A1  C0			     end_line      db 192d, 38 DUP(196d
+					), 217d, 13d, 10d, "$" 
+     114       0026[			
+     115	   C4			
+     116			 ]	
+     117       D9 0D 0A 24		
+     118				                 
+     119				     ;---------------------------------
+					---------------------------------------
+					---------------------------------- 
+     120				     ;                                 
+					               PROMPT                  
+					                       
+     121				     ;---------------------------------
+					---------------------------------------
+					----------------------------------  
+     122				      
+     123 02CC  50 6C 65 61 73 65 20	     msg1          db "Please select th
+					e function [1 or 2 only!]: ", "$" 
+     124       73 65 6C 65 63 74 20	
+     125       74 68 65 20 66 75 6E	
+     126       63 74 69 6F 6E 20 5B	
+     127       31 20 6F 72 20 32 20	
+     128       6F 6E 6C 79 21 5D 3A	
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-4
+
+
+     129       20 24			
+     130				      
+     131 02F8  49 6E 76 61 6C 69 64	     error_Msg     db "Invalid Input! B
+					odoh! Please enter again!", "$" 
+     132       20 49 6E 70 75 74 21	
+     133       20 42 6F 64 6F 68 21	
+     134       20 50 6C 65 61 73 65	
+     135       20 65 6E 74 65 72 20	
+     136       61 67 61 69 6E 21 24	
+     137				      
+     138				     ;customer functions: 
+     139				      
+     140 0322  0A 0D 44 6F 20 79 6F	     confirm_Msg   db 10, 13,"Do you wa
+					nt to add more customers? [Y / N]: $"  
+     141       75 20 77 61 6E 74 20	
+     142       74 6F 20 61 64 64 20	
+     143       6D 6F 72 65 20 63 75	
+     144       73 74 6F 6D 65 72 73	
+     145       3F 20 5B 59 20 2F 20	
+     146       4E 5D 3A 20 24		
+     147 0351  0A 0D 50 6C 65 61 73	     wrong_msg     db 10, 13,"Please en
+					ter the valid input [Y or N only] !$"  
+     148       65 20 65 6E 74 65 72	
+     149       20 74 68 65 20 76 61	
+     150       6C 69 64 20 69 6E 70	
+     151       75 74 20 5B 59 20 6F	
+     152       72 20 4E 20 6F 6E 6C	
+     153       79 5D 20 21 24		
+     154 0380  ??			     choice        db ? 
+     155				      
+     156 0381  0A 0D 50 6C 65 61 73	     cf1           db 10, 13, "Please e
+					nter the customer id: $" 
+     157       65 20 65 6E 74 65 72	
+     158       20 74 68 65 20 63 75	
+     159       73 74 6F 6D 65 72 20	
+     160       69 64 3A 20 24		
+     161 03A2  50 6C 65 61 73 65 20	     cf2           db "Please enter the
+					 customer name: $" 
+     162       65 6E 74 65 72 20 74	
+     163       68 65 20 63 75 73 74	
+     164       6F 6D 65 72 20 6E 61	
+     165       6D 65 3A 20 24		
+     166 03C3  50 6C 65 61 73 65 20	     cf3           db "Please enter the
+					 customer age: $" 
+     167       65 6E 74 65 72 20 74	
+     168       68 65 20 63 75 73 74	
+     169       6F 6D 65 72 20 61 67	
+     170       65 3A 20 24		
+     171 03E3  50 6C 65 61 73 65 20	     cf4           db "Please enter the
+					 customer phone number: $" 
+     172       65 6E 74 65 72 20 74	
+     173       68 65 20 63 75 73 74	
+     174       6F 6D 65 72 20 70 68	
+     175       6F 6E 65 20 6E 75 6D	
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-5
+
+
+     176       62 65 72 3A 20 24	
+     177				      
+     178 040C  20 20 20 20 20 20 20	     infoTopic     db "                
+					     [Customer Information]$" 
+     179       20 20 20 20 20 20 20	
+     180       20 20 20 20 20 20 20	
+     181       5B 43 75 73 74 6F 6D	
+     182       65 72 20 49 6E 66 6F	
+     183       72 6D 61 74 69 6F 6E	
+     184       5D 24			
+     185				      
+     186 0438  20 20 49 44 20 20 20	     info          db "  ID            
+					CustName            Age          Phone$
+					" 
+     187       20 20 20 20 20 20 20	
+     188       20 20 43 75 73 74 4E	
+     189       61 6D 65 20 20 20 20	
+     190       20 20 20 20 20 20 20	
+     191       20 41 67 65 20 20 20	
+     192       20 20 20 20 20 20 20	
+     193       50 68 6F 6E 65 24	
+     194 046F  3D 3D 3D 3D 3D 3D 20	     info1         db "======    ======
+					===============     ===       =========
+					====$" 
+     195       20 20 20 3D 3D 3D 3D	
+     196       3D 3D 3D 3D 3D 3D 3D	
+     197       3D 3D 3D 3D 3D 3D 3D	
+     198       3D 3D 3D 20 20 20 20	
+     199       20 3D 3D 3D 20 20 20	
+     200       20 20 20 20 3D 3D 3D	
+     201       3D 3D 3D 3D 3D 3D 3D	
+     202       3D 3D 3D 24		
+     203				      
+     204 04AB  0D 0A 43 75 73 74 6F	     adding        db 13, 10,"Customer 
+					Info adding.....$"   
+     205       6D 65 72 20 49 6E 66	
+     206       6F 20 61 64 64 69 6E	
+     207       67 2E 2E 2E 2E 2E 24	
+     208 04C7  5B 54 68 65 20 69 6E	     successful    db "[The information
+					 sucessfully added]$"  
+     209       66 6F 72 6D 61 74 69	
+     210       6F 6E 20 73 75 63 65	
+     211       73 73 66 75 6C 6C 79	
+     212       20 61 64 64 65 64 5D	
+     213       24			
+     214				      
+     215				     ;---------------------------------
+					---------------------------------------
+					---------------------------------- 
+     216				     ;                                 
+					               INPUT STORE 
+     217				     ;---------------------------------
+					---------------------------------------
+					----------------------------------  
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-6
+
+
+     218				      
+     219 04EB  ??			     menu_choice   db ? 
+     220				      
+     221				     ;customer functions: 
+     222				      
+     223 04EC  00			     customerCount db 0 
+     224 = 003C				     customerSize  EQU 60 
+     225 = 000A				     max_customers   EQU 10        ; Ma
+					ximum number of customers 
+     226				      
+     227 = 0000				     ID            EQU 0 
+     228 = 000B				     custName      EQU 11 
+     229 = 0025				     Age           EQU 37 
+     230 = 002E				     Phone         EQU 46 
+     231				      
+     232 04ED  01F4[			     customerArr   db  500 dup("$") 
+     233	   24			
+     234			 ]	
+     235				
+     236				      
+     237				     ;---------------------------------
+					---------------------------------------
+					---------------------------------- 
+     238				     ;                                 
+					              MACRO FUNCTIONS 
+     239				     ;---------------------------------
+					---------------------------------------
+					---------------------------------- 
+     240				      
+     241				     COLOUR_CHAR MACRO character, colou
+					r, printNum 
+     242				                push    ax 
+     243				                push    bx 
+     244				                push    cx 
+     245				                push    dx 
+     246				 
+     247				                mov al, character      
+					  ;row 
+     248				                mov bl, colour         
+					  ;column 
+     249				                mov cx, printNum       
+					  ;column * row 
+     250				                mov ah, 09h        
+     251				                int 10h 
+     252				 
+     253				                pop    dx 
+     254				                pop    cx 
+     255				                pop    bx 
+     256				                pop    ax 
+     257				ENDM 
+     258				      
+     259 0000				.code 
+     260				 
+     261 0000				    MAIN PROC 
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-7
+
+
+     262				          
+     263 0000  B8 ---- R		         mov ax, @data 
+     264 0003  8E D8			         mov ds, ax 
+     265				 
+     266 0005  E8 0250 R		         call   clear 
+     267				          
+     268					; Initialize customer count 
+     269 0008  C6 06 04EC R 00		    	mov byte ptr [customerCount], 0
+					 
+     270				 
+     271				         ;print function menu 
+     272 000D  E8 001C R		         call PRINT_TITLE 
+     273				          
+     274 0010  E8 0242 R		         call NEWLINE 
+     275				          
+     276 0013  E8 003B R		         call PRINT_MENU 
+     277				          
+     278				         ;prompt user input 
+     279 0016  E8 008A R		         call PROMPT_USER_CHOOSE       
+					   
+     280				    
+     281				     
+     282 0019  E8 024B R		         call EXIT 
+     283				          
+     284 001C				    MAIN ENDP 
+     285				     
+     286				 
+     287 001C				PRINT_TITLE PROC 
+     288				      
+     289				     
+     290				    COLOUR_CHAR 0, 00001011b, 1080d 
+     291 001C  50                    1	                push    ax 
+     292 001D  53                    1	                push    bx 
+     293 001E  51                    1	                push    cx 
+     294 001F  52                    1	                push    dx 
+     295 0020  B0 00                 1	                mov al, 0        ;row 
+     296 0022  B3 0B                 1	                mov bl, 00001011b      
+					     ;column 
+     297 0024  B9 0438               1	                mov cx, 1080d         ;
+					column * row 
+     298 0027  B4 09                 1	                mov ah, 09h 
+     299 0029  CD 10                 1	                int 10h 
+     300 002B  5A                    1	                pop    dx 
+     301 002C  59                    1	                pop    cx 
+     302 002D  5B                    1	                pop    bx 
+     303 002E  58                    1	                pop    ax 
+     304				     
+     305				    
+     306 002F  8D 16 0003 R		    lea dx, menu_title 
+     307 0033  B4 09			    mov ah, 09h 
+     308 0035  CD 21			    int 21h 
+     309				     
+     310				    
+     311				     
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-8
+
+
+     312 0037  E8 01DE R		    call WHITE 
+     313				      
+     314				      
+     315 003A  C3			     ret 
+     316 003B				PRINT_TITLE ENDP 
+     317				 
+     318 003B				PRINT_MENU PROC 
+     319				     
+     320 003B  B4 09			     mov ah, 09h 
+     321 003D  8D 16 0149 R		     lea dx, first_line 
+     322 0041  CD 21			     int 21h 
+     323				      
+     324 0043  E8 01FC R		     call YELLOW 
+     325 0046  B4 09			     mov ah, 09h 
+     326 0048  8D 16 0174 R		     lea dx, topic_design 
+     327 004C  CD 21			     int 21h 
+     328				      
+     329 004E  E8 01DE R		     call WHITE 
+     330 0051  B4 09			     mov ah, 09h 
+     331 0053  8D 16 019F R		     lea dx, menu 
+     332 0057  CD 21			     int 21h   
+     333				      
+     334 0059  B4 09			     mov ah, 09h 
+     335 005B  8D 16 01CA R		     lea dx, menu1 
+     336 005F  CD 21			     int 21h 
+     337				      
+     338 0061  B4 09			     mov ah, 09h 
+     339 0063  8D 16 01F5 R		     lea dx, menu2 
+     340 0067  CD 21			     int 21h 
+     341				      
+     342 0069  B4 09			     mov ah, 09h 
+     343 006B  8D 16 0220 R		     lea dx, menu3 
+     344 006F  CD 21			     int 21h 
+     345				      
+     346 0071  B4 09			     mov ah, 09h 
+     347 0073  8D 16 024B R		     lea dx, menu4 
+     348 0077  CD 21			     int 21h 
+     349				      
+     350 0079  B4 09			     mov ah, 09h 
+     351 007B  8D 16 0276 R		     lea dx, menu5 
+     352 007F  CD 21			     int 21h 
+     353				      
+     354 0081  B4 09			     mov ah, 09h 
+     355 0083  8D 16 02A1 R		     lea dx, end_line 
+     356 0087  CD 21			     int 21h 
+     357				          
+     358 0089  C3			     ret 
+     359				      
+     360 008A				PRINT_MENU ENDP  
+     361				 
+     362 008A				PROMPT_USER_CHOOSE PROC 
+     363				     
+     364 008A				choose: 
+     365				 
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-9
+
+
+     366				     ;print msg1 
+     367 008A  B4 09			     mov ah, 09h 
+     368 008C  8D 16 02CC R		     lea dx, msg1 
+     369 0090  CD 21			     int 21h 
+     370				      
+     371				     ;store user input 
+     372 0092  B4 01			     mov ah, 01h 
+     373 0094  CD 21			     int 21h 
+     374 0096  2C 30			     sub al, 30h 
+     375 0098  A2 04EB R		     mov [menu_choice], al 
+     376				      
+     377				      
+     378				     ;Validate user input 
+     379 009B  3C 01			     cmp al, 1 
+     380 009D  74 1D			     je valid_choice 
+     381 009F  3C 02			     cmp al, 2 
+     382 00A1  74 19			     je valid_choice 
+     383				      
+     384				     ; If not 1 or 2, display an error 
+					message 
+     385 00A3  E8 0242 R		     call NEWLINE 
+     386 00A6  E8 01F2 R		     call RED 
+     387				      
+     388 00A9  B4 09			     mov ah, 09h 
+     389 00AB  8D 16 02F8 R		     lea dx, error_Msg 
+     390 00AF  CD 21			     int 21h   
+     391				      
+     392 00B1  E8 01DE R		     call WHITE 
+     393 00B4  E8 0242 R		     call NEWLINE 
+     394 00B7  E8 0242 R		     call NEWLINE 
+     395 00BA  EB CE			     jmp choose 
+     396				      
+     397				      
+     398				     ;conditional   
+     399				 
+     400 00BC				valid_choice: 
+     401				      
+     402 00BC  80 3E 04EB R 01		     cmp [menu_choice], 1 
+     403 00C1  74 07			     je  f1_checkPoint  
+     404				     
+     405 00C3  80 3E 04EB R 02		     cmp [menu_choice], 2 
+     406 00C8  74 11			     je  exit_function 
+     407				      
+     408				      
+     409 00CA				f1_checkPoint: 
+     410				         
+     411 00CA  8D 36 04ED R		        lea  si, customerArr 
+     412				         
+     413 00CE  8A 16 04EC R		        mov  dl, [customerCount] 
+     414 00D2  B0 3C			        mov  al, customerSize 
+     415 00D4  F6 E2			        mul  dl 
+     416 00D6  03 F0			        add  si,ax 
+     417				         
+     418 00D8  E8 00E0 R		        call ADD_CUSTOMER 
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-10
+
+
+     419				      
+     420 00DB				exit_function: 
+     421				      
+     422				         
+     423 00DB  E8 024B R		        call EXIT 
+     424 00DE  C3			        ret  
+     425				   
+     426 00DF				exit_prompt:          
+     427				      
+     428 00DF  C3			     ret 
+     429				 
+     430 00E0				PROMPT_USER_CHOOSE ENDP  
+     431				 
+     432 00E0				ADD_CUSTOMER PROC                      
+					    ;add customer to address in SI 
+     433				        
+     434 00E0  E8 0242 R		       call NEWLINE 
+     435 00E3  E8 0250 R		       call CLEAR 
+     436				         
+     437 00E6  BA 04AB R		       mov dx, offset adding 
+     438 00E9  B4 09			       mov ah, 09h 
+     439 00EB  CD 21			       int 21h 
+     440				        
+     441 00ED  E8 0242 R		       call NEWLINE 
+     442				 
+     443 00F0				begin: 
+     444				 
+     445 00F0  BA 0381 R		       mov dx, offset cf1 
+     446 00F3  B4 09			       mov ah, 09h 
+     447 00F5  CD 21			       int 21h 
+     448				                  
+     449 00F7  56			       PUSH SI                         
+					     ;store starting address of array e
+					lement 
+     450				         
+     451 00F8  B9 000A			       mov cx, 10d  
+     452				       ;store the ID 
+     453 00FB				       L1: 
+     454				        
+     455 00FB  B4 01			        mov ah, 01h 
+     456 00FD  CD 21			        int 21h 
+     457				         
+     458 00FF  3C 0D			        cmp al, 13d   ;until user press
+					 enter 
+     459 0101  74 05			        je  L1END  
+     460				         
+     461				           
+     462				         
+     463 0103  88 04			        mov [si], al 
+     464				         
+     465 0105  46			        inc si 
+     466				         
+     467 0106  E2 F3			        loop L1 
+     468				         
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-11
+
+
+     469				        
+     470 0108				      L1END: 
+     471				       
+     472 0108  5E			        POP     SI                     
+					       ;copy starting address of array 
+					element 
+     473 0109  56			        PUSH    SI 
+     474				         
+     475 010A  83 C6 0B			        ADD     SI, custName 
+     476				         
+     477 010D  B3 24			        mov bl, "$" 
+     478 010F  89 1C			        mov [si], bx 
+     479				       
+     480 0111  E8 0242 R		        call NEWLINE 
+     481				 
+     482 0114  BA 03A2 R		        mov dx, offset cf2 
+     483 0117  B4 09			        mov ah, 09h 
+     484 0119  CD 21			        int 21h 
+     485				        
+     486 011B  B9 0014			        mov cx, 20d 
+     487				           
+     488 011E				       L2: 
+     489				        
+     490 011E  B4 01			          mov ah, 01h 
+     491 0120  CD 21			          int 21h 
+     492				           
+     493 0122  3C 0D			          cmp al, 13d 
+     494 0124  74 05			          je  L2END 
+     495				            
+     496 0126  88 04			          mov [si], al        
+     497				           
+     498 0128  46			          inc si 
+     499				           
+     500 0129  E2 F3			          loop L2  
+     501				           
+     502 012B				          L2END: 
+     503				           
+     504 012B  5E			            POP     SI 
+     505 012C  56			            PUSH    SI 
+     506 012D  83 C6 25			            ADD     SI, AGE 
+     507				             
+     508				           
+     509 0130  B3 24			            mov bl, "$" 
+     510 0132  89 1C			            mov [si], bx 
+     511				             
+     512 0134  E8 0242 R		            call NEWLINE 
+     513				 
+     514 0137  BA 03C3 R		            mov dx, offset cf3 
+     515 013A  B4 09			            mov ah, 09h 
+     516 013C  CD 21			            int 21h 
+     517				            
+     518 013E  B9 0009			            mov cx, 9d 
+     519				             
+     520 0141				            L3: 
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-12
+
+
+     521				             
+     522 0141  B4 01			              mov ah, 01h 
+     523 0143  CD 21			              int 21h 
+     524				               
+     525 0145  3C 0D			              cmp al, 13d 
+     526 0147  74 05			              je  L3END 
+     527				               
+     528 0149  88 04			              mov [si], al 
+     529				               
+     530 014B  46			              inc si 
+     531				               
+     532 014C  E2 F3			              loop L3 
+     533				               
+     534 014E				              L3END:      
+     535				               
+     536 014E  5E			                POP     SI 
+     537 014F  56			                PUSH    SI 
+     538 0150  83 C6 2E			                ADD     SI, phone 
+     539				               
+     540 0153  B3 24			                mov bl, "$" 
+     541 0155  89 1C			                mov [si], bx 
+     542				 
+     543 0157  E8 0242 R		                call NEWLINE 
+     544				               
+     545 015A  BA 03E3 R		                mov dx, offset cf4 
+     546 015D  B4 09			                mov ah, 09h 
+     547 015F  CD 21			                int 21h 
+     548				                 
+     549 0161  B9 000F			                mov cx, 15d 
+     550				                 
+     551 0164				                L4: 
+     552				                 
+     553 0164  B4 01			                  mov ah, 01h          
+					                     
+     554 0166  CD 21			                  int 21h 
+     555				                   
+     556 0168  3C 0D			                  cmp al, 13d 
+     557 016A  74 05			                  je  L4END 
+     558				                   
+     559 016C  88 04			                  mov [si], al 
+     560				                   
+     561 016E  46			                  inc si 
+     562				                   
+     563 016F  E2 F3			                  loop L4 
+     564				                   
+     565 0171				                  L4END: 
+     566				                   
+     567 0171  B3 24			                    mov bl, "$" 
+     568 0173  89 1C			                    mov [si], bx 
+     569				                   
+     570 0175  E8 0242 R		                    call NEWLINE 
+     571				                     
+     572 0178  B4 09			                    mov ah, 09h 
+     573 017A  8D 16 04C7 R		                    lea dx, successful 
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-13
+
+
+     574 017E  CD 21			                    int 21h 
+     575				                     
+     576 0180  FE 06 04EC R		                    inc customerCount  
+					  
+     577				                  
+     578				                  
+     579 0184				                L5:     
+     580				                    
+     581 0184  E8 0242 R		                   call NEWLINE 
+     582				                     
+     583 0187  8D 36 04ED R		                   lea si, customerArr 
+     584 018B  B9 0001			                   mov cx, 1d 
+     585				                     
+     586				                      
+     587 018E  5E			                   POP SI 
+     588				                     
+     589 018F				                L5_END: 
+     590				                    
+     591				 
+     592 018F  E8 01B6 R		                   call PRINT_CUST 
+     593				                    
+     594 0192  E2 FB			                   loop L5_END         
+					         
+     595				               
+     596				                  
+     597 0194  C3			       ret 
+     598				     
+     599 0195				ADD_CUSTOMER ENDP 
+     600				 
+     601				 
+     602				 
+     603 0195				PRINT_ARR_ELEMENT   PROC 
+     604				     
+     605 0195  50			                    push    ax 
+     606 0196  53			                    push    bx 
+     607 0197  51			                    push    cx 
+     608 0198  52			                    push    dx 
+     609 0199  56			                    PUSH    SI 
+     610				     
+     611 019A  B9 003C			                    MOV     CX,60D 
+     612				     
+     613 019D  8A 14			 PRINT_ARR_ELEMENT_LOOP:    MOV     DL,
+					[SI] 
+     614 019F  80 FA 24			                            CMP     DL,
+					"$" 
+     615 01A2  74 03			                            JE      PRI
+					NT_EMPTY 
+     616 01A4  EB 03 90			                            JMP     PRI
+					NT_EMPTY_END 
+     617				                             
+     618 01A7				                            PRINT_EMPTY
+					: 
+     619 01A7  B2 20			                                    MOV
+					 DL,32d 
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-14
+
+
+     620				                                     
+     621 01A9				                            PRINT_EMPTY
+					_END: 
+     622				                     
+     623 01A9  B4 02			                            MOV     AH,
+					02H 
+     624 01AB  CD 21			                            INT     21H
+					        
+     625				                             
+     626 01AD  46			                            INC     SI 
+     627				                     
+     628 01AE  E2 ED			                            LOOP    PRI
+					NT_ARR_ELEMENT_LOOP 
+     629				                             
+     630				                     
+     631 01B0  5E			                    POP    SI 
+     632 01B1  5A			                    pop    dx 
+     633 01B2  59			                    pop    cx 
+     634 01B3  5B			                    pop    bx 
+     635 01B4  58			                    pop    ax 
+     636				                     
+     637 01B5  C3			                    RET         
+     638				                     
+     639				           
+     640 01B6				PRINT_ARR_ELEMENT   ENDP  
+     641				 
+     642 01B6				PRINT_CUST          PROC 
+     643				 
+     644 01B6  B4 09			                   mov ah, 09h 
+     645 01B8  8D 16 040C R		                   lea dx, infoTopic 
+     646 01BC  CD 21			                   int 21h 
+     647				 
+     648 01BE  E8 0242 R		                   call NEWLINE 
+     649				 
+     650 01C1  B4 09			                   mov ah, 09h 
+     651 01C3  8D 16 0438 R		                   lea dx, info 
+     652 01C7  CD 21			                   int 21h 
+     653				 
+     654 01C9  E8 0242 R		                   call NEWLINE  
+     655				 
+     656				 
+     657 01CC  B4 09			                   mov ah, 09h 
+     658 01CE  8D 16 046F R		                   lea dx, info1 
+     659 01D2  CD 21			                   int 21h 
+     660				 
+     661 01D4  E8 0242 R		                   call NEWLINE 
+     662 01D7  E8 0195 R		                   call PRINT_ARR_ELEME
+					NT 
+     663				                     
+     664				                  
+     665 01DA  83 C6 3C			                   add si, customerSize
+					 
+     666				        
+     667 01DD  C3			               ret     
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-15
+
+
+     668				                    
+     669 01DE				PRINT_CUST          ENDP      
+     670				 
+     671 01DE				WHITE PROC 
+     672				          
+     673 01DE  33 C0			     xor ax, ax 
+     674 01E0  B4 09			     mov ah, 09h 
+     675 01E2  BB 0007			     mov bx, 00000111b 
+     676 01E5  CD 10			     int 10h 
+     677				      
+     678 01E7  C3			     ret     
+     679				     
+     680 01E8				WHITE ENDP 
+     681				 
+     682				 
+     683				 
+     684 01E8				LIGHTRED PROC 
+     685				     
+     686 01E8  33 C0			    xor ax, ax 
+     687 01EA  B4 09			    mov ah, 09h 
+     688 01EC  BB 000C			    mov bx, 00001100b 
+     689 01EF  CD 10			    int 10h 
+     690				 
+     691				      
+     692 01F1  C3			    ret 
+     693				      
+     694 01F2				LIGHTRED ENDP 
+     695				 
+     696 01F2				RED PROC 
+     697				     
+     698 01F2  33 C0			    xor ax, ax 
+     699 01F4  B4 09			    mov ah, 09h 
+     700 01F6  BB 0084			    mov bx, 10000100b 
+     701 01F9  CD 10			    int 10h 
+     702				 
+     703 01FB  C3			    ret 
+     704				     
+     705 01FC				RED ENDP    
+     706				 
+     707 01FC				YELLOW PROC 
+     708				    
+     709				     
+     710 01FC  33 C0			    xor ax, ax 
+     711 01FE  B4 09			    mov ah, 09h 
+     712 0200  BB 000E			    mov bx, 00001110b 
+     713 0203  CD 10			    int 10h 
+     714				     
+     715 0205  C3			    ret 
+     716				     
+     717 0206				YELLOW ENDP  
+     718				     
+     719 0206				LIGHTGREEN PROC 
+     720				     
+     721 0206  33 C0			    xor ax, ax 
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-16
+
+
+     722 0208  B4 09			    mov ah, 09h 
+     723 020A  BB 000A			    mov bx, 00001010b 
+     724 020D  CD 10			    int 10h 
+     725				     
+     726 020F  C3			    ret 
+     727 0210				LIGHTGREEN ENDP 
+     728				 
+     729 0210				GREEN PROC 
+     730				     
+     731 0210  33 C0			    xor ax, ax 
+     732 0212  B4 09			    mov ah, 09h 
+     733 0214  BB 0002			    mov bx, 00000010b 
+     734 0217  CD 10			    int 10h 
+     735				     
+     736 0219  C3			    ret 
+     737 021A				GREEN ENDP 
+     738				 
+     739 021A				LIGHTBLUE PROC 
+     740				     
+     741 021A  33 C0			    xor ax, ax 
+     742 021C  B4 09			    mov ah, 09h 
+     743 021E  BB 000B			    mov bx, 00001011b  
+     744 0221  CD 10			    int 10h 
+     745				     
+     746 0223  C3			    ret 
+     747				     
+     748 0224				LIGHTBLUE ENDP    
+     749				 
+     750 0224				BLUE PROC 
+     751				     
+     752 0224  33 C0			    xor ax, ax 
+     753 0226  B4 09			    mov ah, 09h 
+     754 0228  BB 0001			    mov bx, 00000001b 
+     755 022B  CD 10			    int 10h 
+     756				     
+     757 022D  C3			    ret 
+     758 022E				BLUE ENDP 
+     759				 
+     760 022E				LIGHTMAGENTA PROC 
+     761				     
+     762 022E  33 C0			    xor ax, ax 
+     763 0230  B4 09			    mov ah, 09h 
+     764 0232  BB 000D			    mov bx, 00001101b 
+     765 0235  CD 10			    int 10h 
+     766				     
+     767 0237  C3			    ret 
+     768 0238				LIGHTMAGENTA ENDP     
+     769				 
+     770				 
+     771 0238				MAGENTA PROC 
+     772				     
+     773 0238  33 C0			    xor ax, ax 
+     774 023A  B4 09			    mov ah, 09h 
+     775 023C  BB 0005			    mov bx, 00000101b 
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Page     1-17
+
+
+     776 023F  CD 10			    int 10h    
+     777				     
+     778 0241  C3			    ret  
+     779				     
+     780 0242				MAGENTA ENDP 
+     781				 
+     782				 
+     783 0242				NEWLINE PROC 
+     784				     
+     785				     
+     786 0242  B4 09			    mov ah, 09h 
+     787 0244  8D 16 0000 R		    lea dx, NL  
+     788 0248  CD 21			    int 21h 
+     789				     
+     790 024A  C3			    ret 
+     791				     
+     792 024B				NEWLINE ENDP 
+     793				 
+     794 024B				EXIT PROC 
+     795				     
+     796				          
+     797				         ;exit 
+     798 024B  B4 4C			         mov ah, 4ch 
+     799 024D  CD 21			         int 21h 
+     800				     
+     801 024F  C3			    ret 
+     802 0250				EXIT ENDP  
+     803				 
+     804 0250				CLEAR PROC    
+     805				         
+     806 0250  B4 06			    mov ah, 06h       ; 
+     807 0252  B0 00			    mov al, 00h       ; 
+     808 0254  B7 0F			    mov bh, 0Fh       ; 
+     809 0256  B9 0000			    mov cx, 0         ; Clear Screen 
+     810 0259  B6 64			    mov dh, 100       ; 
+     811 025B  B2 50			    mov dl, 80        ; 
+     812 025D  CD 10			    int 10h           ; 
+     813				 
+     814 025F  BA 0000			    mov dx, 0         ; 
+     815 0262  B7 00			    mov bh, 0         ; Set cursor to (
+					0,0) 
+     816 0264  B4 02			    mov ah, 02h       ;  
+     817 0266  CD 10			    int 10h 
+     818				 
+     819 0268  C3			        ret 
+     820				      
+     821 0269				CLEAR ENDP 
+     822 0269				END MAIN 
+
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Symbols-1
+
+
+Macros:
+
+		N a m e			Lines
+
+COLOUR_CHAR  . . . . . . . . . .  	  13
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	06E1	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	0269	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+ADDING . . . . . . . . . . . . .  	L BYTE	04AB	_DATA
+ADD_CUSTOMER . . . . . . . . . .  	N PROC	00E0	_TEXT	Length = 00B5
+AGE  . . . . . . . . . . . . . .  	NUMBER	0025	
+
+BEGIN  . . . . . . . . . . . . .  	L NEAR	00F0	_TEXT
+BLUE . . . . . . . . . . . . . .  	N PROC	0224	_TEXT	Length = 000A
+
+CF1  . . . . . . . . . . . . . .  	L BYTE	0381	_DATA
+CF2  . . . . . . . . . . . . . .  	L BYTE	03A2	_DATA
+CF3  . . . . . . . . . . . . . .  	L BYTE	03C3	_DATA
+CF4  . . . . . . . . . . . . . .  	L BYTE	03E3	_DATA
+CHOICE . . . . . . . . . . . . .  	L BYTE	0380	_DATA
+CHOOSE . . . . . . . . . . . . .  	L NEAR	008A	_TEXT
+CLEAR  . . . . . . . . . . . . .  	N PROC	0250	_TEXT	Length = 0019
+CONFIRM_MSG  . . . . . . . . . .  	L BYTE	0322	_DATA
+CUSTNAME . . . . . . . . . . . .  	NUMBER	000B	
+CUSTOMERARR  . . . . . . . . . .  	L BYTE	04ED	_DATA	Length = 01F4
+CUSTOMERCOUNT  . . . . . . . . .  	L BYTE	04EC	_DATA
+CUSTOMERSIZE . . . . . . . . . .  	NUMBER	003C	
+
+END_LINE . . . . . . . . . . . .  	L BYTE	02A1	_DATA
+ERROR_MSG  . . . . . . . . . . .  	L BYTE	02F8	_DATA
+EXIT . . . . . . . . . . . . . .  	N PROC	024B	_TEXT	Length = 0005
+EXIT_FUNCTION  . . . . . . . . .  	L NEAR	00DB	_TEXT
+EXIT_PROMPT  . . . . . . . . . .  	L NEAR	00DF	_TEXT
+
+F1_CHECKPOINT  . . . . . . . . .  	L NEAR	00CA	_TEXT
+FIRST_LINE . . . . . . . . . . .  	L BYTE	0149	_DATA
+
+GREEN  . . . . . . . . . . . . .  	N PROC	0210	_TEXT	Length = 000A
+
+ID . . . . . . . . . . . . . . .  	NUMBER	0000	
+INFO . . . . . . . . . . . . . .  	L BYTE	0438	_DATA
+INFO1  . . . . . . . . . . . . .  	L BYTE	046F	_DATA
+INFOTOPIC  . . . . . . . . . . .  	L BYTE	040C	_DATA
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Symbols-2
+
+
+
+L1 . . . . . . . . . . . . . . .  	L NEAR	00FB	_TEXT
+L1END  . . . . . . . . . . . . .  	L NEAR	0108	_TEXT
+L2 . . . . . . . . . . . . . . .  	L NEAR	011E	_TEXT
+L2END  . . . . . . . . . . . . .  	L NEAR	012B	_TEXT
+L3 . . . . . . . . . . . . . . .  	L NEAR	0141	_TEXT
+L3END  . . . . . . . . . . . . .  	L NEAR	014E	_TEXT
+L4 . . . . . . . . . . . . . . .  	L NEAR	0164	_TEXT
+L4END  . . . . . . . . . . . . .  	L NEAR	0171	_TEXT
+L5 . . . . . . . . . . . . . . .  	L NEAR	0184	_TEXT
+L5_END . . . . . . . . . . . . .  	L NEAR	018F	_TEXT
+LIGHTBLUE  . . . . . . . . . . .  	N PROC	021A	_TEXT	Length = 000A
+LIGHTGREEN . . . . . . . . . . .  	N PROC	0206	_TEXT	Length = 000A
+LIGHTMAGENTA . . . . . . . . . .  	N PROC	022E	_TEXT	Length = 000A
+LIGHTRED . . . . . . . . . . . .  	N PROC	01E8	_TEXT	Length = 000A
+
+MAGENTA  . . . . . . . . . . . .  	N PROC	0238	_TEXT	Length = 000A
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 001C
+MAX_CUSTOMERS  . . . . . . . . .  	NUMBER	000A	
+MENU . . . . . . . . . . . . . .  	L BYTE	019F	_DATA
+MENU1  . . . . . . . . . . . . .  	L BYTE	01CA	_DATA
+MENU2  . . . . . . . . . . . . .  	L BYTE	01F5	_DATA
+MENU3  . . . . . . . . . . . . .  	L BYTE	0220	_DATA
+MENU4  . . . . . . . . . . . . .  	L BYTE	024B	_DATA
+MENU5  . . . . . . . . . . . . .  	L BYTE	0276	_DATA
+MENU_CHOICE  . . . . . . . . . .  	L BYTE	04EB	_DATA
+MENU_TITLE . . . . . . . . . . .  	L BYTE	0003	_DATA
+MSG1 . . . . . . . . . . . . . .  	L BYTE	02CC	_DATA
+
+NEWLINE  . . . . . . . . . . . .  	N PROC	0242	_TEXT	Length = 0009
+NL . . . . . . . . . . . . . . .  	L BYTE	0000	_DATA
+
+PHONE  . . . . . . . . . . . . .  	NUMBER	002E	
+PRINT_ARR_ELEMENT  . . . . . . .  	N PROC	0195	_TEXT	Length = 0021
+PRINT_ARR_ELEMENT_LOOP . . . . .  	L NEAR	019D	_TEXT
+PRINT_CUST . . . . . . . . . . .  	N PROC	01B6	_TEXT	Length = 0028
+PRINT_EMPTY  . . . . . . . . . .  	L NEAR	01A7	_TEXT
+PRINT_EMPTY_END  . . . . . . . .  	L NEAR	01A9	_TEXT
+PRINT_MENU . . . . . . . . . . .  	N PROC	003B	_TEXT	Length = 004F
+PRINT_TITLE  . . . . . . . . . .  	N PROC	001C	_TEXT	Length = 001F
+PROMPT_USER_CHOOSE . . . . . . .  	N PROC	008A	_TEXT	Length = 0056
+
+RED  . . . . . . . . . . . . . .  	N PROC	01F2	_TEXT	Length = 000A
+
+SUCCESSFUL . . . . . . . . . . .  	L BYTE	04C7	_DATA
+
+TOPIC_DESIGN . . . . . . . . . .  	L BYTE	0174	_DATA
+
+VALID_CHOICE . . . . . . . . . .  	L NEAR	00BC	_TEXT
+
+WHITE  . . . . . . . . . . . . .  	N PROC	01DE	_TEXT	Length = 000A
+WRONG_MSG  . . . . . . . . . . .  	L BYTE	0351	_DATA
+
+YELLOW . . . . . . . . . . . . .  	N PROC	01FC	_TEXT	Length = 000A
+Microsoft (R) Macro Assembler Version 5.00                  9/10/23 20:01:09
+                                                             Symbols-3
+
+
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  ymz		
+
+
+    651 Source  Lines
+    664 Total   Lines
+     88 Symbols
+
+  50438 + 449722 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors
