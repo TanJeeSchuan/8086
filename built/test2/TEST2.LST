@@ -1,0 +1,188 @@
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 20:36:38
+                                                             Page     1-1
+
+
+       1				.MODEL      SMALL 
+       2 0064				.STACK      100 
+       3 0000				.DATA 
+       4				 
+       5 = 0008				strNumLen                   EQU 8      
+					;length of strNum 
+       6				 
+       7 0000  30 39 39 35 31 32 33	testStr     DB          "09951234", "$"
+					 
+       8       34 24			
+       9				 
+      10 0000				.CODE 
+      11 0000				MAIN        PROC 
+      12 0000  B8 ---- R		            mov         ax, @DATA 
+      13 0003  8E D8			            mov         ds, ax 
+      14 0005  33 C0			            xor         ax, ax 
+      15				 
+      16 0007  8D 36 0000 R		            lea         si, testStr 
+      17 000B  E8 0012 R		            call        PRINT_PRICE_STR
+					 
+      18				 
+      19				 
+      20				             
+      21 000E  B4 4C			            mov         ah, 4Ch 
+      22 0010  CD 21			            int         21h 
+      23 0012				MAIN        ENDP          
+      24				 
+      25 0012				PRINT_PRICE_STR     PROC               
+					                     ;do not print lead
+					ing zero 
+      26 0012  56			                            push       
+					 si 
+      27				 
+      28 0013  33 C9			                            xor        
+					 cx, cx 
+      29 0015				                            PRINT_PRICE
+					_STR_ZERO_CHECK:     ;exit loop when fo
+					und non zero 
+      30 0015  8A 04			                                       
+					 mov         al, [si] 
+      31 0017  41			                                       
+					 inc         cx 
+      32 0018  46			                                       
+					 inc         si 
+      33				 
+      34 0019  3C 24			                                       
+					 cmp         al, "$" 
+      35 001B  74 24			                                       
+					 je          PRINT_PRICE_STR_EXIT 
+      36				 
+      37 001D  3C 30			                                       
+					 cmp         al, "0" 
+      38 001F  74 F4			                                       
+					 je          PRINT_PRICE_STR_ZERO_CHECK
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 20:36:38
+                                                             Page     1-2
+
+
+					 
+      39 0021  4E			                            dec        
+					 si                  ;si is the address
+					 of the first number 
+      40 0022  49			                            dec        
+					 cx 
+      41				 
+      42 0023  B8 0008			                            mov        
+					 ax, strNumLen 
+      43 0026  2B C1			                            sub        
+					 ax, cx 
+      44 0028  8B C8			                            mov        
+					 cx, ax 
+      45				                             
+      46 002A				                            PRINT_PRICE
+					_PRINT_LOOP: 
+      47 002A  8A 14			                                       
+					 mov         dl, [si] 
+      48 002C  E8 0043 R		                                       
+					 call        PRINT_CHAR 
+      49 002F  46			                                       
+					 inc         si 
+      50				 
+      51 0030  83 F9 03			                                       
+					 cmp         cx, 3 
+      52 0033  74 05			                                       
+					 je          PRINT_PRICE_DECIMAL 
+      53 0035  E2 F3			                                       
+					 loop        PRINT_PRICE_PRINT_LOOP 
+      54				 
+      55 0037  EB 08 90			                                       
+					 jmp         PRINT_PRICE_STR_EXIT 
+      56 003A				                                       
+					 PRINT_PRICE_DECIMAL: 
+      57 003A  B2 2E			                                       
+					             MOV         dl, "." 
+      58 003C  E8 0043 R		                                       
+					             call        PRINT_CHAR    
+					                                       
+					          
+      59 003F  E2 E9			                                       
+					             loop        PRINT_PRICE_PR
+					INT_LOOP 
+      60				                             
+      61 0041				                            PRINT_PRICE
+					_STR_EXIT: 
+      62 0041  5E			                            pop        
+					 si 
+      63 0042  C3			                            ret 
+      64 0043				PRINT_PRICE_STR     ENDP 
+      65				 
+      66 0043				PRINT_CHAR      PROC                   
+					                     ;print cjaracter o
+					f value in dl 
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 20:36:38
+                                                             Page     1-3
+
+
+      67 0043  50			                            push    ax 
+      68 0044  B4 02			                            mov     ah,
+					02h 
+      69 0046  CD 21			                            int     21h
+					 
+      70 0048  58			                            pop     ax 
+      71 0049  C3			                            ret 
+      72 004A				PRINT_CHAR      ENDP 
+      73				 
+      74 004A				PRINT_STR           PROC 
+      75 004A  50			                            push       
+					 ax 
+      76 004B  B4 09			                            mov        
+					 ah,09d 
+      77 004D  CD 21			                            int        
+					 21h 
+      78 004F  58			                            pop        
+					 ax 
+      79 0050  C3			                            ret 
+      80 0051				PRINT_STR       ENDP 
+      81				   
+      82				 
+      83 0051				END         MAIN 
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 20:36:38
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+DGROUP . . . . . . . . . . . . .  	GROUP
+  _DATA  . . . . . . . . . . . .  	0009	WORD	PUBLIC	'DATA'
+  STACK  . . . . . . . . . . . .  	0064	PARA	STACK	'STACK'
+_TEXT  . . . . . . . . . . . . .  	0051	WORD	PUBLIC	'CODE'
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 0012
+
+PRINT_CHAR . . . . . . . . . . .  	N PROC	0043	_TEXT	Length = 0007
+PRINT_PRICE_DECIMAL  . . . . . .  	L NEAR	003A	_TEXT
+PRINT_PRICE_PRINT_LOOP . . . . .  	L NEAR	002A	_TEXT
+PRINT_PRICE_STR  . . . . . . . .  	N PROC	0012	_TEXT	Length = 0031
+PRINT_PRICE_STR_EXIT . . . . . .  	L NEAR	0041	_TEXT
+PRINT_PRICE_STR_ZERO_CHECK . . .  	L NEAR	0015	_TEXT
+PRINT_STR  . . . . . . . . . . .  	N PROC	004A	_TEXT	Length = 0007
+
+STRNUMLEN  . . . . . . . . . . .  	NUMBER	0008	
+
+TESTSTR  . . . . . . . . . . . .  	L BYTE	0000	_DATA
+
+@CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
+@CODESIZE  . . . . . . . . . . .  	TEXT  0		
+@DATASIZE  . . . . . . . . . . .  	TEXT  0		
+@FILENAME  . . . . . . . . . . .  	TEXT  test2		
+
+
+     82 Source  Lines
+     82 Total   Lines
+     24 Symbols
+
+  50454 + 466090 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors

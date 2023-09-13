@@ -2,203 +2,208 @@
 .STACK      100
 .DATA
 
-bcdInputBuffer  DB  "$$$"
+buffer                      DB 32
+                            DB ?
+                            DB 32 DUP(0)
+                            DB "$"
 
-abcLogo         DB "                             **      ******      ******",  10d, 13d
-                DB "                            ****    /*////**    **////**", 10d, 13d
-                DB "                           **//**   /*   /**   **    // ", 10d, 13d
-                DB "                          **  //**  /******   /**       ", 10d, 13d
-                DB "                         ********** /*//// ** /**       ", 10d, 13d
-                DB "                        /**//////** /*    /** //**    **", 10d, 13d
-                DB "                        /**     /** /*******   //****** ", 10d, 13d
-                DB "                        //      //  ///////     //////  $"
+bcdInputBuffer              DB  "$$$"
+
+abcLogo                     DB "                             **      ******      ******",  10d, 13d
+                            DB "                            ****    /*////**    **////**", 10d, 13d
+                            DB "                           **//**   /*   /**   **    // ", 10d, 13d
+                            DB "                          **  //**  /******   /**       ", 10d, 13d
+                            DB "                         ********** /*//// ** /**       ", 10d, 13d
+                            DB "                        /**//////** /*    /** //**    **", 10d, 13d
+                            DB "                        /**     /** /*******   //****** ", 10d, 13d
+                            DB "                        //      //  ///////     //////  $"
+
+anyKeyToCont                DB  "Press any key to continue!$"
+
+testStr                     DB  "TEST STRING$"
+
+sec                         DB  97d, 117d, 116d, 104d, 111d, 114d, 58d, 32d, 84d, 97d, 110d, 32d, 74d, 101d, 101d, 32d, 83d, 99d, 104d, 117d, 97d, 110d, 10d
+                            DB  89d, 101d, 111d, 104d, 32d, 77d, 105d, 110d, 103d, 32d, 90d, 104d, 101d, 10d, "$"
 
 ;++++++++++++++++++++++++++++++++++++++++++++++LOGIN SECTION++++++++++++++++++++++++++++++++++++++++++++++++++++
-loginChances    DB  5
-loginState      DB  0
+loginChances                DB  5
+loginState                  DB  0
 
-userNumber      DB  3
-loginInfo       DB  "2201610$$$","12345ABC$$$$$$$$$$$$"
-                DB  "S2201130$$","67890XYZ$$$$$$$$$$$$"
-                DB  "1$$$$$$$$$","1$$$$$$$$$$$$$$$$$$$"
+userNumber                  DB  3
+loginInfo                   DB  "2201610$$$","12345ABC$$$$$$$$$$$$"
+                            DB  "S2201130$$","67890XYZ$$$$$$$$$$$$"
+                            DB  "1$$$$$$$$$","1$$$$$$$$$$$$$$$$$$$"
 
-loginHeader     DB  80 DUP("=")
-                DB  35 DUP(" "), "LOGIN PAGE"
-                DB  10d
-                DB  80 DUP("=")
-                DB  "$"
+loginHeader                 DB  80 DUP("=")
+                            DB  35 DUP(" "), "LOGIN PAGE"
+                            DB  10d
+                            DB  80 DUP("=")
+                            DB  "$"
 
-loginBorder     DB  "                  ", 201d, 40 DUP(205d), 187d, 10d
-                DB  "                  ", 186d, 40 DUP(" ") , 186d, 10d
-                DB  "                  ", 204d, 40 DUP(205d), 185d, 10d
-                DB  "                  ", 186d, 40 DUP(" ") , 186d, 10d
-                DB  "                  ", 200d, 40 DUP(205d), 188d
-                DB  "$"
+loginBorder                 DB  "                  ", 201d, 40 DUP(205d), 187d, 10d
+                            DB  "                  ", 186d, 40 DUP(" ") , 186d, 10d
+                            DB  "                  ", 204d, 40 DUP(205d), 185d, 10d
+                            DB  "                  ", 186d, 40 DUP(" ") , 186d, 10d
+                            DB  "                  ", 200d, 40 DUP(205d), 188d
+                            DB  "$"
 
-promptUsername  DB  "Username: $"
-promptPassword  DB  "Password: $"
+promptUsername              DB  "Username: $"
+promptPassword              DB  "Password: $"
 
-userNotFound    DB  "USER NOT FOUND!$"
-passWrong       DB  "WRONG PASSWORD$"
+userNotFound                DB  "USER NOT FOUND!$"
+passWrong                   DB  "WRONG PASSWORD$"
 
-successfulLogin DB  "LOGIN SUCCESSFUL!$"
-failedLogin1    DB  "LOGIN FAILED $"
-failedLogin2    DB  " CHANCES LEFT!$"
-noMoreChance    DB  "No more login chances...$"
+successfulLogin             DB  "LOGIN SUCCESSFUL!$"
+failedLogin1                DB  "LOGIN FAILED $"
+failedLogin2                DB  " CHANCES LEFT!$"
+noMoreChance                DB  "No more login chances...$"
 
-anyKeyToCont    DB  "Press any key to continue!$"
+inputUsername               DB  10 DUP("$")
+inputPassword               DB  20 DUP("$")
 
-testStr         DB  "TEST STRING$"
+skull                       DB  "        .... NO! ...                  ... MNO! ...         ", 10d
+                            DB  "      ..... MNO!! ...................... MNNOO! ...        ", 10d
+                            DB  "        ..... MMNO! ......................... MNNOO!! .    ", 10d
+                            DB  "        .... MNOONNOO!   MMMMMMMMMMPPPOII!   MNNO!!!! .    ", 10d
+                            DB  "        ... !O! NNO! MMMMMMMMMMMMMPPPOOOII!! NO! ....      ", 10d
+                            DB  "            ...... ! MMMMMMMMMMMMMPPPPOOOOIII! ! ...       ", 10d
+                            DB  "        ........ MMMMMMMMMMMMPPPPPOOOOOOII!! .....         ", 10d
+                            DB  "        ........ MMMMMOOOOOOPPPPPPPPOOOOMII! ...           ", 10d
+                            DB  "            ....... MMMMM..    OPPMMP    .,OMI! ....       ", 10d
+                            DB  "            ...... MMMM::   o.,OPMP,.o   ::I!! ...         ", 10d
+                            DB  "                .... NNM:::.,,OOPM!P,.::::!! ....          ", 10d
+                            DB  "                .. MMNNNNNOOOOPMO!!IIPPO!!O! .....         ", 10d
+                            DB  "                ... MMMMMNNNNOO:!!:!!IPPPPOO! ....         ", 10d
+                            DB  "                .. MMMMMNNOOMMNNIIIPPPOO!! ......          ", 10d
+                            DB  "                ...... MMMONNMMNNNIIIOO!..........         ", 10d
+                            DB  "            ....... MN MOMMMNNNIIIIIO! OO ..........       ", 10d
+                            DB  "            ......... MNO! IiiiiiiiiiiiI OOOO ...........  ", 10d
+                            DB  "        ...... NNN.MNO! . O!!!!!!!!!O . OONO NO! ........  ", 10d
+                            DB  "        .... MNNNNNO! ...OOOOOOOOOOO .  MMNNON!........    ", 10d
+                            DB  "        ...... MNNNNO! .. PPPPPPPPP .. MMNON!........      ", 10d
+                            DB  "            ...... OO! ................. ON! .......       $", 10d
 
-buffer          DB 32
-                DB ?
-                DB 32 DUP(0)
-                DB "$"
-
-inputUsername   DB  10 DUP("$")
-inputPassword   DB  20 DUP("$")
-
-skull           DB  "        .... NO! ...                  ... MNO! ...         ", 10d
-                DB  "      ..... MNO!! ...................... MNNOO! ...        ", 10d
-                DB  "        ..... MMNO! ......................... MNNOO!! .    ", 10d
-                DB  "        .... MNOONNOO!   MMMMMMMMMMPPPOII!   MNNO!!!! .    ", 10d
-                DB  "        ... !O! NNO! MMMMMMMMMMMMMPPPOOOII!! NO! ....      ", 10d
-                DB  "            ...... ! MMMMMMMMMMMMMPPPPOOOOIII! ! ...       ", 10d
-                DB  "        ........ MMMMMMMMMMMMPPPPPOOOOOOII!! .....         ", 10d
-                DB  "        ........ MMMMMOOOOOOPPPPPPPPOOOOMII! ...           ", 10d
-                DB  "            ....... MMMMM..    OPPMMP    .,OMI! ....       ", 10d
-                DB  "            ...... MMMM::   o.,OPMP,.o   ::I!! ...         ", 10d
-                DB  "                .... NNM:::.,,OOPM!P,.::::!! ....          ", 10d
-                DB  "                .. MMNNNNNOOOOPMO!!IIPPO!!O! .....         ", 10d
-                DB  "                ... MMMMMNNNNOO:!!:!!IPPPPOO! ....         ", 10d
-                DB  "                .. MMMMMNNOOMMNNIIIPPPOO!! ......          ", 10d
-                DB  "                ...... MMMONNMMNNNIIIOO!..........         ", 10d
-                DB  "            ....... MN MOMMMNNNIIIIIO! OO ..........       ", 10d
-                DB  "            ......... MNO! IiiiiiiiiiiiI OOOO ...........  ", 10d
-                DB  "        ...... NNN.MNO! . O!!!!!!!!!O . OONO NO! ........  ", 10d
-                DB  "        .... MNNNNNO! ...OOOOOOOOOOO .  MMNNON!........    ", 10d
-                DB  "        ...... MNNNNO! .. PPPPPPPPP .. MMNON!........      ", 10d
-                DB  "            ...... OO! ................. ON! .......       $", 10d
-
-accountSize     EQU 30
-usernameOffset  EQU 0
-passwordOffset  EQU 10
+accountSize                 EQU 30
+usernameOffset              EQU 0
+passwordOffset              EQU 10
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 ;++++++++++++++++++++++++++++++++++++++++++++++MENU SECTION++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-menuHeader      DB          "                             __   __      __   __   __  ", 10d
-                DB          "                        /\  |__) /  `    |__) /  \ /__` ", 10d
-                DB          "                       /~~\ |__) \__,    |    \__/ .__/ $"
+menuHeader                  DB          "                             __   __      __   __   __  ", 10d
+                            DB          "                        /\  |__) /  `    |__) /  \ /__` ", 10d
+                            DB          "                       /~~\ |__) \__,    |    \__/ .__/ $"
 
-divider         DB          40 DUP ("->"),"$"
+divider                     DB          40 DUP ("->"),"$"
 
-menuBorder      DB          "        _______________________________________________________ "         ,10d
-                DB          "       /\                                                      \"         ,10d
-                DB          "   (O)===)><><><><><><><><><><><><><><><><><><><><><><><><><><><)==(O)"   ,10d
-                DB          "       \/''''''''''''''''''''''''''''''''''''''''''''''''''''''/"         ,10d
-                DB    5 DUP("       (                                                      (",10d,"        )                                                      )",10d)
-                DB          "       /\''''''''''''''''''''''''''''''''''''''''''''''''''''''\    "     ,10d
-                DB          "   (O)===)><><><><><><><><><><><><><><><><><><><><><><><><><><><)==(O)"   ,10d
-                DB          "       \/______________________________________________________/"         ,10d
-                DB          "$"
+menuBorder                  DB          "        _______________________________________________________ "         ,10d
+                            DB          "       /\                                                      \"         ,10d
+                            DB          "   (O)===)><><><><><><><><><><><><><><><><><><><><><><><><><><><)==(O)"   ,10d
+                            DB          "       \/''''''''''''''''''''''''''''''''''''''''''''''''''''''/"         ,10d
+                            DB    5 DUP("       (                                                      (",10d,"        )                                                      )",10d)
+                            DB          "       /\''''''''''''''''''''''''''''''''''''''''''''''''''''''\    "     ,10d
+                            DB          "   (O)===)><><><><><><><><><><><><><><><><><><><><><><><><><><><)==(O)"   ,10d
+                            DB          "       \/______________________________________________________/"         ,10d
+                            DB          "$"
 
-menuSelections  DB          "1)     SALES$$$$$$$$" 
-                DB          "2)     CUSTOMER$$$$$"
-                DB          "3)     EXIT$$$$$$$$$"
+menuSelections              DB  "1)     SALES$$$$$$$$" 
+                            DB  "2)     CUSTOMER$$$$$"
+                            DB  "3)     EXIT$$$$$$$$$"
 
-currentSel      DB          1
+menuInputTip                DB  24 DUP(" "),"w/s(Lowercase) to make selection$"
 
-maxSel          EQU         3
+currentSel                  DB  1
+
+maxSel                      EQU 3
 
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 ;++++++++++++++++++++++++++++++++++++++++++++++EXIT SECTION++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-confirmExit     DB  "EXIT POS SYSTEM ?$"
+confirmExit                 DB  "EXIT POS SYSTEM ?$"
 
-yesStr          DB  "[ Y E S ]$"
+yesStr                      DB  "[ Y E S ]$"
 
-noStr           DB  "[ N O ]$"
+noStr                       DB  "[ N O ]$"
 
-exitSel         DB  1
+exitSel                     DB  1
 
-exitBox         DB  00000000b   ;colour  
-                DB  7   ,12         ;first corner (row, column)
-                DB  19  ,64       ;second corner
+exitBox                     DB  00000000b   ;colour  
+                            DB  7   ,12         ;first corner (row, column)
+                            DB  19  ,64       ;second corner
 
-exitBox1        DB  10001111b   ;colour  
-                DB  4    ,8         ;first corner (row, column)
-                DB  18   ,60      ;second corner
+exitBox1                    DB  10001111b   ;colour  
+                            DB  4    ,8         ;first corner (row, column)
+                            DB  18   ,60      ;second corner
 
-exitBox2        DB  11111111b   ;colour  
-                DB  4    ,8         ;first corner (row, column)
-                DB  17   ,58      ;second corner
+exitBox2                    DB  11111111b   ;colour  
+                            DB  4    ,8         ;first corner (row, column)
+                            DB  17   ,58      ;second corner
 
-exitBox3        DB  01110000b   ;colour  
-                DB  5    ,10         ;first corner (row, column)
-                DB  17   ,58      ;second corner
+exitBox3                    DB  01110000b   ;colour  
+                            DB  5    ,10         ;first corner (row, column)
+                            DB  17   ,58      ;second corner
 
-yesPos          DB  14  ,16
-noPos           DB  14  ,42
+yesPos                      DB  14  ,16
+noPos                       DB  14  ,42
 ;++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+;author: Tan Jee Schuan, Yeoh Ming Zhe
 ;++++++++++++++++++++++++++++++++++++++++++++++SALES SECTION++++++++++++++++++++++++++++++++++++++++++++++++++++
-itemSelectionChoice DB  1
+itemSelectionChoice         DB  1
 
-numberOfItems   DB  8
-                       ;1        0         01           qty
-items           DB  1, "Lemons$$$$$$$$$$$$$$1.20$$$$", 16
-                DB  2, "Blueberries$$$$$$$$$4.99$$$$", 78
-                DB  3, "Tea$$$$$$$$$$$$$$$$$14.99$$$", 45
-                DB  4, "Brandy Apricot$$$$$$17.37$$$", 79
-                DB  5, "Tomato Ravioli Soup$3.99$$$$" ,27
-                DB  6, "Wasabi Paste$$$$$$$$18.21$$$", 63
-                DB  7, "Cheese$$$$$$$$$$$$$$15.67$$$", 7
-                DB  8, "Garlic$$$$$$$$$$$$$$3.08$$$$", 13
-                DB  0
+numberOfItems               DB  8
+                                   ;1        0         01           qty
+items                       DB  1, "Lemons$$$$$$$$$$$$$$1.20$$$$", 16
+                            DB  2, "Blueberries$$$$$$$$$4.99$$$$", 78
+                            DB  3, "Tea$$$$$$$$$$$$$$$$$14.99$$$", 45
+                            DB  4, "Brandy Apricot$$$$$$17.37$$$", 79
+                            DB  5, "Tomato Ravioli Soup$3.99$$$$" ,27
+                            DB  6, "Wasabi Paste$$$$$$$$18.21$$$", 63
+                            DB  7, "Cheese$$$$$$$$$$$$$$15.67$$$", 7
+                            DB  8, "Garlic$$$$$$$$$$$$$$3.08$$$$", 13
+                            DB  0
 
-itemSaleRecord  DB  0,  0,  0,  0,  0,  0,  0,  0
+itemSaleRecord              DB  2,  0,  0,  0,  0,  0,  0,  0
 
 ;ITEM SELECTION
 
-itemSelHeader   DB  201d, 32 DUP (205d), "ITEM SELECTION", 32 DUP (205d), 187d
-                DB  20  DUP(186d, 78 DUP(" "), 186d)
-                DB  200d, 78 DUP (205d), 188d
-                DB  "$"
+itemSelHeader               DB  201d, 32 DUP (205d), "ITEM SELECTION", 32 DUP (205d), 187d
+                            DB  20  DUP(186d, 78 DUP(" "), 186d)
+                            DB  200d, 78 DUP (205d), 188d
+                            DB  "$"
 
-itemHeader      DB  "ID", 10 DUP(" "), "Item Name", 15 DUP(" "), "Price", 8 DUP(" "), "Qty"
-                DB  "$"
+itemHeader                  DB  "ID", 10 DUP(" "), "Item Name", 15 DUP(" "), "Price", 8 DUP(" "), "Qty"
+                            DB  "$"
 
-itemSelBorder   DB  192d ,52 DUP(196d), 217d
-                DB  "$"
+itemSelBorder               DB  192d ,52 DUP(196d), 217d
+                            DB  "$"
 
 
-itemExitString  DB  "0           FINISH SALE$"
+itemExitString              DB  "0           FINISH SALE$"
+            
+;QTY SECTION            
+qtyDisplayBox               DB  01011111b
+                            DB  5, 20             ;row,column
+                            DB  8, 41
+            
+qtyBorder1                  DB  201d, 1 DUP (205d), "QTY (1-999)", 7 DUP (205d), 187d,10d
+                            DB  "$"
+qtyBorder2                  DB  186d, 19 DUP (" "), 186d,10d
+                            DB  "$"
+qtyBorder3                  DB  200d, 19 DUP (205d), 188d
+                            DB  "$"
+        
+qtyPrompt                   DB  "QTY: $"
+        
+qtyError                    DB  "Invalid QTY$"
 
-;QTY SECTION
-qtyDisplayBox   DB  01011111b
-                DB   5, 20             ;row,column
-                DB  8, 41
+itemID                      EQU 0
+itemName                    EQU 1
+itemPrice                   EQU 21
+itemQty                     EQU 29
+itemSize                    EQU 30
 
-qtyBorder1      DB  201d, 1 DUP (205d), "QTY (1-999)", 7 DUP (205d), 187d,10d
-                DB  "$"
-qtyBorder2      DB  186d, 19 DUP (" "), 186d,10d
-                DB  "$"
-qtyBorder3      DB  200d, 19 DUP (205d), 188d
-                DB  "$"
-
-qtyPrompt       DB  "QTY: $"
-
-qtyError        DB  "Invalid QTY$"
-
-itemID      EQU     0
-itemName    EQU     1
-itemPrice   EQU     21
-itemQty     EQU     29
-itemSize    EQU     30
-
-selColour   EQU     01001110b
+selColour                   EQU 01001110b
 
 ;++++++++++++++++++++++++++++++++++++++++++++++CUSTOMER SECTION++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=++++++++++++
 
@@ -296,7 +301,134 @@ age                         EQU 26
 phone                       EQU 30 
 bonusPoint                  EQU 42
 
+;;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++CALCULATION SECTION++++++++++++++++++++++++++++++++++++++++++++++++++++
+strNumLen                   EQU 8      ;length of strNum
+mulResultLen                EQU 20
+
+remainder                   DB  0
+carry                       DB  0
+
+mulResult                   DB  mulResultLen DUP("0"), "$"
+mulX                        DB  ?
+mulY                        DB  ?
+mulI                        DB  0
+mulJ                        DB  0
+;;;;;;;;;
+
+itemSubTotals               DW  0,  0,   0,   0,  0,  0,  0,  0
+
+itemSubTotalsString         DB  8 DUP(strNumLen DUP("0"), "$")
+
+result                      DB  strNumLen  DUP("0"), "$"
+
+subtotal                    DB  strNumLen  DUP("0"), "$"
+
+totalPrice                  DB  mulResultLen DUP("0"), "$"
+
+;;;3 decimal places
+testVal                     DB  "00123550$"
+
+sstRate                     DB  "00000060$"         ;;sst rate 0.060
+
+quantity                    DB  0
+
+;++++++++++++++++++++++++++++++++++++++++++++++++++++++++ TRANSACTION +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+
+promptCustomerPointSel      DB  "Select customer to add points (e for no customer) : ","$"
+
+transactionCustInvalidSel   DB  "Invalid Selection! $"
+
+transactionCustEmpty        DB  "Selected customer doesn't exist! $"
+
+recieptBorder               DB  218d, 26 DUP(196d), 194d, 5 DUP(196d), 194d , 14 DUP(196d), 191d , 10d
+                            DB  7 DUP(179d, 26 DUP(" "), 179d, 5 DUP(" "), 179d , 8 DUP(" "), 179d, 5 DUP(" "), 179d, 10d,    195d, 26 DUP(196d), 197d, 5 DUP(196d), 197d , 14 DUP(196d), 180d ,10d)
+                            DB  179d, 26 DUP(" "), 179d, 5 DUP(" "), 179d , 8 DUP(" "), 179d, 5 DUP(" "), 179d, 10d
+                            DB  204d, 26 DUP(205d), 202d, 5 DUP(205d), 206d , 14 DUP(205d), 185d , 10d
+                            DB  186d, 32 DUP(" "),  186d, 14 DUP(" "), 186d ,10d
+                            DB  200d, 32 DUP(205d), 202d, 14 DUP(205d), 188d , 10d
+                            DB  "$" 
+
+transactionCustSelectedCust DB  0
+
 ;_/~\_/~\_/~\_/~\_/~\_/~\_/~\_/~\_/~\_/~\_/~\_/~\_/~\_/~\_.  MACROS _/~\_/~\_/~\_/~\_/~\_/~\_/~\_/~\_/~\_/~\_/~\_/~\_/~\_/~\_
+NUM_TO_STR_M    MACRO   value, destAddress
+                push    ax
+                push    si
+
+                mov     ax, value
+                lea     si, destAddress
+                call    NUM_TO_STR
+
+                pop     si
+                pop     ax
+ENDM
+STRLEN          MACRO   inputStr        ;return string length in ax
+                lea     si, inputStr
+
+                xor     cx, cx
+                STRLEN_LOOP:
+                        mov     al, [si]
+                        inc     si
+
+                        inc     cx
+                        cmp     al, "$"
+                        jne     STRLEN_LOOP
+
+                dec     cx
+                mov     ax, cx
+ENDM
+STRSHL          MACRO   inputStr        ;shift characters of string to the left one char
+
+                STRLEN  inputStr        ;string length in ax
+                mov     cx, ax
+
+                lea     si, inputStr
+                inc     si
+                STRSHL_LOOP:
+                        mov     al, [si]
+                        dec     si
+                        mov     [si],al
+
+                        add     si, 2
+                        loop    STRSHL_LOOP
+
+                dec     si
+                mov     al,"$"
+                mov     [si],al
+
+                dec     si
+                mov     al, "0"
+                mov     [si],al
+ENDM
+STRCPY          MACRO   dest,   source
+                lea     si, source
+                lea     di, dest
+
+                STRCPY_L:
+                        mov     al, [si]
+                        mov     [di],al
+
+                        inc     si
+                        inc     di
+
+                        cmp     al, "$"
+                        jne     STRCPY_L
+ENDM
+CLEAR_STRNUM    MACRO   inputStr
+                xor     cx, cx
+                mov     cl, [strNumLen]
+
+                lea     si, inputStr
+                add     si, cx
+                dec     si
+
+                CLEAR_STRNUM_L:
+                        mov     al, "0"
+                        mov     [si],al
+                        dec     si
+                        loop    CLEAR_STRNUM_L
+ENDM
+
 CURSOR MACRO row,column
                 push    ax
                 push    bx
@@ -315,7 +447,20 @@ CURSOR MACRO row,column
                 pop    bx
                 pop    ax
 ENDM
+CURSORPOS   MACRO                       ;return cursor pos (row:dh , column:dl)
+                push    ax
+                push    bx
+                push    cx
 
+                ;set cursor
+                mov bh, 0d
+                mov ah, 03h       ; 
+                int 10h
+
+                pop    cx
+                pop    bx
+                pop    ax
+ENDM
 COLOUR_CHAR MACRO character, colour, printNum
                 push    ax
                 push    bx
@@ -385,6 +530,10 @@ MAIN            PROC
                 mov         ds  ,ax
                 xor         ax  ,ax
 
+                call        cls
+                call        TRANSACTION
+                jmp         EXIT_LABLE
+
                 LOGIN_START:
                             call        cls
 
@@ -397,7 +546,6 @@ MAIN            PROC
                             call        PRINT_STR
 
                             COLOUR_CHAR 0,  00001111b,  280d
-                            call        CHANGE_COLOUR
 
                             call        LOGIN_INPUT
 
@@ -417,10 +565,7 @@ MAIN            PROC
 
                             LOGIN_NO_CHANCES:
                                         call        cls
-
-                                        mov         bl, 01001111b
-                                        mov         cx, 0FFFFh
-                                        call        CHANGE_COLOUR
+                                        COLOUR_CHAR 0,  01001111b,  2000d
 
                                         lea         dx, skull
                                         call        PRINT_STR
@@ -454,6 +599,7 @@ MAIN            PROC
                             
                             main_menu_sales:
                                         call        SALES
+                                        call        TRANSACTION
                                         jmp         MENU_START
 
                             main_menu_customer:
@@ -605,18 +751,23 @@ MENU            PROC
                 lea         dx  ,menuSelections+40
                 call        PRINT_STR
 
+                CURSOR      23,0
+                COLOUR_CHAR 0,  10001111b,  80d
+                lea         dx, menuInputTip
+                call        PRINT_STR
+
                 ;menu selection code
                 mov         [currentSel],1
 
                 mov         cx, 9d
-                CURSOR      cx,35
+                CURSOR      cl, 35
                 selectionLoop:
                             push        dx
                             mov         dl, " "
                             call        PRINT_CHAR          ;clear current selection arrow
                             pop         dx
 
-                            CURSOR      cx  ,35
+                            CURSOR      cl  ,35
                             COLOUR_CHAR 17d ,00001100b,1    ;print arrow symbol once
 
                             mov         ah  ,07h
@@ -907,10 +1058,11 @@ CUSTOMER        PROC
                             je          customerMenu_Exit
 
                             ;;invalid input
-                            CURSOR      20,  0
+                            CURSOR      22,  0
+                            COLOUR_CHAR 0,  10001100b,  80d
                             lea         dx, customerInvalidInput
                             call        PRINT_STR
-                            CURSOR      23,  0
+                            CURSOR      24,  0
                             call        ANYPAUSE
                             jmp         customerMenuLoop
 
@@ -938,7 +1090,370 @@ CUSTOMER        PROC
                             ret
 CUSTOMER        ENDP
 
+TRANSACTION     PROC
+                    call        cls
+
+                    call        CALC_SUBTOTAL           ;multiples item price with  qty in itemSaleRecord and output in itemSubTotals
+
+                    call        SUBTOTALS_TO_STR        ;convert itemSubTotals to string number. Output to itemSubTotalsString
+    
+                    call        SUM_SUBTOTALS           ;sum all the item subtotals in itemSubTotalsString, output in result
+                    STRCPY      subtotal,   result
+
+                    CURSOR      3,  0
+                    lea         dx, recieptBorder
+                    call        PRINT_STR
+
+                    call        PRINT_ALL_ITEM_NAME
+                    call        PRINT_ALL_SOLD_QTY
+                    call        PRINT_ALL_SUBTOTAL
+
+                    ; call        TRANSACTION_CUST
+
+                    CURSOR      24,0
+                    call        ANYPAUSE
+                    ret
+TRANSACTION     ENDP
 ;;;;;;
+
+PRINT_ALL_SOLD_QTY  PROC
+                        xor         si,     si
+
+                        mov         bl,     18
+
+                        xor         cx,     cx
+                        mov         cl,     [numberOfItems]
+
+                        lea         si,     itemSaleRecord
+                        add         si,     cx
+                        dec         si
+                        PRINT_ALL_SOLD_QTY_LOOP:
+                                    CURSOR      bl, 30d
+                    
+                                    xor     ax,     ax
+                                    mov     al,     [si]
+                                    call    PRINT_NUM
+
+                                    sub         bl, 2
+
+                                    dec         si
+                                    loop    PRINT_ALL_SOLD_QTY_LOOP
+                        ret
+PRINT_ALL_SOLD_QTY  ENDP
+
+PRINT_ALL_SUBTOTAL  PROC
+                        xor         di,     di
+                        mov         bl,     18
+                        xor         cx,     cx
+                        mov         cl,     numberOfItems
+
+                        PRINT_ALL_SUBTOTAL_LOOP:
+                                    CURSOR      bl, 40d
+
+                                    xor         ax,     ax
+                                    mov         al,     strNumLen
+                                    inc         ax
+
+                                    dec         cx
+                                    mul         cx
+                                    inc         cx
+                                    mov         di,     ax
+
+                                    lea         si,     itemSubTotalsString[di]
+                                    call        PRINT_PRICE_STR
+
+                                    sub         bl, 2
+
+                                    loop        PRINT_ALL_SUBTOTAL_LOOP
+                        ret
+PRINT_ALL_SUBTOTAL  ENDP
+
+PRINT_ALL_ITEM_NAME PROC
+                        xor         si,     si
+
+                        mov         bl,     18
+
+                        lea         si,     items
+                        add         si,     itemName
+
+                        xor         cx,     cx
+                        mov         cl,     [numberOfItems]
+                        PRINT_ALL_ITEM_NAME_LOOP:
+                                    CURSOR      bl, 2d
+
+                                    mov         dx, si
+                                    call        PRINT_STR
+
+                                    sub         bl, 2
+                                    add         si, itemSize
+
+                                    loop    PRINT_ALL_ITEM_NAME_LOOP
+                        ret
+PRINT_ALL_ITEM_NAME ENDP
+
+TRANSACTION_CUST    PROC
+                    jmp         TRANSACTION_CUST_SELECTION_INIT
+                    ;;select customer
+
+                    TRANSACTION_CUST_SELECTION:
+                                CURSOR      24,0
+                                call        ANYPAUSE
+
+                    TRANSACTION_CUST_SELECTION_INIT:
+                                call        cls
+
+                                call        DISPLAY_ALL_CUST
+                                call        CUSTOMER_NUMBERING
+
+                                CURSOR      16, 0
+                                lea         dx, promptCustomerPointSel
+                                call        PRINT_STR
+
+                                mov         ah, 01h
+                                int         21h
+
+                                cmp         al, 'e'
+                                je          TRANSACTION_CUST_SELECTION_END
+                                cmp         al, 'E'
+                                je          TRANSACTION_CUST_SELECTION_END
+
+                                sub         al, 49d             ;convert to digit and dec 1
+
+                                cmp         al, 0
+                                jb          TRANSACTION_CUST_SELECTION_WRONG
+
+                                cmp         al, 4
+                                ja          TRANSACTION_CUST_SELECTION_WRONG
+
+                                xor         ah, ah
+                                mov         bx, customerSize
+                                mul         bx
+
+                                mov         si, ax
+
+                                mov         dl, customerArr[si]
+                                cmp         dl, "$"
+                                je          TRANSACTION_CUST_SELECTION_EMPTY
+
+                                ;;all clear
+                                ;;si is address of selected customer
+                                
+                                jmp         TRANSACTION_CUST_SELECTION_END
+
+                                TRANSACTION_CUST_SELECTION_WRONG:
+                                CURSOR      20, 31
+                                lea         dx, transactionCustInvalidSel
+                                call        PRINT_STR
+                                jmp         TRANSACTION_CUST_SELECTION
+
+                                TRANSACTION_CUST_SELECTION_EMPTY:
+                                CURSOR      20, 24
+                                lea         dx, transactionCustEmpty
+                                call        PRINT_STR
+                                jmp         TRANSACTION_CUST_SELECTION
+                    TRANSACTION_CUST_SELECTION_END:
+                    ret
+TRANSACTION_CUST    ENDP
+
+DEBUG               PROC
+                                        mov     dl, [mulI]
+                                        add     dl, 48d
+                                        call    PRINT_CHAR
+
+                                        mov     dl, " "
+                                        call    PRINT_CHAR
+
+                                        mov     dl, [mulJ]
+                                        add     dl, 48d
+                                        call    PRINT_CHAR
+
+                                        mov     dl, " "
+                                        call    PRINT_CHAR
+
+                                        lea     dx, mulResult
+                                        call    PRINT_STR
+
+                                        mov     dl, " "
+                                        call    PRINT_CHAR
+                                        call    PRINT_CHAR
+
+                                        call    GET_IJ
+                                        mov     ax, dx
+                                        ; add     dx, 48d
+                                        call    PRINT_NUM
+
+                                        mov     ah, 01h
+                                        int     21h
+                                        ret
+DEBUG               ENDP
+
+GET_IJ              PROC                                        ;return i+j in dx
+                                mov     dh, [mulI]             ;i+j
+                                mov     dl, [mulJ]
+                                add     dh, dl
+
+                                mov     dl, mulResultLen    ;get the length of result string
+                                dec     dl
+                                sub     dl, dh               ;(i+j) offset from result string
+                                xor     dh, dh
+
+                                ret
+GET_IJ              ENDP
+
+SUM_SUBTOTALS       PROC
+                        xor         di, di
+                        xor         cx, cx
+                        mov         cl, [numberOfItems]
+                        sumAllSubtotals:
+                                    push        cx
+
+                                    dec         cx
+                                    mov         ax, strNumLen
+                                    inc         ax
+                                    mul         cx              ;index to next strNum
+                                    mov         di, ax
+
+                                    pop         cx
+
+                                    lea         si, result
+                                    lea         di, itemSubTotalsString[di]
+                                    call        STRNUM_ADD
+
+                                    loop        sumAllSubtotals
+
+                        ret
+SUM_SUBTOTALS       ENDP
+
+SUBTOTALS_TO_STR    PROC
+                        xor         si, si              ;index for itemSubTotals
+                        xor         di, di              ;index for itemSubTotalsString
+                        xor         cx, cx
+                        mov         cl, [numberOfItems]
+                        itemSubTotals_To_String:
+                                    push        cx
+                                    dec         cx
+
+                                    mov         ax, 2
+                                    mul         cx
+                                    mov         si, ax              ;index for itemSubtotals ;;; address + 2*cx
+
+                                    mov         ax, strNumLen       
+                                    inc         ax
+                                    mul         cx
+                                    mov         di, ax              ;index for itemSubTotalsString ;;; addresss + stringLength*cx
+
+                                    pop         cx
+
+                                    NUM_TO_STR_M    itemSubTotals[si], itemSubTotalsString[di]
+
+                                    loop        itemSubTotals_To_String
+                    ret
+SUBTOTALS_TO_STR    ENDP
+
+CALC_SUBTOTAL       PROC
+                        xor     cx, cx
+                        mov     cl, [numberOfItems]
+                        calculateSubTotalLoop:
+                                lea     si, items + itemPrice
+                                lea     di, itemSaleRecord
+
+                                push    cx
+                                dec     cx
+                                mov     ax, itemSize            ;offset to previous item cx*itemSize
+                                mul     cx
+                                add     si, ax
+                                add     di, cx
+                                pop     cx
+
+                                call    GET_ITEM_PRICE    
+
+                                mov     ax, dx
+                                xor     dx, dx
+                                mov     dl, [di]                ;get sold qty
+
+                                mul     dx                      ;calculate SaleQty*Price
+
+                                push    ax
+                                mov     bx, 2
+                                mov     ax, cx
+                                dec     ax
+                                mul     bx
+                                mov     di, ax
+                                pop     ax
+                                mov     itemSubTotals[di], ax
+
+                                loop    calculateSubTotalLoop
+
+                        ret
+CALC_SUBTOTAL   ENDP
+
+GET_ITEM_PRICE      PROC                            ;output price from item in si into dx
+                push    cx
+                push    si
+                
+                xor     ax, ax
+                xor     bx, bx
+                xor     cx, cx
+                xor     dx, dx
+
+                mov     cx, 0                   ;cx as number counter
+ 
+                dec     si       
+                PRICE_BCD_CONV_LOOP:
+                        inc     si
+                        mov     al, [si]
+                        cmp     al, "$"
+                        je      PRICE_BCD_CONV_CALC
+                        
+                        cmp     al, "."
+                        je      PRICE_BCD_CONV_LOOP
+                        
+                        inc     cx              ;record number of digits
+                        jmp     PRICE_BCD_CONV_LOOP                   
+                                            
+                        PRICE_BCD_CONV_CALC:
+                                mov         ax, 0001h                   ;ax tracks place of number, eg first number * 1, second number * 10, third number *
+                                dec         si
+                                
+                                BCD_INPUT_CAL:
+                                xor         bx, bx
+
+                                mov         bl, [si]
+                                cmp         bl, "$"     ;if is not digit
+                                je          BCD_INPUT_CAL_NOT_DIGIT_1  
+                                
+                                cmp         bl, "."     ;if is not digit
+                                je          BCD_INPUT_CAL_NOT_DIGIT_1
+                                
+                                sub         bl, 48d
+
+
+                                push        ax              
+
+                                push        dx                  ;mul will effect dx
+                                mul         bx
+                                pop         dx
+
+                                add         dx, ax
+                                pop         ax
+
+                                push        dx                  ;mul will effect dx
+                                mov         bx, 10d
+                                mul         bx
+                                pop         dx
+
+                                dec         si
+                                loop        BCD_INPUT_CAL               
+                                
+                                jmp         BCD_INPUT_CAL_NOT_DIGIT_END_1 
+                                BCD_INPUT_CAL_NOT_DIGIT_1:
+                                            dec         si
+                                            jmp         BCD_INPUT_CAL
+                                BCD_INPUT_CAL_NOT_DIGIT_END_1:    
+                pop     si
+                pop     cx
+                ret
+GET_ITEM_PRICE  ENDP  
 
 CUSTOMER_MENU       PROC
                             COLOUR_CHAR 0,  00001011b, 640d
@@ -1175,9 +1690,7 @@ DISPLAY_ALL_CUST    PROC            ;display customerArr
                             lea         si ,customerArr         ;print all customers
                             call        PRINT_ALL_CUST
 
-
-
-                            CURSOR      18,2
+                            CURSOR      18,0
                             lea         dx, totalCustomersStr   
                             call        PRINT_STR
 
@@ -1220,22 +1733,32 @@ CLEAR_CUST_INPUT    ENDP
 
 CUST_DETAIL_INPUT   PROC                                        ;input into customer array
                         push        cx
-                    startReadID:
+
+                        startReadID:
                         CURSOR      6, 15
                         COLOUR_CHAR 0, 00001010b, 20d
+
                         push        si
-                        mov         cx, 5d    
+                        mov         cx, 4d 
+
+                        ;;init, first char of id must be C
+                        push        dx
+                        mov         dl  ,"C"
+                        mov         [si],dl
+                        inc         si
+                        call        PRINT_CHAR
+                        pop         dx    
                               
-                            readID:
-                                    mov         ah, 01h
-                                    int         21h
+                        readID:
+                                mov         ah, 01h
+                                int         21h
 
-                                    cmp         al, 13d
-                                    je          startReadName
+                                cmp         al, 13d
+                                je          startReadName
 
-                                    mov         [si], al
-                                    inc         si
-                                    loop        readID 
+                                mov         [si], al
+                                inc         si
+                                loop        readID 
 
                     startReadName:
                             pop         si
@@ -1453,7 +1976,7 @@ CUSTOMER_NUMBERING  PROC
                         ret
 CUSTOMER_NUMBERING  ENDP
 
-MOVE_CURSOR_QTY PROC
+MOVE_CURSOR_QTY     PROC
                             push        bx
 
                             mov         bl, [qtyDisplayBox+1]   ;use bl to store row number
@@ -1465,8 +1988,8 @@ MOVE_CURSOR_QTY PROC
                             pop         bx
                             ret
 MOVE_CURSOR_QTY ENDP
-
-DISPLAY_QTY_BOX PROC
+    
+DISPLAY_QTY_BOX     PROC
                             push        ax
                             push        bx
                             push        cx
@@ -1496,8 +2019,8 @@ DISPLAY_QTY_BOX PROC
                             pop         ax
                             ret
 DISPLAY_QTY_BOX ENDP
-
-ITEM_SELECTION  PROC                                                        ;modify itemSelectionChoice
+    
+ITEM_SELECTION      PROC                                                        ;modify itemSelectionChoice
                             mov         bl  ,4
                             CURSOR      bl  ,3
                             COLOUR_CHAR 0, 01001110b, 51d
@@ -1560,8 +2083,8 @@ ITEM_SELECTION  PROC                                                        ;mod
 
                             ret
 ITEM_SELECTION  ENDP
-
-PRINT_ALL_ITEMS PROC
+    
+PRINT_ALL_ITEMS     PROC
                             push        ax
                             push        bx
                             push        cx
@@ -1600,8 +2123,8 @@ PRINT_ALL_ITEMS PROC
                             pop         ax
                             ret
 PRINT_ALL_ITEMS ENDP
-
-PRINT_ITEM      PROC                                                        ;print to row value in bl
+    
+PRINT_ITEM          PROC                                                        ;print to row value in bl
                             push    ax
                             push    bx
                             push    cx
@@ -1634,7 +2157,102 @@ PRINT_ITEM      PROC                                                        ;pri
                             ret
 PRINT_ITEM      ENDP
 
-PRINT_NUM       PROC                        ;print ax
+
+PRINT_PRICE_STR     PROC                                    ;do not print leading zero
+                            push        ax
+                            push        bx
+                            push        cx
+                            push        dx
+                            push        si
+
+                            xor         cx, cx
+                            PRINT_PRICE_STR_ZERO_CHECK:     ;exit loop when found non zero
+                                        mov         al, [si]
+                                        inc         cx
+                                        inc         si
+
+                                        cmp         al, "$"
+                                        je          PRINT_PRICE_STR_ZERO                    ;if entire string is "0"
+
+                                        cmp         al, "0"
+                                        je          PRINT_PRICE_STR_ZERO_CHECK
+                            PRINT_PRICE_STR_ZERO_CHECK_END:
+                            dec         si                  ;si is the address of the first number
+                            dec         cx
+
+                            mov         ax, strNumLen
+                            sub         ax, cx
+                            mov         cx, ax
+                            jmp         PRINT_PRICE_STR_ZERO_END
+
+                            PRINT_PRICE_STR_ZERO:
+                                        mov         cx, 4
+                                        sub         si, cx
+                                        dec         cx
+                            PRINT_PRICE_STR_ZERO_END:
+                            
+                            PRINT_PRICE_PRINT_LOOP:
+                                        mov         dl, [si]
+                                        inc         si
+
+                                        ; cmp         dl, "$"
+                                        ; je          PRINT_PRICE_PRINT_LOOP
+                                        call        PRINT_CHAR
+
+                                        cmp         cx, 3
+                                        je          PRINT_PRICE_DECIMAL
+                                        loop        PRINT_PRICE_PRINT_LOOP
+
+                                        jmp         PRINT_PRICE_STR_EXIT
+                                        PRINT_PRICE_DECIMAL:
+                                                    MOV         dl, "."
+                                                    call        PRINT_CHAR                                                    
+                                                    loop        PRINT_PRICE_PRINT_LOOP
+                            
+                            PRINT_PRICE_STR_EXIT:
+                            pop         si
+                            pop         dx
+                            pop         cx
+                            pop         bx
+                            pop         ax
+                            ret
+PRINT_PRICE_STR     ENDP
+
+NUM_TO_STR          PROC        ;value in ax to si
+                        push    ax
+                        push    bx
+                        push    cx
+                        push    dx
+                        push    si
+
+                        add     si, strNumLen           ;offset to last char of string number
+                        dec     si
+
+                        xor     cx, cx
+                        mov     bx, 10d                 ;/10
+
+                        NUM_TO_STR_DIV_LOOP:
+                                xor     dx, dx          ;clear remainder
+
+                                div     bx
+
+                                add     dl, 48d
+                                mov     [si],   dl
+                                dec     si
+                                
+                                cmp     ax, 0
+                                jnz     NUM_TO_STR_DIV_LOOP
+
+                        pop    si
+                        pop    dx
+                        pop    cx
+                        pop    bx
+                        pop    ax
+
+                        ret
+NUM_TO_STR      ENDP
+
+PRINT_NUM           PROC                        ;print ax
                             push    ax
                             push    bx
                             push    cx
@@ -1666,8 +2284,8 @@ PRINT_NUM       PROC                        ;print ax
 
                             ret
 PRINT_NUM       ENDP
-
-BCD_INPUT       PROC                    ;output to al
+    
+BCD_INPUT           PROC                    ;output to al
                 push        si
 
                 lea         si, bcdInputBuffer
@@ -1693,7 +2311,7 @@ BCD_INPUT       PROC                    ;output to al
                 mov         ax, 1                   ;ax tracks 位数 of number, eg first number * 1, second number * 10, third number *
                 lea         si, bcdInputBuffer+2
                 mov         cx, 3d                  ;number of times to loop
-                BCD_INPUT_CAL:
+                BCD_INPUT_CALC:
                             xor         bx, bx
 
                             mov         bl, [si]
@@ -1716,7 +2334,7 @@ BCD_INPUT       PROC                    ;output to al
 
                             BCD_INPUT_CAL_NOT_DIGIT:
                             dec         si
-                            loop        BCD_INPUT_CAL
+                            loop        BCD_INPUT_CALC
 
                 mov         cx, 3d
                 lea         si, bcdInputBuffer
@@ -1730,8 +2348,8 @@ BCD_INPUT       PROC                    ;output to al
                 pop         si
                 ret
 BCD_INPUT       ENDP
-
-DISPLAY_BOX     PROC                    ;display box from detials from si
+    
+DISPLAY_BOX         PROC                    ;display box from detials from si
                             push    ax
                             push    bx
                             push    cx
@@ -1780,16 +2398,16 @@ DISPLAY_BOX     PROC                    ;display box from detials from si
                             pop    ax
                             ret
 DISPLAY_BOX     ENDP
-
-PRINT_STR       PROC
+    
+PRINT_STR           PROC
                             push        ax
                             mov         ah,09d
                             int         21h
                             pop         ax
                             ret
 PRINT_STR       ENDP
-
-CLS             PROC
+    
+CLS                 PROC
                             push    ax
                             push    bx
                             push    cx
@@ -1815,8 +2433,8 @@ CLS             PROC
 
                             ret
 CLS             ENDP
-
-INPUT_STR       PROC                                        ;read input and move to address in di
+    
+INPUT_STR           PROC                                        ;read input and move to address in di
                             push        ax
                             push        dx
                             push        di
@@ -1854,8 +2472,8 @@ INPUT_STR       PROC                                        ;read input and move
                             pop         ax
                             ret
 INPUT_STR       ENDP
-
-SECRET_INPUT    PROC
+    
+SECRET_INPUT        PROC
                             push        ax
                             push        di
 
@@ -1863,13 +2481,16 @@ SECRET_INPUT    PROC
                             xor         cx,cx
 
                             mov         ah,07h
-                            mov         dl, "*"
                             SECRET_INPUT_LOOP:
                                         int         21h
                                         
                                         cmp         al, 13d
                                         je          SECRET_INPUT_LOOP_EXIT
 
+                                        cmp         al, 08d     ;if backspace
+                                        je          SECRET_INPUT_LOOP_BACKSPACE
+
+                                        mov         dl, "*"
                                         call        PRINT_CHAR
 
                                         mov         [di],al
@@ -1877,30 +2498,41 @@ SECRET_INPUT    PROC
 
                                         jmp         SECRET_INPUT_LOOP
 
-                            SECRET_INPUT_LOOP_EXIT:
+                                        SECRET_INPUT_LOOP_BACKSPACE:
+                                                    dec         di
+                                                    mov         dl  ,"$"
+                                                    mov         [di],dl
 
+                                                    mov         dl, 8d
+                                                    call        PRINT_CHAR
+                                                    mov         dl, " "
+                                                    call        PRINT_CHAR
+                                                    mov         dl, 8d
+                                                    call        PRINT_CHAR
+                                        jmp         SECRET_INPUT_LOOP
+                            SECRET_INPUT_LOOP_EXIT:
                             pop         di
                             pop         ax
                             ret
 SECRET_INPUT    ENDP
-
-PRINT_CHAR      PROC                                        ;print cjaracter of value in dl
+    
+PRINT_CHAR          PROC                                        ;print cjaracter of value in dl
                             push    ax
                             mov     ah,02h
                             int     21h
                             pop     ax
                             ret
 PRINT_CHAR      ENDP
-
-NEWLINE         PROC
+    
+NEWLINE             PROC
                             push    dx
                             mov     dl,0Ah
                             call PRINT_CHAR
                             pop     dx
                             ret
 NEWLINE         ENDP
-
-ANYPAUSE        PROC
+    
+ANYPAUSE            PROC
                             push        ax
                             push        dx
 
@@ -1913,8 +2545,8 @@ ANYPAUSE        PROC
                             pop         ax
                             ret
 ANYPAUSE        ENDP
-
-STRCMP          PROC                                        ;compares string in si and di, if equal will return 0 in ax
+    
+STRCMP              PROC                                        ;compares string in si and di, if equal will return 0 in ax
                             push        si
                             push        di
 
@@ -1941,15 +2573,157 @@ STRCMP          PROC                                        ;compares string in 
                             ret
 STRCMP          ENDP
 
-CHANGE_COLOUR   PROC
-                            push        ax
+;;;;;;;;;;;;;STRNUM
 
-                            xor         ax  ,ax
-                            mov         ah  ,09h
-                            int         10h
+STRNUM_ADD          PROC                            ;string si + string di
+                        push    ax
+                        push    bx
+                        push    cx
+                        push    dx
+                        push    si
+                        push    di
 
-                            pop         ax
-                            ret
-CHANGE_COLOUR   ENDP
+                        mov     [remainder], 0
+
+                        mov     cx, strNumLen
+                        dec     cx
+                        add     si, cx          ;offset to last char
+                        add     di, cx
+
+                        mov     cx, strNumLen
+
+                        STRNUM_ADD_LOOP:
+                                mov     al, [si]
+                                sub     al, 48d
+
+                                mov     ah, [di]
+                                sub     ah, 48d
+
+                                add     al, ah
+                                add     al, [remainder]
+                                xor     ah, ah
+
+                                mov     bx, 10d
+                                div     bl              ;remainder in ah, quotient in al 
+
+                                mov     [remainder],al  ;save quotient
+
+                                push    cx
+                                push    di
+                                
+                                dec     cx
+                                lea     di,     result
+                                add     di,     cx
+
+                                add     ah,     48d
+                                mov     [di],   ah
+
+                                pop     di
+                                pop     cx
+
+                                dec     si
+                                dec     di
+                                loop    STRNUM_ADD_LOOP
+
+                        pop     di
+                        pop     si
+                        pop     dx
+                        pop     cx
+                        pop     bx
+                        pop     ax
+
+                        ret
+STRNUM_ADD          ENDP
+
+STRNUM_MUL          PROC                            ;multiply si, di strings, assume string has 3 decimal places, thus last 3 digits throw away
+                        mov     [carry]     ,0
+                        mov     [mulI]      ,0
+                        mov     [mulJ]      ,0
+
+                        mov     cx, strNumLen
+                        dec     cx
+
+                        add     si, cx          ;offset to last char
+                        add     di, cx
+
+                        mov     cx, strNumLen
+
+                        STRNUM_MUL_L1:
+                                mov     al, [di]
+                                sub     al, 48d
+                                mov     [mulY],al
+
+                                mov     [mulI], 0
+                                push    cx
+
+                                push    si
+                                mov     cx, strNumLen
+                                
+                                STRNUM_MUL_L2:
+                                    
+                                        push    cx
+                                        xor     ax, ax
+                                        mov     al, [si]
+                                        sub     al, 48d
+
+                                        xor     bx, bx
+                                        mov     bl, [mulY]
+                                        mul     bx                  ;ax = ui + vj
+
+                                        call    GET_IJ
+
+                                        push    si
+                                        lea     si, mulResult
+                                        add     si, dx              ;OFFSET to w(i+j) result. n-1, n-2, ..., 0 (reverse order, index ends with 0)
+
+                                        xor     bx, bx
+                                        mov     bl, [si]            ;w(i+j)
+                                        sub     bl, 48d                                        
+
+                                        add     ax, bx              ;ax = ui + vj + w(i+j)
+
+                                        xor     bx, bx
+                                        mov     bl, [carry]
+                                        add     ax, bx              ;ax = ui + vj + w(i+j) + k
+
+                                        xor     dx, dx
+                                        mov     bx, 10d
+                                        div     bx                  ;dx = ax Mod 10, ax = FLOOR(ax/b)
+
+                                        add     dl,     48d
+                                        mov     [si],   dl          ;w(i+j) = ax Mod 10
+
+                                        mov     [carry], al         ;k = FLOOR(ax/b)
+                                        pop     si
+
+                                        ; call    DEBUG
+
+                                        inc     [mulI]
+
+                                        dec     si
+
+                                        pop     cx
+                                        loop    STRNUM_MUL_L2
+
+                                pop     si
+
+                                call    GET_IJ
+                                push    si
+                                lea     si, mulResult
+                                add     si, dx              ;OFFSET to w(i+j) result. n-1, n-2, ..., 0 (reverse order, index ends with 0)
+
+                                mov     al, [carry]
+                                add     al, 48d
+                                mov     [si],   al
+
+                                pop     si
+                                
+                                inc     [mulJ]
+                                dec     di
+
+                                pop     cx
+                                loop    STRNUM_MUL_L1
+                        ret
+STRNUM_MUL          ENDP
 
 END MAIN

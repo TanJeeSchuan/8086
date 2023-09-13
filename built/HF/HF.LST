@@ -1,4 +1,10 @@
-Microsoft (R) Macro Assembler Version 5.00                  9/11/23 18:49:35
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-1
+
+
+ =                           1	
+ASMFiles\A\HF.asm(172): error A2004: Redefinition of symbol
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
                                                              Page     1-1
 
 
@@ -6,503 +12,1381 @@
        2 0400				.stack 
        3 0000				.data 
        4				 
-       5 0000  08			numberOfItems   DB  8 
-       6				            ;1        0         01     
-					      qty 
-       7 0001  01 4C 65 6D 6F 6E 73	items   DB  1, "Lemons$$$$$$$$$$$$$$1.2
-					0$$$$", 16 
-       8       24 24 24 24 24 24 24	
-       9       24 24 24 24 24 24 24	
-      10       31 2E 32 30 24 24 24	
-      11       24 10			
-      12 001F  02 42 6C 75 65 62 65	items2  DB  2, "Blueberries$$$$$$$$$4.9
-					9$$$$", 78 
-      13       72 72 69 65 73 24 24	
-      14       24 24 24 24 24 24 24	
-      15       34 2E 39 39 24 24 24	
-      16       24 4E			
-      17 003D  03 54 65 61 24 24 24	items3  DB  3, "Tea$$$$$$$$$$$$$$$$$14.
-					99$$$", 45 
-      18       24 24 24 24 24 24 24	
-      19       24 24 24 24 24 24 24	
-      20       31 34 2E 39 39 24 24	
-      21       24 2D			
-      22 005B  04 42 72 61 6E 64 79	items4  DB  4, "Brandy Apricot$$$$$$17.
-					37$$$", 79 
-      23       20 41 70 72 69 63 6F	
-      24       74 24 24 24 24 24 24	
-      25       31 37 2E 33 37 24 24	
-      26       24 4F			
-      27 0079  05 54 6F 6D 61 74 6F	items5  DB  5, "Tomato Ravioli Soup$3.9
-					9$$$$", 27 
-      28       20 52 61 76 69 6F 6C	
-      29       69 20 53 6F 75 70 24	
-      30       33 2E 39 39 24 24 24	
-      31       24 1B			
-      32 0097  06 57 61 73 61 62 69	items6  DB  6, "Wasabi Paste$$$$$$$$18.
-					21$$$", 63 
-      33       20 50 61 73 74 65 24	
+       5 = 0008				strNumLen                   EQU 8      
+					;length of strNum 
+       6 = 0014				mulResultLen                EQU 20 
+       7				 
+       8 0000  00			remainder                   DB  0 
+       9 0001  00			carry                       DB  0 
+      10				 
+      11 0002  0014[			mulResult                   DB  mulResu
+					ltLen DUP("0"), "$" 
+      12	   30			
+      13			 ]	
+      14       24			
+      15 0017  ??			mulX                        DB  ? 
+      16 0018  ??			mulY                        DB  ? 
+      17 0019  00			mulI                        DB  0 
+      18 001A  00			mulJ                        DB  0 
+      19				;;;;;;;;; 
+      20				 
+      21 001B  08			numberOfItems               DB  8 
+      22				                                    ;1 
+					       0         01           qty 
+      23 001C  01 4C 65 6D 6F 6E 73	items                       DB  1, "Lem
+					ons$$$$$$$$$$$$$$1.20$$$$", 16 
+      24       24 24 24 24 24 24 24	
+      25       24 24 24 24 24 24 24	
+      26       31 2E 32 30 24 24 24	
+      27       24 10			
+      28 003A  02 42 6C 75 65 62 65	                            DB  2, "Blu
+					eberries$$$$$$$$$4.99$$$$", 78 
+      29       72 72 69 65 73 24 24	
+      30       24 24 24 24 24 24 24	
+      31       34 2E 39 39 24 24 24	
+      32       24 4E			
+      33 0058  03 54 65 61 24 24 24	                            DB  3, "Tea
+					$$$$$$$$$$$$$$$$$14.99$$$", 40 
       34       24 24 24 24 24 24 24	
-      35       31 38 2E 32 31 24 24	
-      36       24 3F			
-      37 00B5  07 43 68 65 65 73 65	items7  DB  7, "Cheese$$$$$$$$$$$$$$15.
-					67$$$", 7 
-      38       24 24 24 24 24 24 24	
-      39       24 24 24 24 24 24 24	
-      40       31 35 2E 36 37 24 24	
-      41       24 07			
-      42 00D3  08 47 61 72 6C 69 63	items8  DB  8, "Garlic$$$$$$$$$$$$$$3.0
-					8$$$$", 13 
-      43       24 24 24 24 24 24 24	
-      44       24 24 24 24 24 24 24	
-      45       33 2E 30 38 24 24 24	
-Microsoft (R) Macro Assembler Version 5.00                  9/11/23 18:49:35
+      35       24 24 24 24 24 24 24	
+      36       31 34 2E 39 39 24 24	
+      37       24 28			
+      38 0076  04 42 72 61 6E 64 79	                            DB  4, "Bra
+					ndy Apricot$$$$$$17.37$$$", 29 
+      39       20 41 70 72 69 63 6F	
+      40       74 24 24 24 24 24 24	
+      41       31 37 2E 33 37 24 24	
+      42       24 1D			
+      43 0094  05 54 6F 6D 61 74 6F	                            DB  5, "Tom
+					ato Ravioli Soup$3.99$$$$", 27 
+      44       20 52 61 76 69 6F 6C	
+      45       69 20 53 6F 75 70 24	
+      46       33 2E 39 39 24 24 24	
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
                                                              Page     1-2
 
 
-      46       24 0D			
-      47 00F1  00			        DB  0 
-      48				 
-      49 00F2  06 4D 0F 09 00 00 00	itemSaleRecord  DB  6,  77,  15,  9,  0
-					,  0,  0,  0  
-      50       00			
-      51 00FA  00			quantity    db  0 
-      52				 
-      53				 
-      54 = 0000				itemID      EQU     0 
-      55 = 0001				itemName    EQU     1 
-      56 = 0015				itemPrice   EQU     21 
-      57 = 001D				itemQty     EQU     29 
-      58 = 001E				itemSize    EQU     30 
-      59				 
-      60				CURSOR MACRO row,column 
-      61				                push    ax 
-      62				                push    bx 
-      63				                push    cx 
-      64				                push    dx 
-      65				 
-      66				                ;set cursor 
-      67				                mov dh, row        ;row
-					 
-      68				                mov dl, column       ;c
-					olumn 
-      69				                mov bh, 0         ; 
-      70				                mov ah, 02h       ;  
-      71				                int 10h 
-      72				 
-      73				                pop    dx 
-      74				                pop    cx 
-      75				                pop    bx 
-      76				                pop    ax 
-      77				ENDM   
+      47       24 1B			
+      48 00B2  06 57 61 73 61 62 69	                            DB  6, "Was
+					abi Paste$$$$$$$$18.21$$$", 28 
+      49       20 50 61 73 74 65 24	
+      50       24 24 24 24 24 24 24	
+      51       31 38 2E 32 31 24 24	
+      52       24 1C			
+      53 00D0  07 43 68 65 65 73 65	                            DB  7, "Che
+					ese$$$$$$$$$$$$$$15.67$$$", 7 
+      54       24 24 24 24 24 24 24	
+      55       24 24 24 24 24 24 24	
+      56       31 35 2E 36 37 24 24	
+      57       24 07			
+      58 00EE  08 47 61 72 6C 69 63	                            DB  8, "Gar
+					lic$$$$$$$$$$$$$$3.08$$$$", 13 
+      59       24 24 24 24 24 24 24	
+      60       24 24 24 24 24 24 24	
+      61       33 2E 30 38 24 24 24	
+      62       24 0D			
+      63 010C  00			                            DB  0 
+      64				 
+      65 010D  06 4D 0F 09 00 00 00	itemSaleRecord              DB  6,  77,
+					  15,  9,  0,  0,  0,  1  
+      66       01			
+      67				 
+      68 0115  0000 0000 0000 0000	itemSubTotals               DW  0,  0, 
+					  0,   0,  0,  0,  0,  0 
+      69       0000 0000 0000 0000	
+      70				 
+      71 0125  0008[			itemSubTotalsString         DB  8 DUP(s
+					trNumLen DUP("0"), "$") 
+      72	0008[			
+      73	    30			
+      74			]	
+      75	   24			
+      76			 ]	
+      77				
       78				 
-      79 0000				.code 
-      80 0000				main    proc 
-      81 0000  B8 ---- R				mov     ax, @data 
-      82 0003  8E D8					mov     ds, ax 
+      79 016D  0008[			result                      DB  strNumL
+					en  DUP("0"), "$" 
+      80	   30			
+      81			 ]	
+      82       24			
       83				 
-      84 0005  8D 36 0016 R		        lea     si, items + itemSIze*0 
-					+itemPrice 
-      85 0009  E8 0015 R		        call    GET_ITEM_PRICE 
-      86				                           
-      87 000C  8B C2			        mov ax,dx 
-      88 000E  E8 010C R		        call    PRINT_NUM 
-      89				               
-      90 0011  B4 4C			        mov ah, 4ch 
-      91 0013  CD 21			        int 21h       
-      92 0015				    MAIN ENDP   
-      93				 
-      94 0015				GET_ITEM_PRICE  PROC                   
-					         ;output price from item in si 
-Microsoft (R) Macro Assembler Version 5.00                  9/11/23 18:49:35
+      84 0176  0008[			subtotal                    DB  8 DUP(4
+					8d) 
+      85	   30			
+      86			 ]	
+      87				
+      88 017E  24			                            DB  "$" 
+      89				 
+      90 017F  0014[			totalPrice                  DB  mulResu
+					ltLen DUP("0"), "$" 
+      91	   30			
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
                                                              Page     1-3
 
 
-					into dx 
-      95 0015  56			                push    si 
-      96 0016  33 C0			                xor     ax, ax 
-      97 0018  33 DB			                xor     bx, bx 
-      98 001A  33 C9			                xor     cx, cx 
-      99 001C  33 D2			                xor     dx, dx 
-     100				 
-     101 001E  B9 0000			                mov     cx, 0          
-					         ;cx as number counter 
-     102				  
-     103 0021  4E			                dec     si        
-     104 0022				                PRICE_BCD_CONV_LOOP: 
-     105 0022  46			                        inc     si 
-     106 0023  8A 04			                        mov     al, [si
+      92			 ]	
+      93       24			
+      94				 
+      95				;;;3 decimal places 
+      96 0194  30 30 31 32 33 35 35	testVal                     DB  "001235
+					50$" 
+      97       30 24			
+      98				 
+      99 019D  30 30 30 30 30 30 36	sstRate                     DB  "000000
+					60$"         ;;sst rate 0.060 
+     100       30 24			
+     101				 
+     102 01A6  00			quantity                    DB  0 
+     103				 
+     104 = 0000				itemID                      EQU 0 
+     105 = 0001				itemName                    EQU 1 
+     106 = 0015				itemPrice                   EQU 21 
+     107 = 001D				itemQty                     EQU 29 
+     108 = 001E				itemSize                    EQU 30 
+     109				 
+     110				STRLEN          MACRO   inputStr       
+					 ;return string length in ax 
+     111				                lea     si, inputStr 
+     112				 
+     113				                xor     cx, cx 
+     114				                STRLEN_LOOP: 
+     115				                        mov     al, [si
 					] 
-     107 0025  3C 24			                        cmp     al, "$"
+     116				                        inc     si 
+     117				 
+     118				                        inc     cx 
+     119				                        cmp     al, "$"
 					 
-     108 0027  74 07			                        je      PRICE_B
-					CD_CONV_CALC 
-     109				                         
-     110 0029  3C 2E			                        cmp     al, "."
-					 
-     111 002B  74 F5			                        je      PRICE_B
-					CD_CONV_LOOP 
-     112				                         
-     113 002D  41			                        inc     cx     
-					         ;record number of digits 
-     114 002E  EB F2			                        jmp     PRICE_B
-					CD_CONV_LOOP                    
-     115				                                       
-					      
-     116 0030				                        PRICE_BCD_CONV_
-					CALC: 
-     117 0030  B8 0001			                                mov    
-					     ax, 0001h                   ;ax tr
-					acks place of number, eg first number *
-					 1, second numb
-     118 0033  4E			                                dec    
-					     si 
-     119				                                 
-     120 0034				                                BCD_INP
-					UT_CAL: 
-     121 0034  33 DB			                                xor    
-					     bx, bx 
-     122				 
-     123 0036  8A 1C			                                mov    
-					     bl, [si] 
-     124 0038  80 FB 24			                                cmp    
-					     bl, "$"     ;if is not digit 
-     125 003B  74 1D			                                je     
-					     BCD_INPUT_CAL_NOT_DIGIT   
-     126				                                 
-     127 003D  80 FB 2E			                                cmp    
-					     bl, "."     ;if is not digit 
-Microsoft (R) Macro Assembler Version 5.00                  9/11/23 18:49:35
+     120				                        jne     STRLEN_
+					LOOP 
+     121				 
+     122				                dec     cx 
+     123				                mov     ax, cx 
+     124				ENDM 
+     125				STRSHL          MACRO   inputStr       
+					 ;shift characters of string to the lef
+					t one char 
+     126				 
+     127				                STRLEN  inputStr       
+					 ;string length in ax 
+     128				                mov     cx, ax 
+     129				 
+     130				                lea     si, inputStr 
+     131				                inc     si 
+     132				                STRSHL_LOOP: 
+     133				                        mov     al, [si
+					] 
+     134				                        dec     si 
+     135				                        mov     [si],al
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
                                                              Page     1-4
 
 
-     128 0040  74 18			                                je     
-					     BCD_INPUT_CAL_NOT_DIGIT 
-     129				                                 
-     130 0042  80 EB 30			                                sub    
-					     bl, 48d 
-     131				 
-     132				 
-     133 0045  50			                                push   
-					     ax               
-     134				 
-     135 0046  52			                                push   
-					     dx                  ;mul will effe
-					ct dx 
-     136 0047  F7 E3			                                mul    
-					     bx 
-     137 0049  5A			                                pop    
-					     dx 
-     138				 
-     139 004A  03 D0			                                add    
-					     dx, ax 
-     140 004C  58			                                pop    
-					     ax 
-     141				 
-     142 004D  52			                                push   
-					     dx                  ;mul will effe
-					ct dx 
-     143 004E  BB 000A			                                mov    
-					     bx, 10d 
-     144 0051  F7 E3			                                mul    
-					     bx 
-     145 0053  5A			                                pop    
-					     dx 
-     146				 
-     147 0054  4E			                                dec    
-					     si 
-     148 0055  E2 DD			                                loop   
-					     BCD_INPUT_CAL                
-     149				                                 
-     150 0057  EB 04 90			                                jmp    
-					     BCD_INPUT_CAL_NOT_DIGIT_END  
-     151 005A				                                BCD_INP
-					UT_CAL_NOT_DIGIT: 
-     152 005A  4E			                                       
-					     dec         si 
-     153 005B  EB D7			                                       
-					     jmp         BCD_INPUT_CAL 
-     154 005D				                                BCD_INP
-					UT_CAL_NOT_DIGIT_END:     
-     155 005D  5E			                pop     si 
-     156 005E  C3			                ret 
-     157 005F				GET_ITEM_PRICE  ENDP 
+					 
+     136				 
+     137				                        add     si, 2 
+     138				                        loop    STRSHL_
+					LOOP 
+     139				 
+     140				                dec     si 
+     141				                mov     al,"$" 
+     142				                mov     [si],al 
+     143				 
+     144				                dec     si 
+     145				                mov     al, "0" 
+     146				                mov     [si],al 
+     147				ENDM 
+     148				STRCPY          MACRO   dest,   source 
+     149				                lea     si, source 
+     150				                lea     di, dest 
+     151				 
+     152				                STRCPY_L: 
+     153				                        mov     al, [si
+					] 
+     154				                        mov     [di],al
+					 
+     155				 
+     156				                        inc     si 
+     157				                        inc     di 
      158				 
-     159 005F				PRINT_ALL_ITEMS PROC 
-     160 005F  50			                            push       
-Microsoft (R) Macro Assembler Version 5.00                  9/11/23 18:49:35
+     159				                        cmp     al, "$"
+					 
+     160				                        jne     STRCPY_
+					L 
+     161				ENDM 
+     162				CLEAR_STRNUM    MACRO   inputStr 
+     163				                xor     cx, cx 
+     164				                mov     cl, [strNumLen]
+					 
+     165				 
+     166				                lea     si, inputStr 
+     167				                add     si, cx 
+     168				                dec     si 
+     169				 
+     170				                CLEAR_STRNUM_L: 
+     171				                        mov     al, "0"
+					 
+     172				                        mov     [si],al
+					 
+     173				                        dec     si 
+     174				                        loop    CLEAR_S
+					TRNUM_L 
+     175				ENDM 
+     176				NUM_TO_STR_M    MACRO   value, destAddr
+					ess 
+     177				                push    ax 
+     178				                push    si 
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
                                                              Page     1-5
 
 
-					 ax 
-     161 0060  53			                            push       
-					 bx 
-     162 0061  51			                            push       
-					 cx 
-     163 0062  52			                            push       
-					 dx 
-     164				 
-     165				                            ;;GET CURRE
-					NT CURSOR POS 
-     166 0063  B4 03			                            mov        
-					 ah, 03h 
-     167 0065  B3 00			                            mov        
-					 bl, 00h 
-     168 0067  CD 10			                            int        
-					 10h                 ;cursor pos will b
-					e stored in dh dl 
-     169 0069  52			                            push       
-					 dx 
-     170				 
-     171 006A  33 C9			                            xor        
-					 cx  ,cx 
-     172 006C  8A 0E 0000 R		                            mov        
-					 cl  ,[numberOfItems] 
-     173 0070  B3 02			                            mov        
-					 bl  ,2 
-     174 0072  8D 36 0001 R		                            lea        
-					 si  ,items 
-     175 0076				                            print_item_
-					loop: 
-     176 0076  80 C3 02			                                       
-					 add         bl  ,2 
-     177				                                       
-					 CURSOR      bl  ,3 
-     178 0079  50                    1	                push    ax 
-     179 007A  53                    1	                push    bx 
-     180 007B  51                    1	                push    cx 
-     181 007C  52                    1	                push    dx 
-     182 007D  8A F3                 1	                mov dh, bl        ;row 
-     183 007F  B2 03                 1	                mov dl, 3       ;column
+     179				 
+     180				                mov     ax, value 
+     181				                lea     si, destAddress
 					 
-     184 0081  B7 00                 1	                mov bh, 0         ; 
-     185 0083  B4 02                 1	                mov ah, 02h       ; 
-     186 0085  CD 10                 1	                int 10h 
-     187 0087  5A                    1	                pop    dx 
-     188 0088  59                    1	                pop    cx 
-     189 0089  5B                    1	                pop    bx 
-     190 008A  58                    1	                pop    ax 
-     191				 
-     192 008B  E8 00AB R		                                       
-					 call        PRINT_ITEM 
-     193 008E  83 C6 1E			                                       
-					 add         si  ,itemSize 
-     194				 
-Microsoft (R) Macro Assembler Version 5.00                  9/11/23 18:49:35
+     182				                call    NUM_TO_STR 
+     183				 
+     184				                pop     si 
+     185				                pop     ax 
+     186				ENDM 
+     187				CURSOR MACRO row,column 
+     188				                push    ax 
+     189				                push    bx 
+     190				                push    cx 
+     191				                push    dx 
+     192				 
+     193				                ;set cursor 
+     194				                mov dh, row        ;row
+					 
+     195				                mov dl, column       ;c
+					olumn 
+     196				                mov bh, 0         ; 
+     197				                mov ah, 02h       ;  
+     198				                int 10h 
+     199				 
+     200				                pop    dx 
+     201				                pop    cx 
+     202				                pop    bx 
+     203				                pop    ax 
+     204				ENDM   
+     205				 
+     206 0000				.code 
+     207 0000				MAIN                PROC 
+     208 0000  B8 ---- R		                    mov         ax, @da
+					ta 
+     209 0003  8E D8			                    mov         ds, ax 
+     210				     
+     211				     
+     212 0005  E8 01E3 R		                    call        CALC_SU
+					BTOTAL           ;multiples item price 
+					with  qty in itemSaleRecord and output 
+					in itemSubTotal
+     213				     
+     214 0008  E8 01B5 R		                    call        SUBTOTA
+					LS_TO_STR        ;convert itemSubTotals
+					 to string number. Output to itemSubTot
+					alsString 
+     215				     
+     216 000B  E8 0194 R		                    call        SUM_SUB
+					TOTALS           ;sum all the item subt
+					otals in itemSubTotalsString, output in
+					 result 
+     217				     
+     218				                    STRCPY      subtota
+					l,   result 
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
                                                              Page     1-6
 
 
-     195 0091  E2 E3			                                       
-					 loop        print_item_loop 
-     196				 
-     197				;                            add       
-					  bl  ,2 
-     198				;                            CURSOR    
-					  bl  ,3 
-     199				;                            lea       
-					  dx  ,itemExitString 
-     200				;                            call      
-					  PRINT_STR 
-     201				 
-     202 0093  5A			                            pop        
-					 dx 
-     203				                            CURSOR     
-					 dh,dl       ;set cursor back to origin
-					al position 
-     204 0094  50                    1	                push    ax 
-     205 0095  53                    1	                push    bx 
-     206 0096  51                    1	                push    cx 
-     207 0097  52                    1	                push    dx 
-     208 0098  8A F6                 1	                mov dh, dh        ;row 
-     209 009A  8A D2                 1	                mov dl, dl       ;colum
-					n 
-     210 009C  B7 00                 1	                mov bh, 0         ; 
-     211 009E  B4 02                 1	                mov ah, 02h       ; 
-     212 00A0  CD 10                 1	                int 10h 
-     213 00A2  5A                    1	                pop    dx 
-     214 00A3  59                    1	                pop    cx 
-     215 00A4  5B                    1	                pop    bx 
-     216 00A5  58                    1	                pop    ax 
-     217				 
-     218 00A6  5A			                            pop        
-					 dx 
-     219 00A7  59			                            pop        
-					 cx 
-     220 00A8  5B			                            pop        
-					 bx 
-     221 00A9  58			                            pop        
-					 ax 
-     222 00AA  C3			                            ret 
-     223 00AB				PRINT_ALL_ITEMS ENDP 
-     224				 
-     225 00AB				PRINT_ITEM      PROC                   
-					                                     ;p
-					rint to row value in bl 
-     226 00AB  50			                            push    ax 
-     227 00AC  53			                            push    bx 
-     228 00AD  51			                            push    cx 
-     229 00AE  52			                            push    dx 
-     230 00AF  56			                            push    si 
-     231				 
-     232 00B0  33 C0			                            xor        
-					 ax, ax 
-Microsoft (R) Macro Assembler Version 5.00                  9/11/23 18:49:35
+     219 000E  8D 36 016D R          1	                lea     si, result 
+     220 0012  8D 3E 0176 R          1	                lea     di, subtotal 
+     221			     1	                STRCPY_L: 
+ASMFiles\A\HF.asm(164): error A2005: Symbol is multidefined: STRCPY_L
+     222 0016  8A 04                 1	                        mov     al, [si
+					] 
+     223 0018  88 05                 1	                        mov     [di],al
+					 
+     224 001A  46                    1	                        inc     si 
+     225 001B  47                    1	                        inc     di 
+     226 001C  3C 24                 1	                        cmp     al, "$"
+					 
+     227 001E  75 F6                 1	                        jne     STRCPY_
+					L 
+ASMFiles\A\HF.asm(164): error A2026: Reference to multidefined symbol
+     228				                    STRSHL      subtota
+					l                ;shift string left, re
+					place empty slot with "0", to prepare f
+					or rounding iss
+     229 0020  8D 36 0176 R          2	                lea     si, subtotal 
+     230 0024  33 C9                 2	                xor     cx, cx 
+     231 0026                        2	                STRLEN_LOOP: 
+     232 0026  8A 04                 2	                        mov     al, [si
+					] 
+     233 0028  46                    2	                        inc     si 
+     234 0029  41                    2	                        inc     cx 
+     235 002A  3C 24                 2	                        cmp     al, "$"
+					 
+     236 002C  75 F8                 2	                        jne     STRLEN_
+					LOOP 
+     237 002E  49                    2	                dec     cx 
+     238 002F  8B C1                 2	                mov     ax, cx 
+     239 0031  8B C8                 1	                mov     cx, ax 
+     240 0033  8D 36 0176 R          1	                lea     si, subtotal 
+     241 0037  46                    1	                inc     si 
+     242 0038                        1	                STRSHL_LOOP: 
+     243 0038  8A 04                 1	                        mov     al, [si
+					] 
+     244 003A  4E                    1	                        dec     si 
+     245 003B  88 04                 1	                        mov     [si],al
+					 
+     246 003D  83 C6 02              1	                        add     si, 2 
+     247 0040  E2 F6                 1	                        loop    STRSHL_
+					LOOP 
+     248 0042  4E                    1	                dec     si 
+     249 0043  B0 24                 1	                mov     al,"$" 
+     250 0045  88 04                 1	                mov     [si],al 
+     251 0047  4E                    1	                dec     si 
+     252 0048  B0 30                 1	                mov     al, "0" 
+     253 004A  88 04                 1	                mov     [si],al 
+     254				 
+     255				 
+     256 004C  8D 36 0176 R		                    lea         si, sub
+					total 
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
                                                              Page     1-7
 
 
-     233 00B2  8A 04			                            mov        
-					 al, [si] 
-     234 00B4  E8 010C R		                            call       
-					 PRINT_NUM 
-     235				 
-     236				                            CURSOR     
-					 bl, 15 
-     237 00B7  50                    1	                push    ax 
-     238 00B8  53                    1	                push    bx 
-     239 00B9  51                    1	                push    cx 
-     240 00BA  52                    1	                push    dx 
-     241 00BB  8A F3                 1	                mov dh, bl        ;row 
-     242 00BD  B2 0F                 1	                mov dl, 15       ;colum
-					n 
-     243 00BF  B7 00                 1	                mov bh, 0         ; 
-     244 00C1  B4 02                 1	                mov ah, 02h       ; 
-     245 00C3  CD 10                 1	                int 10h 
-     246 00C5  5A                    1	                pop    dx 
-     247 00C6  59                    1	                pop    cx 
-     248 00C7  5B                    1	                pop    bx 
-     249 00C8  58                    1	                pop    ax 
-     250 00C9  8D 54 01			                            lea        
-					 dx, [si + itemName] 
-     251 00CC  E8 0105 R		                            call       
-					 PRINT_STR 
-     252				 
-     253				                            CURSOR     
-					 bl, 39 
-     254 00CF  50                    1	                push    ax 
-     255 00D0  53                    1	                push    bx 
-     256 00D1  51                    1	                push    cx 
-     257 00D2  52                    1	                push    dx 
-     258 00D3  8A F3                 1	                mov dh, bl        ;row 
-     259 00D5  B2 27                 1	                mov dl, 39       ;colum
-					n 
-     260 00D7  B7 00                 1	                mov bh, 0         ; 
-     261 00D9  B4 02                 1	                mov ah, 02h       ; 
-     262 00DB  CD 10                 1	                int 10h 
-     263 00DD  5A                    1	                pop    dx 
-     264 00DE  59                    1	                pop    cx 
-     265 00DF  5B                    1	                pop    bx 
-     266 00E0  58                    1	                pop    ax 
-     267 00E1  8D 54 15			                            lea        
-					 dx, [si + itemPrice] 
-     268 00E4  E8 0105 R		                            call       
-					 PRINT_STR 
-     269				 
-     270				                            CURSOR     
-					 bl, 52 
-     271 00E7  50                    1	                push    ax 
-     272 00E8  53                    1	                push    bx 
-     273 00E9  51                    1	                push    cx 
-     274 00EA  52                    1	                push    dx 
-     275 00EB  8A F3                 1	                mov dh, bl        ;row 
-Microsoft (R) Macro Assembler Version 5.00                  9/11/23 18:49:35
+     257 0050  8D 3E 019D R		                    lea         di, sst
+					Rate 
+     258 0054  E8 00BE R		                    call        STRNUM_
+					MUL 
+     259				 
+     260				                    STRCPY      totalPr
+					ice,  mulResult 
+     261 0057  8D 36 0002 R          1	                lea     si, mulResult 
+     262 005B  8D 3E 017F R          1	                lea     di, totalPrice 
+     263			     1	                STRCPY_L: 
+ASMFiles\A\HF.asm(172): error A2005: Symbol is multidefined: STRCPY_L
+     264 005F  8A 04                 1	                        mov     al, [si
+					] 
+     265 0061  88 05                 1	                        mov     [di],al
+					 
+     266 0063  46                    1	                        inc     si 
+     267 0064  47                    1	                        inc     di 
+     268 0065  3C 24                 1	                        cmp     al, "$"
+					 
+     269 0067  75 AD                 1	                        jne     STRCPY_
+					L 
+ASMFiles\A\HF.asm(172): error A2026: Reference to multidefined symbol
+     270				 
+     271 0069  8D 16 017F R		                    lea         dx, tot
+					alPrice 
+     272 006D  E8 0330 R		                    call        PRINT_S
+					TR 
+     273				                 
+     274 0070  B4 4C			                    mov ah, 4ch 
+     275 0072  CD 21			                    int 21h       
+     276 0074				MAIN                ENDP   
+     277				 
+     278 0074				STRNUM_ADD          PROC               
+					             ;string si + string di 
+     279 0074  50			                        push    ax 
+     280 0075  53			                        push    bx 
+     281 0076  51			                        push    cx 
+     282 0077  52			                        push    dx 
+     283 0078  56			                        push    si 
+     284 0079  57			                        push    di 
+     285				 
+     286 007A  C6 06 0000 R 00		                        mov     [remain
+					der], 0 
+     287				 
+     288 007F  B9 0008			                        mov     cx, str
+					NumLen 
+     289 0082  49			                        dec     cx 
+     290 0083  03 F1			                        add     si, cx 
+					         ;offset to last char 
+     291 0085  03 F9			                        add     di, cx 
+     292				 
+     293 0087  B9 0008			                        mov     cx, str
+					NumLen 
+     294				 
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
                                                              Page     1-8
 
 
-     276 00ED  B2 34                 1	                mov dl, 52       ;colum
-					n 
-     277 00EF  B7 00                 1	                mov bh, 0         ; 
-     278 00F1  B4 02                 1	                mov ah, 02h       ; 
-     279 00F3  CD 10                 1	                int 10h 
-     280 00F5  5A                    1	                pop    dx 
-     281 00F6  59                    1	                pop    cx 
-     282 00F7  5B                    1	                pop    bx 
-     283 00F8  58                    1	                pop    ax 
-     284 00F9  8A 44 1D			                            mov        
-					 al, [si + itemQty] 
-     285 00FC  E8 010C R		                            call       
-					 print_Num 
-     286				 
-     287				                             
-     288				 
-     289 00FF  5E			                            pop     si 
-     290 0100  5A			                            pop     dx 
-     291 0101  59			                            pop     cx 
-     292 0102  5B			                            pop     bx 
-     293 0103  58			                            pop     ax 
-     294 0104  C3			                            ret 
-     295 0105				PRINT_ITEM  ENDP     
-     296				 
-     297 0105				PRINT_STR       PROC 
-     298 0105  50			                            push       
-					 ax 
-     299 0106  B4 09			                            mov        
-					 ah,09d 
-     300 0108  CD 21			                            int        
-					 21h 
-     301 010A  58			                            pop        
-					 ax 
-     302 010B  C3			                            ret 
-     303 010C				PRINT_STR       ENDP    
-     304				 
-     305 010C				PRINT_NUM       PROC                   
-					     ;print ax 
-     306 010C  50			                            push    ax 
-     307 010D  53			                            push    bx 
-     308 010E  51			                            push    cx 
-     309 010F  52			                            push    dx 
+     295 008A				                        STRNUM_ADD_LOOP
+					: 
+     296 008A  8A 04			                                mov    
+					 al, [si] 
+     297 008C  2C 30			                                sub    
+					 al, 48d 
+     298				 
+     299 008E  8A 25			                                mov    
+					 ah, [di] 
+     300 0090  80 EC 30			                                sub    
+					 ah, 48d 
+     301				 
+     302 0093  02 C4			                                add    
+					 al, ah 
+     303 0095  02 06 0000 R		                                add    
+					 al, [remainder] 
+     304 0099  32 E4			                                xor    
+					 ah, ah 
+     305				 
+     306 009B  BB 000A			                                mov    
+					 bx, 10d 
+     307 009E  F6 F3			                                div    
+					 bl              ;remainder in ah, quot
+					ient in al  
+     308				 
+     309 00A0  A2 0000 R		                                mov    
+					 [remainder],al  ;save quotient 
      310				 
-     311 0110  BB 000A			                            mov     bx,
-					0Ah      ;initalise divisor 
-     312 0113  B9 0000			                            mov     cx,
-					0h 
-     313				                             
-     314 0116				                            divLoop:   
-					  
-     315 0116  33 D2			                                       
-					 xor     dx,dx       ;clear remainder 
-     316 0118  F7 F3			                                       
-					 div     bx 
-Microsoft (R) Macro Assembler Version 5.00                  9/11/23 18:49:35
+     311 00A3  51			                                push   
+					 cx 
+     312 00A4  57			                                push   
+					 di 
+     313				                                 
+     314 00A5  49			                                dec    
+					 cx 
+     315 00A6  8D 3E 016D R		                                lea    
+					 di,     result 
+     316 00AA  03 F9			                                add    
+					 di,     cx 
+     317				 
+     318 00AC  80 C4 30			                                add    
+					 ah,     48d 
+     319 00AF  88 25			                                mov    
+					 [di],   ah 
+     320				 
+     321 00B1  5F			                                pop    
+					 di 
+     322 00B2  59			                                pop    
+					 cx 
+     323				 
+     324 00B3  4E			                                dec    
+					 si 
+     325 00B4  4F			                                dec    
+					 di 
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
                                                              Page     1-9
 
 
-     317 011A  52			                                       
+     326 00B5  E2 D3			                                loop   
+					 STRNUM_ADD_LOOP 
+     327				 
+     328 00B7  5F			                        pop     di 
+     329 00B8  5E			                        pop     si 
+     330 00B9  5A			                        pop     dx 
+     331 00BA  59			                        pop     cx 
+     332 00BB  5B			                        pop     bx 
+     333 00BC  58			                        pop     ax 
+     334				 
+     335 00BD  C3			                        ret 
+     336 00BE				STRNUM_ADD          ENDP 
+     337				 
+     338 00BE				STRNUM_MUL          PROC               
+					             ;multiply si, di strings, 
+					assume string has 3 decimal places, thu
+					s last 3 digits
+     339 00BE  C6 06 0001 R 00		                        mov     [carry]
+					     ,0 
+     340 00C3  C6 06 0019 R 00		                        mov     [mulI] 
+					     ,0 
+     341 00C8  C6 06 001A R 00		                        mov     [mulJ] 
+					     ,0 
+     342				 
+     343 00CD  B9 0008			                        mov     cx, str
+					NumLen 
+     344 00D0  49			                        dec     cx 
+     345				 
+     346 00D1  03 F1			                        add     si, cx 
+					         ;offset to last char 
+     347 00D3  03 F9			                        add     di, cx 
+     348				 
+     349 00D5  B9 0008			                        mov     cx, str
+					NumLen 
+     350 00D8				                        STRNUM_MUL_L1: 
+     351 00D8  8A 05			                                mov    
+					 al, [di] 
+     352 00DA  2C 30			                                sub    
+					 al, 48d 
+     353 00DC  A2 0018 R		                                mov    
+					 [mulY],al 
+     354				 
+     355 00DF  C6 06 0019 R 00		                                mov    
+					 [mulI], 0 
+     356 00E4  51			                                push   
+					 cx 
+     357				 
+     358 00E5  56			                                push   
+					 si 
+     359 00E6  B9 0008			                                mov    
+					 cx, strNumLen 
+     360 00E9				                                STRNUM_
+					MUL_L2: 
+     361				                                     
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-10
+
+
+     362 00E9  51			                                       
+					 push    cx 
+     363 00EA  33 C0			                                       
+					 xor     ax, ax 
+     364 00EC  8A 04			                                       
+					 mov     al, [si] 
+     365 00EE  2C 30			                                       
+					 sub     al, 48d 
+     366				 
+     367 00F0  33 DB			                                       
+					 xor     bx, bx 
+     368 00F2  8A 1E 0018 R		                                       
+					 mov     bl, [mulY] 
+     369 00F6  F7 E3			                                       
+					 mul     bx                  ;ax = ui +
+					 vj 
+     370				 
+     371 00F8  E8 0181 R		                                       
+					 call    GET_IJ 
+     372				 
+     373 00FB  56			                                       
+					 push    si 
+     374 00FC  8D 36 0002 R		                                       
+					 lea     si, mulResult 
+     375 0100  03 F2			                                       
+					 add     si, dx              ;OFFSET to
+					 w(i+j) result. n-1, n-2, ..., 0 (rever
+					se order, index
+     376				 
+     377 0102  33 DB			                                       
+					 xor     bx, bx 
+     378 0104  8A 1C			                                       
+					 mov     bl, [si]            ;w(i+j) 
+     379 0106  80 EB 30			                                       
+					 sub     bl, 48d                       
+					                  
+     380				 
+     381 0109  03 C3			                                       
+					 add     ax, bx              ;ax = ui +
+					 vj + w(i+j) 
+     382				 
+     383 010B  33 DB			                                       
+					 xor     bx, bx 
+     384 010D  8A 1E 0001 R		                                       
+					 mov     bl, [carry] 
+     385 0111  03 C3			                                       
+					 add     ax, bx              ;ax = ui +
+					 vj + w(i+j) + k 
+     386				 
+     387 0113  33 D2			                                       
+					 xor     dx, dx 
+     388 0115  BB 000A			                                       
+					 mov     bx, 10d 
+     389 0118  F7 F3			                                       
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-11
+
+
+					 div     bx                  ;dx = ax M
+					od 10, ax = FLOOR(ax/b) 
+     390				 
+     391 011A  80 C2 30			                                       
+					 add     dl,     48d 
+     392 011D  88 14			                                       
+					 mov     [si],   dl          ;w(i+j) = 
+					ax Mod 10 
+     393				 
+     394 011F  A2 0001 R		                                       
+					 mov     [carry], al         ;k = FLOOR
+					(ax/b) 
+     395 0122  5E			                                       
+					 pop     si 
+     396				 
+     397				                                       
+					 ; call    DEBUG 
+     398				 
+     399 0123  FE 06 0019 R		                                       
+					 inc     [mulI] 
+     400				 
+     401 0127  4E			                                       
+					 dec     si 
+     402				 
+     403 0128  59			                                       
+					 pop     cx 
+     404 0129  E2 BE			                                       
+					 loop    STRNUM_MUL_L2 
+     405				 
+     406 012B  5E			                                pop    
+					 si 
+     407				 
+     408 012C  E8 0181 R		                                call   
+					 GET_IJ 
+     409 012F  56			                                push   
+					 si 
+     410 0130  8D 36 0002 R		                                lea    
+					 si, mulResult 
+     411 0134  03 F2			                                add    
+					 si, dx              ;OFFSET to w(i+j) 
+					result. n-1, n-2, ..., 0 (reverse order
+					, index ends wi
+     412				 
+     413 0136  A0 0001 R		                                mov    
+					 al, [carry] 
+     414 0139  04 30			                                add    
+					 al, 48d 
+     415 013B  88 04			                                mov    
+					 [si],   al 
+     416				 
+     417 013D  5E			                                pop    
+					 si 
+     418				                                 
+     419 013E  FE 06 001A R		                                inc    
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-12
+
+
+					 [mulJ] 
+     420 0142  4F			                                dec    
+					 di 
+     421				 
+     422 0143  59			                                pop    
+					 cx 
+     423 0144  E2 92			                                loop   
+					 STRNUM_MUL_L1 
+     424 0146  C3			                        ret 
+     425 0147				STRNUM_MUL          ENDP 
+     426				 
+     427 0147				DEBUG               PROC 
+     428 0147  8A 16 0019 R		                                       
+					 mov     dl, [mulI] 
+     429 014B  80 C2 30			                                       
+					 add     dl, 48d 
+     430 014E  E8 0362 R		                                       
+					 call    PRINT_CHAR 
+     431				 
+     432 0151  B2 20			                                       
+					 mov     dl, " " 
+     433 0153  E8 0362 R		                                       
+					 call    PRINT_CHAR 
+     434				 
+     435 0156  8A 16 001A R		                                       
+					 mov     dl, [mulJ] 
+     436 015A  80 C2 30			                                       
+					 add     dl, 48d 
+     437 015D  E8 0362 R		                                       
+					 call    PRINT_CHAR 
+     438				 
+     439 0160  B2 20			                                       
+					 mov     dl, " " 
+     440 0162  E8 0362 R		                                       
+					 call    PRINT_CHAR 
+     441				 
+     442 0165  8D 16 0002 R		                                       
+					 lea     dx, mulResult 
+     443 0169  E8 0330 R		                                       
+					 call    PRINT_STR 
+     444				 
+     445 016C  B2 20			                                       
+					 mov     dl, " " 
+     446 016E  E8 0362 R		                                       
+					 call    PRINT_CHAR 
+     447 0171  E8 0362 R		                                       
+					 call    PRINT_CHAR 
+     448				 
+     449 0174  E8 0181 R		                                       
+					 call    GET_IJ 
+     450 0177  8B C2			                                       
+					 mov     ax, dx 
+     451				                                       
+					 ; add     dx, 48d 
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-13
+
+
+     452 0179  E8 0337 R		                                       
+					 call    PRINT_NUM 
+     453				 
+     454 017C  B4 01			                                       
+					 mov     ah, 01h 
+     455 017E  CD 21			                                       
+					 int     21h 
+     456 0180  C3			                                       
+					 ret 
+     457 0181				DEBUG               ENDP 
+     458				 
+     459 0181				GET_IJ              PROC               
+					                         ;return i+j in
+					 dx 
+     460 0181  8A 36 0019 R		                                mov    
+					 dh, [mulI]             ;i+j 
+     461 0185  8A 16 001A R		                                mov    
+					 dl, [mulJ] 
+     462 0189  02 F2			                                add    
+					 dh, dl 
+     463				 
+     464 018B  B2 14			                                mov    
+					 dl, mulResultLen    ;get the length of
+					 result string 
+     465 018D  FE CA			                                dec    
+					 dl 
+     466 018F  2A D6			                                sub    
+					 dl, dh               ;(i+j) offset fro
+					m result string 
+     467 0191  32 F6			                                xor    
+					 dh, dh 
+     468				 
+     469 0193  C3			                                ret 
+     470 0194				GET_IJ              ENDP 
+     471				 
+     472 0194				SUM_SUBTOTALS       PROC 
+     473 0194  33 FF			                        xor         di,
+					 di 
+     474 0196  33 C9			                        xor         cx,
+					 cx 
+     475 0198  8A 0E 001B R		                        mov         cl,
+					 [numberOfItems] 
+     476 019C				                        sumAllSubtotals
+					: 
+     477 019C  51			                                    pus
+					h        cx 
+     478				 
+     479 019D  49			                                    dec
+					         cx 
+     480 019E  B8 0008			                                    mov
+					         ax, strNumLen 
+     481 01A1  40			                                    inc
+					         ax 
+     482 01A2  F7 E1			                                    mul
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-14
+
+
+					         cx              ;index to next
+					 strNum 
+     483 01A4  8B F8			                                    mov
+					         di, ax 
+     484				 
+     485 01A6  59			                                    pop
+					         cx 
+     486				 
+     487				                                    ; l
+					ea         dx, itemSubTotalsString[di] 
+     488				                                    ; c
+					all        PRINT_STR 
+     489				                                    ; c
+					all        NEWLINE 
+     490				 
+     491 01A7  8D 36 016D R		                                    lea
+					         si, result 
+     492 01AB  8D BD 0125 R		                                    lea
+					         di, itemSubTotalsString[di] 
+     493 01AF  E8 0074 R		                                    cal
+					l        STRNUM_ADD 
+     494				 
+     495 01B2  E2 E8			                                    loo
+					p        sumAllSubtotals 
+     496				 
+     497 01B4  C3			                        ret 
+     498 01B5				SUM_SUBTOTALS       ENDP 
+     499				 
+     500 01B5				SUBTOTALS_TO_STR    PROC 
+     501 01B5  33 F6			                        xor         si,
+					 si              ;index for itemSubTota
+					ls 
+     502 01B7  33 FF			                        xor         di,
+					 di              ;index for itemSubTota
+					lsString 
+     503 01B9  33 C9			                        xor         cx,
+					 cx 
+     504 01BB  8A 0E 001B R		                        mov         cl,
+					 [numberOfItems] 
+     505 01BF				                        itemSubTotals_T
+					o_String: 
+     506 01BF  51			                                    pus
+					h        cx 
+     507 01C0  49			                                    dec
+					         cx 
+     508				 
+     509 01C1  B8 0002			                                    mov
+					         ax, 2 
+     510 01C4  F7 E1			                                    mul
+					         cx 
+     511 01C6  8B F0			                                    mov
+					         si, ax              ;index for
+					 itemSubtotals ;;; address + 2*cx 
+     512				 
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-15
+
+
+     513 01C8  B8 0008			                                    mov
+					         ax, strNumLen        
+     514 01CB  40			                                    inc
+					         ax 
+     515 01CC  F7 E1			                                    mul
+					         cx 
+     516 01CE  8B F8			                                    mov
+					         di, ax              ;index for
+					 itemSubTotalsString ;;; addresss + str
+					ingLength*cx 
+     517				 
+     518 01D0  59			                                    pop
+					         cx 
+     519				 
+     520				                                    NUM
+					_TO_STR_M    itemSubTotals[si], itemSub
+					TotalsString[di] 
+     521 01D1  50                    1	                push    ax 
+     522 01D2  56                    1	                push    si 
+     523 01D3  8B 84 0115 R          1	                mov     ax, itemSubTota
+					ls[si] 
+     524 01D7  8D B5 0125 R          1	                lea     si, itemSubTota
+					lsString[di] 
+     525 01DB  E8 021B R             1	                call    NUM_TO_STR 
+     526 01DE  5E                    1	                pop     si 
+     527 01DF  58                    1	                pop     ax 
+     528				 
+     529 01E0  E2 DD			                                    loo
+					p        itemSubTotals_To_String 
+     530 01E2  C3			                    ret 
+     531 01E3				SUBTOTALS_TO_STR    ENDP 
+     532				 
+     533 01E3				CALC_SUBTOTAL       PROC 
+     534 01E3  33 C9			                        xor     cx, cx 
+     535 01E5  8A 0E 001B R		                        mov     cl, [nu
+					mberOfItems] 
+     536 01E9				                        calculateSubTot
+					alLoop: 
+     537 01E9  8D 36 0031 R		                                lea    
+					 si, items + itemPrice 
+     538 01ED  8D 3E 010D R		                                lea    
+					 di, itemSaleRecord 
+     539				 
+     540 01F1  51			                                push   
+					 cx 
+     541 01F2  49			                                dec    
+					 cx 
+     542 01F3  B8 001E			                                mov    
+					 ax, itemSize            ;offset to pre
+					vious item cx*itemSize 
+     543 01F6  F7 E1			                                mul    
+					 cx 
+     544 01F8  03 F0			                                add    
+					 si, ax 
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-16
+
+
+     545 01FA  03 F9			                                add    
+					 di, cx 
+     546 01FC  59			                                pop    
+					 cx 
+     547				 
+     548 01FD  E8 023E R		                                call   
+					 GET_ITEM_PRICE     
+     549				 
+     550 0200  8B C2			                                mov    
+					 ax, dx 
+     551 0202  33 D2			                                xor    
+					 dx, dx 
+     552 0204  8A 15			                                mov    
+					 dl, [di]                ;get sold qty 
+     553				 
+     554 0206  F7 E2			                                mul    
+					 dx                      ;calculate Sal
+					eQty*Price 
+     555				 
+     556 0208  50			                                push   
+					 ax 
+     557 0209  BB 0002			                                mov    
+					 bx, 2 
+     558 020C  8B C1			                                mov    
+					 ax, cx 
+     559 020E  48			                                dec    
+					 ax 
+     560 020F  F7 E3			                                mul    
+					 bx 
+     561 0211  8B F8			                                mov    
+					 di, ax 
+     562 0213  58			                                pop    
+					 ax 
+     563 0214  89 85 0115 R		                                mov    
+					 itemSubTotals[di], ax 
+     564				 
+     565 0218  E2 CF			                                loop   
+					 calculateSubTotalLoop 
+     566				 
+     567 021A  C3			                        ret 
+     568 021B				CALC_SUBTOTAL   ENDP 
+     569				 
+     570 021B				NUM_TO_STR          PROC        ;value 
+					in ax to si 
+     571 021B  50			                        push    ax 
+     572 021C  53			                        push    bx 
+     573 021D  51			                        push    cx 
+     574 021E  52			                        push    dx 
+     575 021F  56			                        push    si 
+     576				 
+     577 0220  83 C6 08			                        add     si, str
+					NumLen           ;offset to last char o
+					f string number 
+     578 0223  4E			                        dec     si 
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-17
+
+
+     579				 
+     580 0224  33 C9			                        xor     cx, cx 
+     581 0226  BB 000A			                        mov     bx, 10d
+					                 ;/10 
+     582				 
+     583 0229				                        NUM_TO_STR_DIV_
+					LOOP: 
+     584 0229  33 D2			                                xor    
+					 dx, dx          ;clear remainder 
+     585				 
+     586 022B  F7 F3			                                div    
+					 bx 
+     587				 
+     588 022D  80 C2 30			                                add    
+					 dl, 48d 
+     589 0230  88 14			                                mov    
+					 [si],   dl 
+     590 0232  4E			                                dec    
+					 si 
+     591				                                 
+     592 0233  3D 0000			                                cmp    
+					 ax, 0 
+     593 0236  75 F1			                                jnz    
+					 NUM_TO_STR_DIV_LOOP 
+     594				 
+     595 0238  5E			                        pop    si 
+     596 0239  5A			                        pop    dx 
+     597 023A  59			                        pop    cx 
+     598 023B  5B			                        pop    bx 
+     599 023C  58			                        pop    ax 
+     600				 
+     601 023D  C3			                        ret 
+     602 023E				NUM_TO_STR      ENDP 
+     603				 
+     604 023E				GET_ITEM_PRICE      PROC               
+					             ;output price from item in
+					 si into dx 
+     605 023E  51			                push    cx 
+     606 023F  56			                push    si 
+     607				                 
+     608 0240  33 C0			                xor     ax, ax 
+     609 0242  33 DB			                xor     bx, bx 
+     610 0244  33 C9			                xor     cx, cx 
+     611 0246  33 D2			                xor     dx, dx 
+     612				 
+     613 0248  B9 0000			                mov     cx, 0          
+					         ;cx as number counter 
+     614				  
+     615 024B  4E			                dec     si        
+     616 024C				                PRICE_BCD_CONV_LOOP: 
+     617 024C  46			                        inc     si 
+     618 024D  8A 04			                        mov     al, [si
+					] 
+     619 024F  3C 24			                        cmp     al, "$"
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-18
+
+
+					 
+     620 0251  74 07			                        je      PRICE_B
+					CD_CONV_CALC 
+     621				                         
+     622 0253  3C 2E			                        cmp     al, "."
+					 
+     623 0255  74 F5			                        je      PRICE_B
+					CD_CONV_LOOP 
+     624				                         
+     625 0257  41			                        inc     cx     
+					         ;record number of digits 
+     626 0258  EB F2			                        jmp     PRICE_B
+					CD_CONV_LOOP                    
+     627				                                       
+					      
+     628 025A				                        PRICE_BCD_CONV_
+					CALC: 
+     629 025A  B8 0001			                                mov    
+					     ax, 0001h                   ;ax tr
+					acks place of number, eg first number *
+					 1, second numb
+     630 025D  4E			                                dec    
+					     si 
+     631				                                 
+     632 025E				                                BCD_INP
+					UT_CAL: 
+     633 025E  33 DB			                                xor    
+					     bx, bx 
+     634				 
+     635 0260  8A 1C			                                mov    
+					     bl, [si] 
+     636 0262  80 FB 24			                                cmp    
+					     bl, "$"     ;if is not digit 
+     637 0265  74 1D			                                je     
+					     BCD_INPUT_CAL_NOT_DIGIT   
+     638				                                 
+     639 0267  80 FB 2E			                                cmp    
+					     bl, "."     ;if is not digit 
+     640 026A  74 18			                                je     
+					     BCD_INPUT_CAL_NOT_DIGIT 
+     641				                                 
+     642 026C  80 EB 30			                                sub    
+					     bl, 48d 
+     643				 
+     644				 
+     645 026F  50			                                push   
+					     ax               
+     646				 
+     647 0270  52			                                push   
+					     dx                  ;mul will effe
+					ct dx 
+     648 0271  F7 E3			                                mul    
+					     bx 
+     649 0273  5A			                                pop    
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-19
+
+
+					     dx 
+     650				 
+     651 0274  03 D0			                                add    
+					     dx, ax 
+     652 0276  58			                                pop    
+					     ax 
+     653				 
+     654 0277  52			                                push   
+					     dx                  ;mul will effe
+					ct dx 
+     655 0278  BB 000A			                                mov    
+					     bx, 10d 
+     656 027B  F7 E3			                                mul    
+					     bx 
+     657 027D  5A			                                pop    
+					     dx 
+     658				 
+     659 027E  4E			                                dec    
+					     si 
+     660 027F  E2 DD			                                loop   
+					     BCD_INPUT_CAL                
+     661				                                 
+     662 0281  EB 04 90			                                jmp    
+					     BCD_INPUT_CAL_NOT_DIGIT_END  
+     663 0284				                                BCD_INP
+					UT_CAL_NOT_DIGIT: 
+     664 0284  4E			                                       
+					     dec         si 
+     665 0285  EB D7			                                       
+					     jmp         BCD_INPUT_CAL 
+     666 0287				                                BCD_INP
+					UT_CAL_NOT_DIGIT_END:     
+     667 0287  5E			                pop     si 
+     668 0288  59			                pop     cx 
+     669 0289  C3			                ret 
+     670 028A				GET_ITEM_PRICE  ENDP 
+     671				 
+     672 028A				PRINT_ALL_ITEMS     PROC 
+     673 028A  50			                            push       
+					 ax 
+     674 028B  53			                            push       
+					 bx 
+     675 028C  51			                            push       
+					 cx 
+     676 028D  52			                            push       
+					 dx 
+     677				 
+     678				                            ;;GET CURRE
+					NT CURSOR POS 
+     679 028E  B4 03			                            mov        
+					 ah, 03h 
+     680 0290  B3 00			                            mov        
+					 bl, 00h 
+     681 0292  CD 10			                            int        
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-20
+
+
+					 10h                 ;cursor pos will b
+					e stored in dh dl 
+     682 0294  52			                            push       
+					 dx 
+     683				 
+     684 0295  33 C9			                            xor        
+					 cx  ,cx 
+     685 0297  8A 0E 001B R		                            mov        
+					 cl  ,[numberOfItems] 
+     686 029B  B3 02			                            mov        
+					 bl  ,2 
+     687 029D  8D 36 001C R		                            lea        
+					 si  ,items 
+     688 02A1				                            print_item_
+					loop: 
+     689 02A1  80 C3 02			                                       
+					 add         bl  ,2 
+     690				                                       
+					 CURSOR      bl  ,3 
+     691 02A4  50                    1	                push    ax 
+     692 02A5  53                    1	                push    bx 
+     693 02A6  51                    1	                push    cx 
+     694 02A7  52                    1	                push    dx 
+     695 02A8  8A F3                 1	                mov dh, bl        ;row 
+     696 02AA  B2 03                 1	                mov dl, 3       ;column
+					 
+     697 02AC  B7 00                 1	                mov bh, 0         ; 
+     698 02AE  B4 02                 1	                mov ah, 02h       ; 
+     699 02B0  CD 10                 1	                int 10h 
+     700 02B2  5A                    1	                pop    dx 
+     701 02B3  59                    1	                pop    cx 
+     702 02B4  5B                    1	                pop    bx 
+     703 02B5  58                    1	                pop    ax 
+     704				 
+     705 02B6  E8 02D6 R		                                       
+					 call        PRINT_ITEM 
+     706 02B9  83 C6 1E			                                       
+					 add         si  ,itemSize 
+     707				 
+     708 02BC  E2 E3			                                       
+					 loop        print_item_loop 
+     709				 
+     710				;                            add       
+					  bl  ,2 
+     711				;                            CURSOR    
+					  bl  ,3 
+     712				;                            lea       
+					  dx  ,itemExitString 
+     713				;                            call      
+					  PRINT_STR 
+     714				 
+     715 02BE  5A			                            pop        
+					 dx 
+     716				                            CURSOR     
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-21
+
+
+					 dh,dl       ;set cursor back to origin
+					al position 
+     717 02BF  50                    1	                push    ax 
+     718 02C0  53                    1	                push    bx 
+     719 02C1  51                    1	                push    cx 
+     720 02C2  52                    1	                push    dx 
+     721 02C3  8A F6                 1	                mov dh, dh        ;row 
+     722 02C5  8A D2                 1	                mov dl, dl       ;colum
+					n 
+     723 02C7  B7 00                 1	                mov bh, 0         ; 
+     724 02C9  B4 02                 1	                mov ah, 02h       ; 
+     725 02CB  CD 10                 1	                int 10h 
+     726 02CD  5A                    1	                pop    dx 
+     727 02CE  59                    1	                pop    cx 
+     728 02CF  5B                    1	                pop    bx 
+     729 02D0  58                    1	                pop    ax 
+     730				 
+     731 02D1  5A			                            pop        
+					 dx 
+     732 02D2  59			                            pop        
+					 cx 
+     733 02D3  5B			                            pop        
+					 bx 
+     734 02D4  58			                            pop        
+					 ax 
+     735 02D5  C3			                            ret 
+     736 02D6				PRINT_ALL_ITEMS ENDP 
+     737				 
+     738 02D6				PRINT_ITEM          PROC               
+					                                       
+					  ;print to row value in bl 
+     739 02D6  50			                            push    ax 
+     740 02D7  53			                            push    bx 
+     741 02D8  51			                            push    cx 
+     742 02D9  52			                            push    dx 
+     743 02DA  56			                            push    si 
+     744				 
+     745 02DB  33 C0			                            xor        
+					 ax, ax 
+     746 02DD  8A 04			                            mov        
+					 al, [si] 
+     747 02DF  E8 0337 R		                            call       
+					 PRINT_NUM 
+     748				 
+     749				                            CURSOR     
+					 bl, 15 
+     750 02E2  50                    1	                push    ax 
+     751 02E3  53                    1	                push    bx 
+     752 02E4  51                    1	                push    cx 
+     753 02E5  52                    1	                push    dx 
+     754 02E6  8A F3                 1	                mov dh, bl        ;row 
+     755 02E8  B2 0F                 1	                mov dl, 15       ;colum
+					n 
+     756 02EA  B7 00                 1	                mov bh, 0         ; 
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-22
+
+
+     757 02EC  B4 02                 1	                mov ah, 02h       ; 
+     758 02EE  CD 10                 1	                int 10h 
+     759 02F0  5A                    1	                pop    dx 
+     760 02F1  59                    1	                pop    cx 
+     761 02F2  5B                    1	                pop    bx 
+     762 02F3  58                    1	                pop    ax 
+     763 02F4  8D 54 01			                            lea        
+					 dx, [si + itemName] 
+     764 02F7  E8 0330 R		                            call       
+					 PRINT_STR 
+     765				 
+     766				                            CURSOR     
+					 bl, 39 
+     767 02FA  50                    1	                push    ax 
+     768 02FB  53                    1	                push    bx 
+     769 02FC  51                    1	                push    cx 
+     770 02FD  52                    1	                push    dx 
+     771 02FE  8A F3                 1	                mov dh, bl        ;row 
+     772 0300  B2 27                 1	                mov dl, 39       ;colum
+					n 
+     773 0302  B7 00                 1	                mov bh, 0         ; 
+     774 0304  B4 02                 1	                mov ah, 02h       ; 
+     775 0306  CD 10                 1	                int 10h 
+     776 0308  5A                    1	                pop    dx 
+     777 0309  59                    1	                pop    cx 
+     778 030A  5B                    1	                pop    bx 
+     779 030B  58                    1	                pop    ax 
+     780 030C  8D 54 15			                            lea        
+					 dx, [si + itemPrice] 
+     781 030F  E8 0330 R		                            call       
+					 PRINT_STR 
+     782				 
+     783				                            CURSOR     
+					 bl, 52 
+     784 0312  50                    1	                push    ax 
+     785 0313  53                    1	                push    bx 
+     786 0314  51                    1	                push    cx 
+     787 0315  52                    1	                push    dx 
+     788 0316  8A F3                 1	                mov dh, bl        ;row 
+     789 0318  B2 34                 1	                mov dl, 52       ;colum
+					n 
+     790 031A  B7 00                 1	                mov bh, 0         ; 
+     791 031C  B4 02                 1	                mov ah, 02h       ; 
+     792 031E  CD 10                 1	                int 10h 
+     793 0320  5A                    1	                pop    dx 
+     794 0321  59                    1	                pop    cx 
+     795 0322  5B                    1	                pop    bx 
+     796 0323  58                    1	                pop    ax 
+     797 0324  8A 44 1D			                            mov        
+					 al, [si + itemQty] 
+     798 0327  E8 0337 R		                            call       
+					 print_Num 
+     799				 
+     800				                             
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-23
+
+
+     801				 
+     802 032A  5E			                            pop     si 
+     803 032B  5A			                            pop     dx 
+     804 032C  59			                            pop     cx 
+     805 032D  5B			                            pop     bx 
+     806 032E  58			                            pop     ax 
+     807 032F  C3			                            ret 
+     808 0330				PRINT_ITEM  ENDP     
+     809				 
+     810 0330				PRINT_STR           PROC 
+     811 0330  50			                            push       
+					 ax 
+     812 0331  B4 09			                            mov        
+					 ah,09d 
+     813 0333  CD 21			                            int        
+					 21h 
+     814 0335  58			                            pop        
+					 ax 
+     815 0336  C3			                            ret 
+     816 0337				PRINT_STR       ENDP    
+     817				 
+     818 0337				PRINT_NUM           PROC               
+					         ;print ax 
+     819 0337  50			                            push    ax 
+     820 0338  53			                            push    bx 
+     821 0339  51			                            push    cx 
+     822 033A  52			                            push    dx 
+     823				 
+     824 033B  BB 000A			                            mov     bx,
+					0Ah      ;initalise divisor 
+     825 033E  B9 0000			                            mov     cx,
+					0h 
+     826				                             
+     827 0341				                            divLoop:   
+					  
+     828 0341  33 D2			                                       
+					 xor     dx,dx       ;clear remainder 
+     829 0343  F7 F3			                                       
+					 div     bx 
+     830 0345  52			                                       
 					 push    dx          ;save remainder 
-     318 011B  41			                                       
+     831 0346  41			                                       
 					 inc     cx          ;count looped numb
 					er 
-     319 011C  85 C0			                                       
+     832 0347  85 C0			                                       
 					 test    ax,ax       ;if ax != 0, conti
 					nue 
-     320 011E  75 F6			                                       
+     833 0349  75 F6			                                       
 					 jnz     divLoop 
-     321				 
-     322 0120  B4 02			                            mov     ah,
+     834				 
+     835 034B  B4 02			                            mov     ah,
 					02h 
-     323				 
-     324 0122				                            printLoop: 
+     836				 
+     837 034D				                            printLoop: 
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Page     1-24
+
+
 					  
-     325 0122  5A			                                       
+     838 034D  5A			                                       
 					 pop     dx          ;get remainder 
-     326 0123  80 C2 30			                                       
+     839 034E  80 C2 30			                                       
 					 add     dl,"0" 
-     327 0126  CD 21			                                       
+     840 0351  CD 21			                                       
 					 int     21h         ;print 
-     328 0128  E2 F8			                                       
+     841 0353  E2 F8			                                       
 					 loop    printLoop   ;loop until cx is 
 					zero (the number of times divLoop) 
-     329				 
-     330 012A  5A			                            pop    dx 
-     331 012B  59			                            pop    cx 
-     332 012C  5B			                            pop    bx 
-     333 012D  58			                            pop    ax 
-     334				 
-     335 012E  C3			                            ret 
-     336 012F				PRINT_NUM           ENDP 
-     337				 
-     338 012F				END                 MAIN 
+     842				 
+     843 0355  5A			                            pop    dx 
+     844 0356  59			                            pop    cx 
+     845 0357  5B			                            pop    bx 
+     846 0358  58			                            pop    ax 
+     847				 
+     848 0359  C3			                            ret 
+     849 035A				PRINT_NUM           ENDP 
+     850				 
+     851 035A				NEWLINE             PROC 
+     852 035A  52			                            push    dx 
+     853 035B  B2 0A			                            mov     dl,
+					0Ah 
+     854 035D  E8 0362 R		                            call PRINT_
+					CHAR 
+     855 0360  5A			                            pop     dx 
+     856 0361  C3			                            ret 
+     857 0362				NEWLINE         ENDP 
+     858				 
+     859 0362				PRINT_CHAR          PROC               
+					                         ;print cjaract
+					er of value in dl 
+     860 0362  50			                            push    ax 
+     861 0363  B4 02			                            mov     ah,
+					02h 
+     862 0365  CD 21			                            int     21h
+					 
+     863 0367  58			                            pop     ax 
+     864 0368  C3			                            ret 
+     865 0369				PRINT_CHAR      ENDP 
+     866				 
+     867				 
+     868 0369				END                 MAIN 
 
-Microsoft (R) Macro Assembler Version 5.00                  9/11/23 18:49:35
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
                                                              Symbols-1
 
 
@@ -510,74 +1394,116 @@ Macros:
 
 		N a m e			Lines
 
+CLEAR_STRNUM . . . . . . . . . .  	  10
 CURSOR . . . . . . . . . . . . .  	  14
+NUM_TO_STR_M . . . . . . . . . .  	   7
+STRCPY . . . . . . . . . . . . .  	   9
+STRLEN . . . . . . . . . . . . .  	  10
+STRSHL . . . . . . . . . . . . .  	  16
 
 Segments and Groups:
 
                 N a m e         	Length	 Align	Combine Class
 
 DGROUP . . . . . . . . . . . . .  	GROUP
-  _DATA  . . . . . . . . . . . .  	00FB	WORD	PUBLIC	'DATA'
+  _DATA  . . . . . . . . . . . .  	01A7	WORD	PUBLIC	'DATA'
   STACK  . . . . . . . . . . . .  	0400	PARA	STACK	'STACK'
-_TEXT  . . . . . . . . . . . . .  	012F	WORD	PUBLIC	'CODE'
+_TEXT  . . . . . . . . . . . . .  	0369	WORD	PUBLIC	'CODE'
 
 Symbols:            
 
                 N a m e         	Type	 Value	 Attr
 
-BCD_INPUT_CAL  . . . . . . . . .  	L NEAR	0034	_TEXT
-BCD_INPUT_CAL_NOT_DIGIT  . . . .  	L NEAR	005A	_TEXT
-BCD_INPUT_CAL_NOT_DIGIT_END  . .  	L NEAR	005D	_TEXT
+BCD_INPUT_CAL  . . . . . . . . .  	L NEAR	025E	_TEXT
+BCD_INPUT_CAL_NOT_DIGIT  . . . .  	L NEAR	0284	_TEXT
+BCD_INPUT_CAL_NOT_DIGIT_END  . .  	L NEAR	0287	_TEXT
 
-DIVLOOP  . . . . . . . . . . . .  	L NEAR	0116	_TEXT
+CALCULATESUBTOTALLOOP  . . . . .  	L NEAR	01E9	_TEXT
+CALC_SUBTOTAL  . . . . . . . . .  	N PROC	01E3	_TEXT	Length = 0038
+CARRY  . . . . . . . . . . . . .  	L BYTE	0001	_DATA
 
-GET_ITEM_PRICE . . . . . . . . .  	N PROC	0015	_TEXT	Length = 004A
+DEBUG  . . . . . . . . . . . . .  	N PROC	0147	_TEXT	Length = 003A
+DIVLOOP  . . . . . . . . . . . .  	L NEAR	0341	_TEXT
+
+GET_IJ . . . . . . . . . . . . .  	N PROC	0181	_TEXT	Length = 0013
+GET_ITEM_PRICE . . . . . . . . .  	N PROC	023E	_TEXT	Length = 004C
 
 ITEMID . . . . . . . . . . . . .  	NUMBER	0000	
 ITEMNAME . . . . . . . . . . . .  	NUMBER	0001	
 ITEMPRICE  . . . . . . . . . . .  	NUMBER	0015	
 ITEMQTY  . . . . . . . . . . . .  	NUMBER	001D	
-ITEMS  . . . . . . . . . . . . .  	L BYTE	0001	_DATA
-ITEMS2 . . . . . . . . . . . . .  	L BYTE	001F	_DATA
-ITEMS3 . . . . . . . . . . . . .  	L BYTE	003D	_DATA
-ITEMS4 . . . . . . . . . . . . .  	L BYTE	005B	_DATA
-ITEMS5 . . . . . . . . . . . . .  	L BYTE	0079	_DATA
-ITEMS6 . . . . . . . . . . . . .  	L BYTE	0097	_DATA
-ITEMS7 . . . . . . . . . . . . .  	L BYTE	00B5	_DATA
-ITEMS8 . . . . . . . . . . . . .  	L BYTE	00D3	_DATA
-ITEMSALERECORD . . . . . . . . .  	L BYTE	00F2	_DATA
+ITEMS  . . . . . . . . . . . . .  	L BYTE	001C	_DATA
+ITEMSALERECORD . . . . . . . . .  	L BYTE	010D	_DATA
 ITEMSIZE . . . . . . . . . . . .  	NUMBER	001E	
+ITEMSUBTOTALS  . . . . . . . . .  	L WORD	0115	_DATA
+ITEMSUBTOTALSSTRING  . . . . . .  	L BYTE	0125	_DATA	Length = 0008
+ITEMSUBTOTALS_TO_STRING  . . . .  	L NEAR	01BF	_TEXT
 
-MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 0015
-
-NUMBEROFITEMS  . . . . . . . . .  	L BYTE	0000	_DATA
-
-PRICE_BCD_CONV_CALC  . . . . . .  	L NEAR	0030	_TEXT
-PRICE_BCD_CONV_LOOP  . . . . . .  	L NEAR	0022	_TEXT
-PRINTLOOP  . . . . . . . . . . .  	L NEAR	0122	_TEXT
-PRINT_ALL_ITEMS  . . . . . . . .  	N PROC	005F	_TEXT	Length = 004C
-PRINT_ITEM . . . . . . . . . . .  	N PROC	00AB	_TEXT	Length = 005A
-PRINT_ITEM_LOOP  . . . . . . . .  	L NEAR	0076	_TEXT
-PRINT_NUM  . . . . . . . . . . .  	N PROC	010C	_TEXT	Length = 0023
-PRINT_STR  . . . . . . . . . . .  	N PROC	0105	_TEXT	Length = 0007
-Microsoft (R) Macro Assembler Version 5.00                  9/11/23 18:49:35
+MAIN . . . . . . . . . . . . . .  	N PROC	0000	_TEXT	Length = 0074
+MULI . . . . . . . . . . . . . .  	L BYTE	0019	_DATA
+MULJ . . . . . . . . . . . . . .  	L BYTE	001A	_DATA
+MULRESULT  . . . . . . . . . . .  	L BYTE	0002	_DATA	Length = 0014
+MULRESULTLEN . . . . . . . . . .  	NUMBER	0014	
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
                                                              Symbols-2
 
 
+MULX . . . . . . . . . . . . . .  	L BYTE	0017	_DATA
+MULY . . . . . . . . . . . . . .  	L BYTE	0018	_DATA
 
-QUANTITY . . . . . . . . . . . .  	L BYTE	00FA	_DATA
+NEWLINE  . . . . . . . . . . . .  	N PROC	035A	_TEXT	Length = 0008
+NUMBEROFITEMS  . . . . . . . . .  	L BYTE	001B	_DATA
+NUM_TO_STR . . . . . . . . . . .  	N PROC	021B	_TEXT	Length = 0023
+NUM_TO_STR_DIV_LOOP  . . . . . .  	L NEAR	0229	_TEXT
+
+PRICE_BCD_CONV_CALC  . . . . . .  	L NEAR	025A	_TEXT
+PRICE_BCD_CONV_LOOP  . . . . . .  	L NEAR	024C	_TEXT
+PRINTLOOP  . . . . . . . . . . .  	L NEAR	034D	_TEXT
+PRINT_ALL_ITEMS  . . . . . . . .  	N PROC	028A	_TEXT	Length = 004C
+PRINT_CHAR . . . . . . . . . . .  	N PROC	0362	_TEXT	Length = 0007
+PRINT_ITEM . . . . . . . . . . .  	N PROC	02D6	_TEXT	Length = 005A
+PRINT_ITEM_LOOP  . . . . . . . .  	L NEAR	02A1	_TEXT
+PRINT_NUM  . . . . . . . . . . .  	N PROC	0337	_TEXT	Length = 0023
+PRINT_STR  . . . . . . . . . . .  	N PROC	0330	_TEXT	Length = 0007
+
+QUANTITY . . . . . . . . . . . .  	L BYTE	01A6	_DATA
+
+REMAINDER  . . . . . . . . . . .  	L BYTE	0000	_DATA
+RESULT . . . . . . . . . . . . .  	L BYTE	016D	_DATA	Length = 0008
+
+SSTRATE  . . . . . . . . . . . .  	L BYTE	019D	_DATA
+STRCPY_L . . . . . . . . . . . .  	L NEAR	0016	_TEXT
+STRLEN_LOOP  . . . . . . . . . .  	L NEAR	0026	_TEXT
+STRNUMLEN  . . . . . . . . . . .  	NUMBER	0008	
+STRNUM_ADD . . . . . . . . . . .  	N PROC	0074	_TEXT	Length = 004A
+STRNUM_ADD_LOOP  . . . . . . . .  	L NEAR	008A	_TEXT
+STRNUM_MUL . . . . . . . . . . .  	N PROC	00BE	_TEXT	Length = 0089
+STRNUM_MUL_L1  . . . . . . . . .  	L NEAR	00D8	_TEXT
+STRNUM_MUL_L2  . . . . . . . . .  	L NEAR	00E9	_TEXT
+STRSHL_LOOP  . . . . . . . . . .  	L NEAR	0038	_TEXT
+SUBTOTAL . . . . . . . . . . . .  	L BYTE	0176	_DATA	Length = 0008
+SUBTOTALS_TO_STR . . . . . . . .  	N PROC	01B5	_TEXT	Length = 002E
+SUMALLSUBTOTALS  . . . . . . . .  	L NEAR	019C	_TEXT
+SUM_SUBTOTALS  . . . . . . . . .  	N PROC	0194	_TEXT	Length = 0021
+
+TESTVAL  . . . . . . . . . . . .  	L BYTE	0194	_DATA
+TOTALPRICE . . . . . . . . . . .  	L BYTE	017F	_DATA	Length = 0014
 
 @CODE  . . . . . . . . . . . . .  	TEXT  _TEXT		
 @CODESIZE  . . . . . . . . . . .  	TEXT  0		
 @DATASIZE  . . . . . . . . . . .  	TEXT  0		
 @FILENAME  . . . . . . . . . . .  	TEXT  HF		
 
+Microsoft (R) Macro Assembler Version 5.00                  9/12/23 13:54:22
+                                                             Symbols-3
 
-    240 Source  Lines
-    310 Total   Lines
-     45 Symbols
 
-  50382 + 449778 Bytes symbol space free
+
+    699 Source  Lines
+    820 Total   Lines
+     79 Symbols
+
+  50414 + 416978 Bytes symbol space free
 
       0 Warning Errors
-      0 Severe  Errors
+      5 Severe  Errors
